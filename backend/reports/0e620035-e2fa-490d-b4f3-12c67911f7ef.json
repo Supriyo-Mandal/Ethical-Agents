@@ -1,0 +1,95 @@
+{
+  "id": "0e620035-e2fa-490d-b4f3-12c67911f7ef",
+  "document_name": "7.txt",
+  "publish": false,
+  "overall_score": 0.84,
+  "summary": "Publication is withheld due to elevated risk in the following domain(s): Privacy. Overall risk score: 84/100 (threshold: 70/100). 1 high-risk field(s) require remediation before this document can be approved.",
+  "metadata": {
+    "fields": [
+      {
+        "agent": "Privacy",
+        "field": "Universal data collection without consent",
+        "score": 0.706,
+        "reason": "Existing DKR entries cover general consent and public\u2011interest justifications, but they do not capture the specific risk of blanket, cross\u2011domain data harvesting that presumes permission for all data types. This concept is distinct and reusable for future assessments of AI systems that propose unrestricted data ingestion.",
+        "high_risk": true
+      },
+      {
+        "agent": "Transparency",
+        "field": "Self\u2011Improving Model Opacity",
+        "score": 0.68,
+        "reason": "",
+        "high_risk": false
+      },
+      {
+        "agent": "Transparency",
+        "field": "Assumed Unrestricted Data Access",
+        "score": 0.671,
+        "reason": "",
+        "high_risk": false
+      },
+      {
+        "agent": "Security",
+        "field": "Assumed Global Data Consent",
+        "score": 0.665,
+        "reason": "",
+        "high_risk": false
+      },
+      {
+        "agent": "Compliance",
+        "field": "Regulatory Obligations",
+        "score": 0.588,
+        "reason": "",
+        "high_risk": false
+      },
+      {
+        "agent": "Bias",
+        "field": "Automated Decision Making",
+        "score": 0.529,
+        "reason": "",
+        "high_risk": false
+      },
+      {
+        "agent": "Security",
+        "field": "Self-Validated AI Security",
+        "score": 0.521,
+        "reason": "",
+        "high_risk": false
+      },
+      {
+        "agent": "Privacy",
+        "field": "Sensitive Personal Data",
+        "score": 0.508,
+        "reason": "",
+        "high_risk": false
+      },
+      {
+        "agent": "Compliance",
+        "field": "Environmental Benefit Data Consent Override",
+        "score": 0.471,
+        "reason": "",
+        "high_risk": false
+      }
+    ],
+    "high_risk_fields": [
+      {
+        "agent": "Privacy",
+        "field_name": "Universal data collection without consent",
+        "score": 0.706,
+        "reason": "Existing DKR entries cover general consent and public\u2011interest justifications, but they do not capture the specific risk of blanket, cross\u2011domain data harvesting that presumes permission for all data types. This concept is distinct and reusable for future assessments of AI systems that propose unrestricted data ingestion."
+      }
+    ],
+    "newly_learned_fields": [],
+    "decision": "Do Not Publish",
+    "executive_summary": "Publication is withheld due to elevated risk in the following domain(s): Privacy. Overall risk score: 84/100 (threshold: 70/100). 1 high-risk field(s) require remediation before this document can be approved.",
+    "recommendations": [
+      "[Privacy] Review and remediate 'Universal data collection without consent' (score 0.71): Existing DKR entries cover general consent and public\u2011interest justifications, but they do not capture the specific risk of blanket, cross\u2011domain data harvesting that presumes permission for all data types. This concept is distinct and reusable for future assessments of AI systems that propose unrestricted data ingestion."
+    ],
+    "domain_scores": {
+      "Bias": 0.529,
+      "Privacy": 0.782,
+      "Security": 0.593,
+      "Compliance": 0.529,
+      "Transparency": 0.675
+    }
+  }
+}
