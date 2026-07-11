@@ -10,15 +10,12 @@ from .config import REPORT_DIRECTORY
 REPORT_DIRECTORY.mkdir(parents=True, exist_ok=True)
 
 
-def save_analysis(document_payload: dict[str, Any], result: dict[str, Any]) -> dict[str, Any]:
+def save_analysis(document_name: str, result: dict[str, Any]) -> dict[str, Any]:
     analysis_id = str(uuid4())
     report_path = REPORT_DIRECTORY / f"{analysis_id}.json"
-    document = document_payload.get("document", {})
     payload = {
         "id": analysis_id,
-        "document_name": document.get("name", "document"),
-        "document_type": document.get("type", "txt"),
-        "document": document,
+        "document_name": document_name,
         **result,
     }
     report_path.write_text(json.dumps(payload, indent=2), encoding="utf-8")
