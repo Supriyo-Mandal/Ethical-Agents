@@ -1,0 +1,10 @@
+[
+  {
+    "field_id": "TRN_001",
+    "field_name": "Explainability and Review",
+    "description": "The system should allow users to understand and challenge decisions.",
+    "reason": "Lack of transparency can undermine trust and accountability.",
+    "examples": ["Decision Logs", "Human Review"],
+    "version": 1
+  }
+]

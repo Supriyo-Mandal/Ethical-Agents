@@ -1,0 +1,10 @@
+[
+  {
+    "field_id": "BIAS_001",
+    "field_name": "Automated Decision Making",
+    "description": "System makes decisions without human intervention.",
+    "reason": "Automated decisions can introduce unfair outcomes.",
+    "examples": ["Candidate Ranking", "Loan Approval"],
+    "version": 1
+  }
+]
