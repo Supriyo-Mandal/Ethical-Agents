@@ -4,9 +4,9 @@ from typing import Any
 
 
 def analyze_document(document: Any) -> dict[str, Any]:
-    content = ""
+    document_name = ""
     if isinstance(document, dict):
-        content = str(document.get("document", {}).get("content", ""))
+        document_name = str(document.get("document_name", ""))
 
     return {
         "publish": False,
@@ -22,5 +22,5 @@ def analyze_document(document: Any) -> dict[str, Any]:
                 }
             ]
         },
-        "content_preview": content[:120],
+        "content_preview": document_name,
     }

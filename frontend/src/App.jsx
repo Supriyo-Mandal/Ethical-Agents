@@ -53,24 +53,34 @@ export default function App() {
     if (!file) return;
 
     setUploadState({ loading: true, result: null });
-    await new Promise((resolve) => setTimeout(resolve, 1300));
 
-    const decision = Math.random() > 0.45 ? 'YES' : 'NO';
-    const nextEntry = {
-      id: `${Date.now()}`,
-      name: file.name,
-      type: file.type || 'Unknown',
-      submittedAt: new Date().toLocaleString(),
-      status: decision,
-      metadata: {
-        owner: decision === 'YES' ? 'Review Team' : 'Escalation Desk',
-        severity: decision === 'YES' ? 'Low' : 'Medium',
-        source: 'simulated-backend'
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+
+      const res = await fetch('http://localhost:8000/upload', { method: 'POST', body: formData });
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({ detail: res.statusText }));
+        throw new Error(err.detail || 'Upload failed');
       }
-    };
 
-    setDocuments((prev) => [nextEntry, ...prev].slice(0, 8));
-    setUploadState({ loading: false, result: nextEntry });
+      const data = await res.json();
+      const decision = data.publish ? 'YES' : 'NO';
+      const nextEntry = {
+        id: `${Date.now()}`,
+        name: file.name,
+        type: file.type || 'Unknown',
+        submittedAt: new Date().toLocaleString(),
+        status: decision,
+        metadata: { summary: data.summary, source: 'backend', ...Object.fromEntries((data.metadata?.fields ?? []).map((f) => [f.name ?? f.key, f.value])) }
+      };
+
+      setDocuments((prev) => [nextEntry, ...prev].slice(0, 8));
+      setUploadState({ loading: false, result: nextEntry });
+    } catch (err) {
+      setUploadState({ loading: false, result: { error: err.message } });
+    }
+
     setSelectedFile(null);
     event.target.reset();
   };
@@ -174,7 +184,13 @@ function UploadView({ onUpload, selectedFile, setSelectedFile, uploadState }) {
           </button>
         </form>
 
-        {uploadState.result && (
+        {uploadState.result?.error && (
+          <div className="result-card warn">
+            <div className="result-head"><strong>Error</strong><span>Upload failed</span></div>
+            <p>{uploadState.result.error}</p>
+          </div>
+        )}
+        {uploadState.result?.status && (
           <div className={`result-card ${uploadState.result.status === 'YES' ? 'success' : 'warn'}`}>
             <div className="result-head">
               <strong>{uploadState.result.status}</strong>
