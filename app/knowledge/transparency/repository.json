@@ -4,7 +4,109 @@
     "field_name": "Explainability and Review",
     "description": "The system should allow users to understand and challenge decisions.",
     "reason": "Lack of transparency can undermine trust and accountability.",
-    "examples": ["Decision Logs", "Human Review"],
+    "examples": [
+      "Decision Logs",
+      "Human Review"
+    ],
+    "version": 1
+  },
+  {
+    "field_id": "TRA_002",
+    "field_name": "automated_decision_making",
+    "description": "Indicates whether a system employs automated decision-making (including profiling) and defines the scope, purpose, and criteria of such automation.",
+    "reason": "Transparency obligations often require clear disclosure of any automated processing that significantly affects individuals, especially in hiring or credit contexts.",
+    "examples": [
+      "The hiring platform uses an algorithm to rank candidates based on skill match scores.",
+      "A loan application system employs automated credit scoring to approve or decline requests."
+    ],
+    "version": 1
+  },
+  {
+    "field_id": "TRA_002",
+    "field_name": "human_review_mechanism",
+    "description": "Details the involvement of human reviewers in overseeing, correcting, or overriding automated decisions, including triggers and procedures.",
+    "reason": "Regulations and best\u2011practice guidelines emphasize the need for human oversight to mitigate risks of algorithmic bias and to provide recourse.",
+    "examples": [
+      "A recruiter manually reviews top\u2011ranked applicants before final selection.",
+      "An appeals team re\u2011evaluates decisions flagged as high risk by the automated system."
+    ],
+    "version": 1
+  },
+  {
+    "field_id": "TRA_002",
+    "field_name": "consent_management",
+    "description": "Describes how explicit consent from data subjects is obtained, recorded, managed, and withdrawn for specific processing activities.",
+    "reason": "Consent is a lawful basis under many data\u2011protection frameworks; transparent records of consent are required for accountability.",
+    "examples": [
+      "Applicants tick a box to agree to background\u2011check processing, with a timestamp stored in the consent log.",
+      "A UI panel allows users to withdraw consent to marketing communications at any time."
+    ],
+    "version": 1
+  },
+  {
+    "field_id": "TRA_002",
+    "field_name": "personal_data_categories",
+    "description": "Enumerates the types of personal data collected and processed (e.g., contact information, education history, biometric data).",
+    "reason": "Clear identification of data categories supports impact assessments, data\u2011subject rights requests, and regulatory filings.",
+    "examples": [
+      "Name, email address, r\u00e9sum\u00e9, and reference letters.",
+      "Fingerprint data collected for secure facility access."
+    ],
+    "version": 1
+  },
+  {
+    "field_id": "TRA_002",
+    "field_name": "lawful_basis_for_processing",
+    "description": "Specifies the legal justification for each data\u2011processing activity (e.g., consent, contractual necessity, legitimate interests).",
+    "reason": "Data\u2011protection regulations mandate that organizations disclose the lawful basis for processing personal data.",
+    "examples": [
+      "Processing applicant qualifications is based on the contract for recruitment services.",
+      "Marketing emails are sent based on prior consent."
+    ],
+    "version": 1
+  },
+  {
+    "field_id": "TRA_002",
+    "field_name": "regulatory_obligation_documentation",
+    "description": "References the statutes, guidelines, or standards that the organization must comply with for the described processing activities.",
+    "reason": "Linking processing activities to specific obligations demonstrates accountability and aids auditors.",
+    "examples": [
+      "Compliance with GDPR Art. 22 regarding automated individual decision\u2011making.",
+      "Adherence to the Equal Employment Opportunity Commission (EEOC) guidelines on hiring."
+    ],
+    "version": 1
+  },
+  {
+    "field_id": "TRA_002",
+    "field_name": "security_controls",
+    "description": "Lists technical and organizational measures implemented to protect personal data (e.g., encryption, access controls, monitoring).",
+    "reason": "Transparency about security safeguards is required for risk assessments and to inform data subjects about protection levels.",
+    "examples": [
+      "Data at rest encrypted with AES\u2011256; role\u2011based access control enforced for HR staff.",
+      "Regular penetration testing performed quarterly."
+    ],
+    "version": 1
+  },
+  {
+    "field_id": "TRA_002",
+    "field_name": "data_retention_policy",
+    "description": "Defines how long personal data is retained, the criteria for retention periods, and the deletion/disposal procedures.",
+    "reason": "Retention limits are a core principle of data\u2011protection law; transparent policies help manage expectations and compliance.",
+    "examples": [
+      "Applicant data retained for 12 months after the recruitment cycle; then permanently deleted.",
+      "Log files kept for 90 days for security monitoring, then purged."
+    ],
+    "version": 1
+  },
+  {
+    "field_id": "TRA_002",
+    "field_name": "data_subject_rights_provision",
+    "description": "Outlines the mechanisms provided to individuals to exercise their rights (access, correction, erasure, objection, portability).",
+    "reason": "Facilitating rights exercise is a statutory requirement and enhances trust through transparent processes.",
+    "examples": [
+      "A self\u2011service portal allows applicants to request a copy of their data within 30 days.",
+      "An email address is provided for submitting data\u2011erasure requests."
+    ],
     "version": 1
   }
 ]

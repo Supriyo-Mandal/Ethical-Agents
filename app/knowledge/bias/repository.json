@@ -4,7 +4,21 @@
     "field_name": "Automated Decision Making",
     "description": "System makes decisions without human intervention.",
     "reason": "Automated decisions can introduce unfair outcomes.",
-    "examples": ["Candidate Ranking", "Loan Approval"],
+    "examples": [
+      "Candidate Ranking",
+      "Loan Approval"
+    ],
+    "version": 1
+  },
+  {
+    "field_id": "BIA_002",
+    "field_name": "Consent Management",
+    "description": "Reusable consent oversight for automated systems.",
+    "reason": "Document discusses consent and oversight practices.",
+    "examples": [
+      "Opt-in controls",
+      "Notice flow"
+    ],
     "version": 1
   }
 ]
