@@ -13,6 +13,7 @@ class PreviousDocument(BaseModel):
 
 class AnalysisResponse(BaseModel):
     publish: bool
+    overall_score: float
     summary: str
     metadata: dict[str, Any]
     previous_documents: list[PreviousDocument]

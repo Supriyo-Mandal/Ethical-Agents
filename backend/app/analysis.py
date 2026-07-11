@@ -2,21 +2,19 @@ from __future__ import annotations
 
 from typing import Any
 
-try:
-    from app.orchestrator import analyze_document as framework_analyze
-except Exception:  # pragma: no cover - defensive fallback
-    framework_analyze = None
+from app.orchestrator import analyze_document
 
 
-def analyze(document: Any) -> dict[str, Any]:
-    if framework_analyze is None:
-        return {
-            "publish": False,
-            "summary": "Framework unavailable",
-            "metadata": {"fields": []},
-        }
+def analyze(file: Any) -> dict[str, Any]:
+    payload = {
+        "document_name": file.filename,
+        "document_type": file.content_type,
+        "document": file,
+    }
 
-    result = framework_analyze(document)
+    result = analyze_document(payload)
+
     if not isinstance(result, dict):
         raise TypeError("The AI framework must return a dictionary")
+
     return result
