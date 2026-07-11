@@ -1,0 +1,116 @@
+{
+  "id": "2e1c8bca-f089-43ec-8863-63c6b0ad4844",
+  "document_name": "positive_doc.txt",
+  "publish": false,
+  "overall_score": 0.915,
+  "summary": "Publication is withheld due to elevated risk in the following domain(s): Transparency, Bias. Overall risk score: 91/100 (threshold: 70/100). 3 high-risk field(s) require remediation before this document can be approved.",
+  "metadata": {
+    "fields": [
+      {
+        "agent": "Bias",
+        "field": "Automated Decision Making",
+        "score": 0.928,
+        "reason": "Automated decisions can introduce unfair outcomes.",
+        "high_risk": true
+      },
+      {
+        "agent": "Transparency",
+        "field": "Explainability and Review",
+        "score": 0.779,
+        "reason": "Lack of transparency can undermine trust and accountability.",
+        "high_risk": true
+      },
+      {
+        "agent": "Bias",
+        "field": "Consent Management",
+        "score": 0.714,
+        "reason": "Document discusses consent and oversight practices.",
+        "high_risk": true
+      },
+      {
+        "agent": "Privacy",
+        "field": "Universal data collection without consent",
+        "score": 0.638,
+        "reason": "",
+        "high_risk": false
+      },
+      {
+        "agent": "Compliance",
+        "field": "Regulatory Obligations",
+        "score": 0.633,
+        "reason": "",
+        "high_risk": false
+      },
+      {
+        "agent": "Privacy",
+        "field": "Sensitive Personal Data",
+        "score": 0.615,
+        "reason": "",
+        "high_risk": false
+      },
+      {
+        "agent": "Transparency",
+        "field": "Assumed Unrestricted Data Access",
+        "score": 0.585,
+        "reason": "",
+        "high_risk": false
+      },
+      {
+        "agent": "Security",
+        "field": "Assumed Global Data Consent",
+        "score": 0.565,
+        "reason": "",
+        "high_risk": false
+      },
+      {
+        "agent": "Compliance",
+        "field": "Environmental Benefit Data Consent Override",
+        "score": 0.553,
+        "reason": "",
+        "high_risk": false
+      },
+      {
+        "agent": "Transparency",
+        "field": "Self\u2011Improving Model Opacity",
+        "score": 0.525,
+        "reason": "",
+        "high_risk": false
+      }
+    ],
+    "high_risk_fields": [
+      {
+        "agent": "Bias",
+        "field_name": "Automated Decision Making",
+        "score": 0.928,
+        "reason": "Automated decisions can introduce unfair outcomes."
+      },
+      {
+        "agent": "Bias",
+        "field_name": "Consent Management",
+        "score": 0.714,
+        "reason": "Document discusses consent and oversight practices."
+      },
+      {
+        "agent": "Transparency",
+        "field_name": "Explainability and Review",
+        "score": 0.779,
+        "reason": "Lack of transparency can undermine trust and accountability."
+      }
+    ],
+    "newly_learned_fields": [],
+    "decision": "Do Not Publish",
+    "executive_summary": "Publication is withheld due to elevated risk in the following domain(s): Transparency, Bias. Overall risk score: 91/100 (threshold: 70/100). 3 high-risk field(s) require remediation before this document can be approved.",
+    "recommendations": [
+      "[Bias] Review and remediate 'Automated Decision Making' (score 0.93): Automated decisions can introduce unfair outcomes.",
+      "[Bias] Also address 'Consent Management' (score 0.71).",
+      "[Transparency] Review and remediate 'Explainability and Review' (score 0.78): Lack of transparency can undermine trust and accountability."
+    ],
+    "domain_scores": {
+      "Bias": 0.848,
+      "Privacy": 0.627,
+      "Security": 0.565,
+      "Compliance": 0.593,
+      "Transparency": 0.862
+    }
+  }
+}

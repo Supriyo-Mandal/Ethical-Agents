@@ -110,17 +110,31 @@ class ParentAgent:
                 }
             )
 
-        # ── Aggregate scores ───────────────────────────────────────────
-        scores = [d["overall_score"] for d in domain_summaries]
-        overall_score = round(max(scores), 3) if scores else 0.0
+        # ── Aggregate scores — ceiling-pull model ─────────────────────
+        # A single high-risk domain (score >= threshold) dominates via
+        # score²-weighting; clean domains add only 10 % noise so they
+        # cannot drag a genuinely risky result down, nor inflate a
+        # genuinely clean result up.
+        high_risk_domains_data = [d for d in domain_summaries if d["overall_score"] >= self.threshold]
+        low_risk_domains_data  = [d for d in domain_summaries if d["overall_score"] <  self.threshold]
 
-        # Boost overall score by the average of high-risk field scores so that
-        # documents with dangerous fields are more likely to cross the threshold.
-        if all_high_risk_fields:
-            high_risk_avg = sum(f["score"] for f in all_high_risk_fields) / len(all_high_risk_fields)
-            overall_score = round(min(1.0, overall_score * 0.5 + high_risk_avg * 0.5), 3)
+        if high_risk_domains_data:
+            hr_weight_sum = sum(d["overall_score"] ** 2 for d in high_risk_domains_data)
+            hr_weighted   = sum(d["overall_score"] ** 3 for d in high_risk_domains_data)
+            hr_pull = hr_weighted / hr_weight_sum
 
-        publish = overall_score < self.threshold and len(all_high_risk_fields) < 2
+            lr_noise = (
+                sum(d["overall_score"] for d in low_risk_domains_data) / len(low_risk_domains_data) * 0.10
+            ) if low_risk_domains_data else 0.0
+
+            overall_score = round(min(1.0, hr_pull + lr_noise), 3)
+        else:
+            # All domains clean — take the max so a borderline domain
+            # is still visible but cannot falsely block publication.
+            scores = [d["overall_score"] for d in domain_summaries]
+            overall_score = round(max(scores), 3) if scores else 0.0
+
+        publish = overall_score < self.threshold
 
         # ── Identify highest-risk domains ──────────────────────────────
         high_risk_domains = sorted(

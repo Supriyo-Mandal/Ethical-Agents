@@ -99,21 +99,37 @@ class BaseAgent:
         self, entry: dict[str, Any], doc_tokens: set[str]
     ) -> bool:
         """
-        Returns True if any keyword from the DKR entry appears in the
-        document token set.  Short, common words (length ≤ 2) are ignored
-        to avoid trivially matching everything.
+        Returns True only when the document shows a meaningful signal for
+        this DKR field.  Two-tier gate:
+
+        1. At least one field-name token (the curated risk label) must
+           appear in the document.  A field whose name has zero overlap
+           with the document is simply not relevant — description/example
+           matches alone are too noisy.
+
+        2. Additionally, at least 2 meaningful tokens from the full entry
+           (name + description + examples) must match.  This prevents a
+           single coincidental word from triggering scoring.
+
+        Tokens shorter than 4 characters are excluded; very short words
+        ("the", "and", "is", …) cause false positives across all documents.
         """
         field_name = str(entry.get("field_name", "")).lower()
         description = str(entry.get("description", "")).lower()
         examples = entry.get("examples") or []
 
-        flat: set[str] = self._tokenize(field_name) | self._tokenize(description)
+        # Gate 1 — at least one field-name token must be in the document
+        name_tokens = {t for t in self._tokenize(field_name) if len(t) > 3}
+        if not name_tokens or not (name_tokens & doc_tokens):
+            return False
+
+        # Gate 2 — require at least 2 meaningful token matches overall
+        full: set[str] = name_tokens | {t for t in self._tokenize(description) if len(t) > 3}
         for e in examples:
             if isinstance(e, str):
-                flat |= self._tokenize(e)
+                full |= {t for t in self._tokenize(str(e)) if len(t) > 3}
 
-        meaningful = {t for t in flat if len(t) > 2}
-        return bool(meaningful & doc_tokens)
+        return len(full & doc_tokens) >= 2
 
     # ------------------------------------------------------------------ #
     #  Phase 2 helpers: Analysis                                           #
@@ -172,18 +188,26 @@ class BaseAgent:
         # Sort by score descending so the highest-risk fields are first
         evaluated.sort(key=lambda x: x["score"], reverse=True)
 
-        # Overall agent score:
-        # Blend the single highest-risk field (70 % weight) with the
-        # average of all other evaluated fields (30 % weight).
-        # This means: one severely problematic field is enough to push
-        # the agent score above the threshold, while still incorporating
-        # cumulative signal from lower-scoring fields.
-        top_score = evaluated[0]["score"]
-        if len(evaluated) == 1:
-            overall = top_score
+        # Overall agent score — ceiling-pull model:
+        # High-risk fields (score >= threshold) dominate via score²-weighting.
+        # Low-risk fields contribute only 15 % noise and cannot pull the
+        # agent score up when no genuine risk is present.
+        high_risk = [f for f in evaluated if f["score"] >= self.threshold]
+        low_risk  = [f for f in evaluated if f["score"] <  self.threshold]
+
+        if high_risk:
+            hr_weight_sum = sum(f["score"] ** 2 for f in high_risk)
+            hr_weighted   = sum(f["score"] ** 3 for f in high_risk)
+            hr_pull = hr_weighted / hr_weight_sum
+
+            lr_noise = (
+                sum(f["score"] for f in low_risk) / len(low_risk) * 0.15
+            ) if low_risk else 0.0
+
+            overall = round(min(1.0, hr_pull + lr_noise), 3)
         else:
-            rest_avg = sum(f["score"] for f in evaluated[1:]) / (len(evaluated) - 1)
-            overall = round(min(1.0, 0.70 * top_score + 0.30 * rest_avg), 3)
+            # No high-risk fields — plain mean keeps clean docs low
+            overall = round(sum(f["score"] for f in evaluated) / len(evaluated), 3)
 
         field_scores = {f["field_name"]: f["score"] for f in evaluated}
 
@@ -251,11 +275,15 @@ class BaseAgent:
         # How many curated field-name tokens appear in the document?
         # A full name match means the document explicitly discusses the
         # exact risk concept.  This is the dominant signal.
+        # If no field-name token matches at all, return 0 immediately —
+        # the relevance gate should have caught this, but guard here too.
         if field_tokens:
             fn_matched = field_tokens & doc_tokens
+            if not fn_matched:
+                return 0.0
             fn_coverage = len(fn_matched) / len(field_tokens)
         else:
-            fn_coverage = 0.0
+            return 0.0
         # Power curve: 50 % name coverage → 0.33; 100 % → 0.45
         score_a = min(0.45, 0.45 * (fn_coverage ** 0.65))
 
