@@ -1,24 +1,10 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Link, NavLink, Route, Routes, useLocation } from 'react-router-dom';
 
-const initialDocs = [
-  {
-    id: 'demo-1',
-    name: 'Quarterly Compliance Review',
-    type: 'PDF',
-    submittedAt: '2026-07-10 09:15',
-    status: 'YES',
-    metadata: { owner: 'Compliance Team', severity: 'Low', source: 'mock-seed' }
-  },
-  {
-    id: 'demo-2',
-    name: 'Vendor Assessment',
-    type: 'DOCX',
-    submittedAt: '2026-07-09 16:10',
-    status: 'NO',
-    metadata: { owner: 'Operations', severity: 'Medium', source: 'mock-seed' }
-  }
-];
+
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+
+const initialDocs = [];
 
 const pageConfig = [
   { to: '/', label: 'Home', icon: '◉' },
@@ -32,7 +18,18 @@ export default function App() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [documents, setDocuments] = useState(() => {
     const saved = window.localStorage.getItem('ethical-agent-documents');
-    return saved ? JSON.parse(saved) : initialDocs;
+    // If saved data contains old mock seeds, discard it
+    if (saved) {
+      try {
+        const parsed = JSON.parse(saved);
+        const hasMockSeeds = parsed.some((d) => d.metadata?.source === 'mock-seed');
+        if (!hasMockSeeds) return parsed;
+      } catch {
+        // ignore parse errors
+      }
+    }
+    window.localStorage.removeItem('ethical-agent-documents');
+    return [];
   });
   const [uploadState, setUploadState] = useState({ loading: false, result: null });
   const [selectedFile, setSelectedFile] = useState(null);
@@ -58,7 +55,7 @@ export default function App() {
       const formData = new FormData();
       formData.append('file', file);
 
-      const res = await fetch('http://localhost:8000/upload', { method: 'POST', body: formData });
+      const res = await fetch(`${API_URL}/upload`, { method: 'POST', body: formData });
       if (!res.ok) {
         const err = await res.json().catch(() => ({ detail: res.statusText }));
         throw new Error(err.detail || 'Upload failed');
@@ -66,13 +63,32 @@ export default function App() {
 
       const data = await res.json();
       const decision = data.publish ? 'YES' : 'NO';
+
+      // Build a flat metadata object from the richer agent response
+      const meta = data.metadata ?? {};
+      const highRiskFields = (meta.high_risk_fields ?? [])
+        .map((f) => `${f.agent}: ${f.field_name} (${f.score})`)
+        .join(' | ');
+      const domainScores = meta.domain_scores
+        ? Object.entries(meta.domain_scores)
+            .map(([k, v]) => `${k}: ${v}`)
+            .join(', ')
+        : '';
+
       const nextEntry = {
         id: `${Date.now()}`,
         name: file.name,
         type: file.type || 'Unknown',
         submittedAt: new Date().toLocaleString(),
         status: decision,
-        metadata: { summary: data.summary, source: 'backend', ...Object.fromEntries((data.metadata?.fields ?? []).map((f) => [f.name ?? f.key, f.value])) }
+        metadata: {
+          decision: meta.decision ?? (data.publish ? 'Publish' : 'Do Not Publish'),
+          overall_score: data.overall_score,
+          summary: data.summary,
+          ...(domainScores && { domain_scores: domainScores }),
+          ...(highRiskFields && { high_risk_fields: highRiskFields }),
+          source: 'backend',
+        }
       };
 
       setDocuments((prev) => [nextEntry, ...prev].slice(0, 8));
@@ -193,17 +209,19 @@ function UploadView({ onUpload, selectedFile, setSelectedFile, uploadState }) {
         {uploadState.result?.status && (
           <div className={`result-card ${uploadState.result.status === 'YES' ? 'success' : 'warn'}`}>
             <div className="result-head">
-              <strong>{uploadState.result.status}</strong>
-              <span>{uploadState.result.status === 'YES' ? 'Accepted' : 'Needs review'}</span>
+              <strong>{uploadState.result.status === 'YES' ? 'Publish' : 'Do Not Publish'}</strong>
+              <span>Score: {uploadState.result.metadata?.overall_score ?? '—'}</span>
             </div>
-            <p>{uploadState.result.name} was reviewed successfully.</p>
+            <p>{uploadState.result.name} — {uploadState.result.metadata?.summary}</p>
             <div className="metadata-grid">
-              {Object.entries(uploadState.result.metadata).map(([key, value]) => (
-                <div key={key} className="meta-item">
-                  <strong>{key}</strong>
-                  <span>{String(value)}</span>
-                </div>
-              ))}
+              {Object.entries(uploadState.result.metadata)
+                .filter(([key]) => key !== 'source')
+                .map(([key, value]) => (
+                  <div key={key} className="meta-item">
+                    <strong>{key.replace(/_/g, ' ')}</strong>
+                    <span>{String(value)}</span>
+                  </div>
+                ))}
             </div>
           </div>
         )}

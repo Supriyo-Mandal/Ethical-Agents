@@ -132,5 +132,149 @@
       "low risk \u2013 controls fully cover identified threats"
     ],
     "version": 1
+  },
+  {
+    "field_id": "COM_003",
+    "field_name": "RegulationReference",
+    "description": "Official identifier or citation of the law, regulation, standard, or guideline that the document addresses (e.g., GDPR Article 5, HIPAA \u00a7164.312).",
+    "reason": "Enables linking compliance content to specific legal texts, facilitating traceability and impact analysis across multiple documents.",
+    "examples": [
+      "GDPR Article 5(1)(a)",
+      "PCI DSS Requirement 3.2.1",
+      "California Consumer Privacy Act (CCPA) Section 1798.100"
+    ],
+    "version": 1
+  },
+  {
+    "field_id": "COM_003",
+    "field_name": "Jurisdiction",
+    "description": "Geographic or political region whose legal framework governs the compliance obligations (e.g., EU, California, Singapore).",
+    "reason": "Many compliance requirements are location\u2011specific; capturing jurisdiction supports cross\u2011border analysis and applicability checks.",
+    "examples": [
+      "European Union",
+      "United States \u2013 California",
+      "Singapore"
+    ],
+    "version": 1
+  },
+  {
+    "field_id": "COM_003",
+    "field_name": "DataSubjectRights",
+    "description": "Specific rights afforded to individuals under the regulation (e.g., right of access, right to be forgotten).",
+    "reason": "Rights are central to privacy regulations; identifying them allows organizations to map operational controls to legal obligations.",
+    "examples": [
+      "Right of Access",
+      "Right to Rectification",
+      "Right to Data Portability",
+      "Right to Object"
+    ],
+    "version": 1
+  },
+  {
+    "field_id": "COM_003",
+    "field_name": "RetentionPeriod",
+    "description": "Maximum duration that personal or regulated data may be retained, as prescribed by the applicable regulation.",
+    "reason": "Retention requirements drive data lifecycle policies and are common across many compliance regimes.",
+    "examples": [
+      "7 years after contract termination",
+      "30 days after breach notification",
+      "Indefinitely for archival records under tax law"
+    ],
+    "version": 1
+  },
+  {
+    "field_id": "COM_003",
+    "field_name": "ComplianceStatus",
+    "description": "Current state of adherence to the specified requirement (e.g., compliant, partially compliant, non\u2011compliant, pending).",
+    "reason": "Standardizing status facilitates dashboards, audit tracking, and remediation planning across disparate documents.",
+    "examples": [
+      "Compliant",
+      "Non\u2011compliant \u2013 missing encryption at rest",
+      "Partially compliant \u2013 consent obtained but not documented"
+    ],
+    "version": 1
+  },
+  {
+    "field_id": "COM_003",
+    "field_name": "RiskLevel",
+    "description": "Qualitative or quantitative assessment of the risk associated with non\u2011compliance (e.g., high, medium, low, or a numeric score).",
+    "reason": "Prioritizing remediation efforts requires a consistent risk indicator that can be aggregated across controls.",
+    "examples": [
+      "High \u2013 potential fines exceeding $1M",
+      "Medium \u2013 reputational impact",
+      "Low \u2013 administrative penalty only"
+    ],
+    "version": 1
+  },
+  {
+    "field_id": "COM_003",
+    "field_name": "ControlType",
+    "description": "Category of the technical, administrative, or physical control used to meet the compliance requirement (e.g., encryption, access review, training).",
+    "reason": "Facilitates mapping between regulatory clauses and concrete security or governance controls for reuse in control libraries.",
+    "examples": [
+      "Technical \u2013 Data\u2011at\u2011rest encryption",
+      "Administrative \u2013 Annual privacy awareness training",
+      "Physical \u2013 Secure disposal of media"
+    ],
+    "version": 1
+  },
+  {
+    "field_id": "COM_003",
+    "field_name": "EnforcementAuthority",
+    "description": "Governmental or regulatory body responsible for enforcing the requirement (e.g., ICO, FTC, DPDP).",
+    "reason": "Identifying the authority helps determine reporting channels, inspection rights, and potential penalties.",
+    "examples": [
+      "Information Commissioner\u2019s Office (ICO)",
+      "Federal Trade Commission (FTC)",
+      "Data Protection Authority of Singapore (PDPC)"
+    ],
+    "version": 1
+  },
+  {
+    "field_id": "COM_003",
+    "field_name": "PenaltyAmount",
+    "description": "Monetary or other sanctions stipulated for non\u2011compliance, expressed as a range, fixed amount, or percentage of revenue.",
+    "reason": "Quantifying penalties supports risk\u2011based decision making and budgeting for compliance programs.",
+    "examples": [
+      "Up to \u20ac20\u202fmillion or 4\u202f% of global annual turnover (whichever is higher)",
+      "$7,500 per violation per record",
+      "License revocation"
+    ],
+    "version": 1
+  },
+  {
+    "field_id": "COM_003",
+    "field_name": "ConsentRequirement",
+    "description": "Specific conditions under which consent must be obtained, including form, timing, and revocability.",
+    "reason": "Consent is a recurring theme in privacy regulations; capturing its parameters enables consistent policy implementation.",
+    "examples": [
+      "Freely given, specific, informed, and unambiguous indication of wishes",
+      "Separate consent for marketing communications",
+      "Ability to withdraw consent at any time"
+    ],
+    "version": 1
+  },
+  {
+    "field_id": "COM_003",
+    "field_name": "AuditFrequency",
+    "description": "Recommended or mandated interval for performing audits or assessments related to the requirement.",
+    "reason": ": Ensures that compliance programs schedule periodic verification activities in line with regulatory expectations.",
+    "examples": [
+      "Annual internal privacy audit",
+      "Quarterly access\u2011control review",
+      "Bi\u2011annual penetration testing"
+    ],
+    "version": 1
+  },
+  {
+    "field_id": "COM_004",
+    "field_name": "Environmental Benefit Data Consent Override",
+    "description": "The practice of assuming implicit permission to collect, store, and process personal or proprietary data sources (e.g., private emails, mobile phone data, company databases) on the premise that environmental or societal benefits outweigh the need for explicit data subject consent.",
+    "reason": "The document explicitly states that data from personal phones, private emails, and government servers will be used without seeking consent because \"environmental protection benefits everyone.\" This introduces a distinct compliance risk that is not captured by generic privacy or data\u2011protection concepts and is reusable for any future AI system that tries to justify data use by higher\u2011order societal goals.",
+    "examples": [
+      "Permission to use personal mobile phone data is assumed because the AI will eliminate pollution worldwide.",
+      "Private emails are harvested without consent under the justification of accelerating climate change mitigation."
+    ],
+    "version": 1
   }
 ]

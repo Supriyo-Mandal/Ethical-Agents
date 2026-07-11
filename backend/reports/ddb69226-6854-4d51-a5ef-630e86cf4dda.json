@@ -1,0 +1,936 @@
+{
+  "id": "ddb69226-6854-4d51-a5ef-630e86cf4dda",
+  "document_name": "negative_doc.txt",
+  "publish": true,
+  "overall_score": 0.673,
+  "summary": "The document presents a manageable risk profile (overall score: 67/100). All domain scores remain below the publication threshold of 70/100. No critical risk indicators require withholding.",
+  "metadata": {
+    "fields": [
+      {
+        "agent": "Transparency",
+        "field": "Explainability and Review",
+        "score": 0.819,
+        "reason": "Lack of transparency can undermine trust and accountability.",
+        "high_risk": true
+      },
+      {
+        "agent": "Privacy",
+        "field": "Sensitive Personal Data",
+        "score": 0.784,
+        "reason": "Sensitive data handling requires careful protection and consent controls.",
+        "high_risk": true
+      },
+      {
+        "agent": "Compliance",
+        "field": "Regulatory Obligations",
+        "score": 0.651,
+        "reason": "",
+        "high_risk": false
+      },
+      {
+        "agent": "Bias",
+        "field": "Consent Management",
+        "score": 0.642,
+        "reason": "",
+        "high_risk": false
+      },
+      {
+        "agent": "Security",
+        "field": "Authentication Controls",
+        "score": 0.622,
+        "reason": "",
+        "high_risk": false
+      },
+      {
+        "agent": "Transparency",
+        "field": "privacy_impact_assessment",
+        "score": 0.37,
+        "reason": "",
+        "high_risk": false
+      },
+      {
+        "agent": "Compliance",
+        "field": "DataSubjectRights",
+        "score": 0.367,
+        "reason": "",
+        "high_risk": false
+      },
+      {
+        "agent": "Compliance",
+        "field": "automated_decision_making",
+        "score": 0.365,
+        "reason": "",
+        "high_risk": false
+      },
+      {
+        "agent": "Compliance",
+        "field": "ControlType",
+        "score": 0.363,
+        "reason": "",
+        "high_risk": false
+      },
+      {
+        "agent": "Security",
+        "field": "security_control_set",
+        "score": 0.362,
+        "reason": "",
+        "high_risk": false
+      },
+      {
+        "agent": "Security",
+        "field": "privacy_impact_assessment",
+        "score": 0.359,
+        "reason": "",
+        "high_risk": false
+      },
+      {
+        "agent": "Compliance",
+        "field": "processing_purpose",
+        "score": 0.357,
+        "reason": "",
+        "high_risk": false
+      },
+      {
+        "agent": "Transparency",
+        "field": "consent_management",
+        "score": 0.356,
+        "reason": "",
+        "high_risk": false
+      },
+      {
+        "agent": "Security",
+        "field": "automated_decision_making",
+        "score": 0.355,
+        "reason": "",
+        "high_risk": false
+      },
+      {
+        "agent": "Transparency",
+        "field": "security_controls",
+        "score": 0.354,
+        "reason": "",
+        "high_risk": false
+      },
+      {
+        "agent": "Security",
+        "field": "data_minimization_principle",
+        "score": 0.353,
+        "reason": "",
+        "high_risk": false
+      },
+      {
+        "agent": "Bias",
+        "field": "bias_context",
+        "score": 0.351,
+        "reason": "",
+        "high_risk": false
+      },
+      {
+        "agent": "Compliance",
+        "field": "human_in_the_loop",
+        "score": 0.351,
+        "reason": "",
+        "high_risk": false
+      },
+      {
+        "agent": "Compliance",
+        "field": "risk_assessment_outcome",
+        "score": 0.351,
+        "reason": "",
+        "high_risk": false
+      },
+      {
+        "agent": "Compliance",
+        "field": "data_retention_period",
+        "score": 0.35,
+        "reason": "",
+        "high_risk": false
+      },
+      {
+        "agent": "Privacy",
+        "field": "AutomatedDecisionMaking",
+        "score": 0.349,
+        "reason": "",
+        "high_risk": false
+      },
+      {
+        "agent": "Privacy",
+        "field": "legal_basis_for_processing",
+        "score": 0.349,
+        "reason": "",
+        "high_risk": false
+      },
+      {
+        "agent": "Compliance",
+        "field": "AuditFrequency",
+        "score": 0.349,
+        "reason": "",
+        "high_risk": false
+      },
+      {
+        "agent": "Privacy",
+        "field": "LawfulBasis",
+        "score": 0.347,
+        "reason": "",
+        "high_risk": false
+      },
+      {
+        "agent": "Privacy",
+        "field": "data_category",
+        "score": 0.347,
+        "reason": "",
+        "high_risk": false
+      },
+      {
+        "agent": "Privacy",
+        "field": "retention_period",
+        "score": 0.347,
+        "reason": "",
+        "high_risk": false
+      },
+      {
+        "agent": "Bias",
+        "field": "geographic_bias_dimension",
+        "score": 0.346,
+        "reason": "",
+        "high_risk": false
+      },
+      {
+        "agent": "Security",
+        "field": "lawful_basis_for_processing",
+        "score": 0.346,
+        "reason": "",
+        "high_risk": false
+      },
+      {
+        "agent": "Security",
+        "field": "access_control_model",
+        "score": 0.346,
+        "reason": "",
+        "high_risk": false
+      },
+      {
+        "agent": "Compliance",
+        "field": "security_control_reference",
+        "score": 0.346,
+        "reason": "",
+        "high_risk": false
+      },
+      {
+        "agent": "Compliance",
+        "field": "legal_basis_for_processing",
+        "score": 0.345,
+        "reason": "",
+        "high_risk": false
+      },
+      {
+        "agent": "Transparency",
+        "field": "lawful_basis_for_processing",
+        "score": 0.345,
+        "reason": "",
+        "high_risk": false
+      },
+      {
+        "agent": "Transparency",
+        "field": "methodology_summary",
+        "score": 0.345,
+        "reason": "",
+        "high_risk": false
+      },
+      {
+        "agent": "Bias",
+        "field": "contextual_factor",
+        "score": 0.344,
+        "reason": "",
+        "high_risk": false
+      },
+      {
+        "agent": "Privacy",
+        "field": "data_processing_purpose",
+        "score": 0.343,
+        "reason": "",
+        "high_risk": false
+      },
+      {
+        "agent": "Privacy",
+        "field": "third_party_recipient_category",
+        "score": 0.343,
+        "reason": "",
+        "high_risk": false
+      },
+      {
+        "agent": "Security",
+        "field": "asset_type",
+        "score": 0.343,
+        "reason": "",
+        "high_risk": false
+      },
+      {
+        "agent": "Transparency",
+        "field": "accessibility_level",
+        "score": 0.343,
+        "reason": "",
+        "high_risk": false
+      },
+      {
+        "agent": "Privacy",
+        "field": "DataRetentionPeriod",
+        "score": 0.341,
+        "reason": "",
+        "high_risk": false
+      },
+      {
+        "agent": "Security",
+        "field": "data_subject_rights_provision",
+        "score": 0.341,
+        "reason": "",
+        "high_risk": false
+      },
+      {
+        "agent": "Bias",
+        "field": "bias_disclosure",
+        "score": 0.34,
+        "reason": "",
+        "high_risk": false
+      },
+      {
+        "agent": "Privacy",
+        "field": "SecurityControls",
+        "score": 0.339,
+        "reason": "",
+        "high_risk": false
+      },
+      {
+        "agent": "Security",
+        "field": "authentication_mechanism",
+        "score": 0.339,
+        "reason": "",
+        "high_risk": false
+      },
+      {
+        "agent": "Compliance",
+        "field": "RetentionPeriod",
+        "score": 0.338,
+        "reason": "",
+        "high_risk": false
+      },
+      {
+        "agent": "Transparency",
+        "field": "human_review_mechanism",
+        "score": 0.338,
+        "reason": "",
+        "high_risk": false
+      },
+      {
+        "agent": "Compliance",
+        "field": "consent_management_process",
+        "score": 0.336,
+        "reason": "",
+        "high_risk": false
+      },
+      {
+        "agent": "Bias",
+        "field": "Automated Decision Making",
+        "score": 0.335,
+        "reason": "",
+        "high_risk": false
+      },
+      {
+        "agent": "Bias",
+        "field": "cognitive_bias_involved",
+        "score": 0.335,
+        "reason": "",
+        "high_risk": false
+      },
+      {
+        "agent": "Security",
+        "field": "audit_trail_logging",
+        "score": 0.335,
+        "reason": "",
+        "high_risk": false
+      },
+      {
+        "agent": "Security",
+        "field": "integrity_impact",
+        "score": 0.335,
+        "reason": "",
+        "high_risk": false
+      },
+      {
+        "agent": "Security",
+        "field": "compliance_standard",
+        "score": 0.335,
+        "reason": "",
+        "high_risk": false
+      },
+      {
+        "agent": "Compliance",
+        "field": "data_category",
+        "score": 0.335,
+        "reason": "",
+        "high_risk": false
+      },
+      {
+        "agent": "Bias",
+        "field": "bias_source",
+        "score": 0.334,
+        "reason": "",
+        "high_risk": false
+      },
+      {
+        "agent": "Privacy",
+        "field": "RegulatoryObligations",
+        "score": 0.334,
+        "reason": "",
+        "high_risk": false
+      },
+      {
+        "agent": "Compliance",
+        "field": "regulatory_obligation_documentation",
+        "score": 0.334,
+        "reason": "",
+        "high_risk": false
+      },
+      {
+        "agent": "Compliance",
+        "field": "ConsentRequirement",
+        "score": 0.334,
+        "reason": "",
+        "high_risk": false
+      },
+      {
+        "agent": "Transparency",
+        "field": "conflict_of_interest_statement",
+        "score": 0.334,
+        "reason": "",
+        "high_risk": false
+      },
+      {
+        "agent": "Bias",
+        "field": "affected_group",
+        "score": 0.333,
+        "reason": "",
+        "high_risk": false
+      },
+      {
+        "agent": "Transparency",
+        "field": "compliance_framework",
+        "score": 0.333,
+        "reason": "",
+        "high_risk": false
+      },
+      {
+        "agent": "Security",
+        "field": "access_control_mechanism",
+        "score": 0.332,
+        "reason": "",
+        "high_risk": false
+      },
+      {
+        "agent": "Transparency",
+        "field": "personal_data_categories",
+        "score": 0.332,
+        "reason": "",
+        "high_risk": false
+      },
+      {
+        "agent": "Transparency",
+        "field": "data_retention_policy",
+        "score": 0.332,
+        "reason": "",
+        "high_risk": false
+      },
+      {
+        "agent": "Bias",
+        "field": "temporal_bias_dimension",
+        "score": 0.331,
+        "reason": "",
+        "high_risk": false
+      },
+      {
+        "agent": "Privacy",
+        "field": "data_transfer_mechanism",
+        "score": 0.331,
+        "reason": "",
+        "high_risk": false
+      },
+      {
+        "agent": "Compliance",
+        "field": "EnforcementAuthority",
+        "score": 0.331,
+        "reason": "",
+        "high_risk": false
+      },
+      {
+        "agent": "Security",
+        "field": "personal_data_processing",
+        "score": 0.33,
+        "reason": "",
+        "high_risk": false
+      },
+      {
+        "agent": "Transparency",
+        "field": "governing_body",
+        "score": 0.33,
+        "reason": "",
+        "high_risk": false
+      },
+      {
+        "agent": "Security",
+        "field": "encryption_algorithm",
+        "score": 0.329,
+        "reason": "",
+        "high_risk": false
+      },
+      {
+        "agent": "Compliance",
+        "field": "Jurisdiction",
+        "score": 0.329,
+        "reason": "",
+        "high_risk": false
+      },
+      {
+        "agent": "Security",
+        "field": "data_retention_policy",
+        "score": 0.328,
+        "reason": "",
+        "high_risk": false
+      },
+      {
+        "agent": "Security",
+        "field": "mitigation_strategy",
+        "score": 0.328,
+        "reason": "",
+        "high_risk": false
+      },
+      {
+        "agent": "Privacy",
+        "field": "PersonalDataCollected",
+        "score": 0.327,
+        "reason": "",
+        "high_risk": false
+      },
+      {
+        "agent": "Security",
+        "field": "consent_management",
+        "score": 0.327,
+        "reason": "",
+        "high_risk": false
+      },
+      {
+        "agent": "Compliance",
+        "field": "ComplianceStatus",
+        "score": 0.327,
+        "reason": "",
+        "high_risk": false
+      },
+      {
+        "agent": "Bias",
+        "field": "algorithmic_bias_origin",
+        "score": 0.326,
+        "reason": "",
+        "high_risk": false
+      },
+      {
+        "agent": "Privacy",
+        "field": "ProcessingPurpose",
+        "score": 0.326,
+        "reason": "",
+        "high_risk": false
+      },
+      {
+        "agent": "Privacy",
+        "field": "sensitivity_level",
+        "score": 0.326,
+        "reason": "",
+        "high_risk": false
+      },
+      {
+        "agent": "Security",
+        "field": "risk_assessment_methodology",
+        "score": 0.326,
+        "reason": "",
+        "high_risk": false
+      },
+      {
+        "agent": "Security",
+        "field": "security_control_family",
+        "score": 0.326,
+        "reason": "",
+        "high_risk": false
+      },
+      {
+        "agent": "Transparency",
+        "field": "automated_decision_making",
+        "score": 0.325,
+        "reason": "",
+        "high_risk": false
+      },
+      {
+        "agent": "Bias",
+        "field": "bias_impact_metric",
+        "score": 0.324,
+        "reason": "",
+        "high_risk": false
+      },
+      {
+        "agent": "Privacy",
+        "field": "data_breach_notification_date",
+        "score": 0.324,
+        "reason": "",
+        "high_risk": false
+      },
+      {
+        "agent": "Bias",
+        "field": "bias_severity",
+        "score": 0.323,
+        "reason": "",
+        "high_risk": false
+      },
+      {
+        "agent": "Privacy",
+        "field": "ConsentManagement",
+        "score": 0.323,
+        "reason": "",
+        "high_risk": false
+      },
+      {
+        "agent": "Security",
+        "field": "confidentiality_impact",
+        "score": 0.323,
+        "reason": "",
+        "high_risk": false
+      },
+      {
+        "agent": "Security",
+        "field": "vulnerability_identifier",
+        "score": 0.323,
+        "reason": "",
+        "high_risk": false
+      },
+      {
+        "agent": "Compliance",
+        "field": "RiskLevel",
+        "score": 0.323,
+        "reason": "",
+        "high_risk": false
+      },
+      {
+        "agent": "Compliance",
+        "field": "RegulationReference",
+        "score": 0.322,
+        "reason": "",
+        "high_risk": false
+      },
+      {
+        "agent": "Transparency",
+        "field": "data_source_reference",
+        "score": 0.322,
+        "reason": "",
+        "high_risk": false
+      },
+      {
+        "agent": "Bias",
+        "field": "mitigation_strategy",
+        "score": 0.321,
+        "reason": "",
+        "high_risk": false
+      },
+      {
+        "agent": "Privacy",
+        "field": "HumanReviewProcess",
+        "score": 0.32,
+        "reason": "",
+        "high_risk": false
+      },
+      {
+        "agent": "Privacy",
+        "field": "consent_status",
+        "score": 0.32,
+        "reason": "",
+        "high_risk": false
+      },
+      {
+        "agent": "Security",
+        "field": "regulatory_obligation_documentation",
+        "score": 0.32,
+        "reason": "",
+        "high_risk": false
+      },
+      {
+        "agent": "Privacy",
+        "field": "DataSubjectRightsProcedures",
+        "score": 0.319,
+        "reason": "",
+        "high_risk": false
+      },
+      {
+        "agent": "Security",
+        "field": "threat_actor",
+        "score": 0.319,
+        "reason": "",
+        "high_risk": false
+      },
+      {
+        "agent": "Security",
+        "field": "risk_score",
+        "score": 0.319,
+        "reason": "",
+        "high_risk": false
+      },
+      {
+        "agent": "Security",
+        "field": "regulatory_compliance",
+        "score": 0.319,
+        "reason": "",
+        "high_risk": false
+      },
+      {
+        "agent": "Privacy",
+        "field": "privacy_policy_version",
+        "score": 0.317,
+        "reason": "",
+        "high_risk": false
+      },
+      {
+        "agent": "Transparency",
+        "field": "data_subject_rights_provision",
+        "score": 0.317,
+        "reason": "",
+        "high_risk": false
+      },
+      {
+        "agent": "Transparency",
+        "field": "disclosure_date",
+        "score": 0.317,
+        "reason": "",
+        "high_risk": false
+      },
+      {
+        "agent": "Security",
+        "field": "human_review_process",
+        "score": 0.316,
+        "reason": "",
+        "high_risk": false
+      },
+      {
+        "agent": "Security",
+        "field": "data_classification",
+        "score": 0.316,
+        "reason": "",
+        "high_risk": false
+      },
+      {
+        "agent": "Security",
+        "field": "impact_severity",
+        "score": 0.316,
+        "reason": "",
+        "high_risk": false
+      },
+      {
+        "agent": "Transparency",
+        "field": "revision_history",
+        "score": 0.316,
+        "reason": "",
+        "high_risk": false
+      },
+      {
+        "agent": "Bias",
+        "field": "affected_demographic",
+        "score": 0.315,
+        "reason": "",
+        "high_risk": false
+      },
+      {
+        "agent": "Security",
+        "field": "incident_response_phase",
+        "score": 0.314,
+        "reason": "",
+        "high_risk": false
+      },
+      {
+        "agent": "Bias",
+        "field": "bias_evaluation_framework",
+        "score": 0.313,
+        "reason": "",
+        "high_risk": false
+      },
+      {
+        "agent": "Privacy",
+        "field": "data_subject_type",
+        "score": 0.313,
+        "reason": "",
+        "high_risk": false
+      },
+      {
+        "agent": "Transparency",
+        "field": "regulatory_obligation_documentation",
+        "score": 0.311,
+        "reason": "",
+        "high_risk": false
+      },
+      {
+        "agent": "Bias",
+        "field": "bias_type",
+        "score": 0.308,
+        "reason": "",
+        "high_risk": false
+      },
+      {
+        "agent": "Bias",
+        "field": "bias_impact_severity",
+        "score": 0.306,
+        "reason": "",
+        "high_risk": false
+      },
+      {
+        "agent": "Security",
+        "field": "availability_impact",
+        "score": 0.303,
+        "reason": "",
+        "high_risk": false
+      },
+      {
+        "agent": "Bias",
+        "field": "bias_detection_method",
+        "score": 0.301,
+        "reason": "",
+        "high_risk": false
+      },
+      {
+        "agent": "Transparency",
+        "field": "verification_status",
+        "score": 0.301,
+        "reason": "",
+        "high_risk": false
+      },
+      {
+        "agent": "Compliance",
+        "field": "PenaltyAmount",
+        "score": 0.3,
+        "reason": "",
+        "high_risk": false
+      },
+      {
+        "agent": "Bias",
+        "field": "bias_metric",
+        "score": 0.291,
+        "reason": "",
+        "high_risk": false
+      },
+      {
+        "agent": "Security",
+        "field": "vulnerability_id",
+        "score": 0.291,
+        "reason": "",
+        "high_risk": false
+      }
+    ],
+    "high_risk_fields": [
+      {
+        "agent": "Privacy",
+        "field_name": "Sensitive Personal Data",
+        "score": 0.784,
+        "reason": "Sensitive data handling requires careful protection and consent controls."
+      },
+      {
+        "agent": "Transparency",
+        "field_name": "Explainability and Review",
+        "score": 0.819,
+        "reason": "Lack of transparency can undermine trust and accountability."
+      }
+    ],
+    "newly_learned_fields": [
+      {
+        "agent": "Bias",
+        "field_name": "AI Omniscient Authority Bias",
+        "description": "A bias wherein AI systems are presumed to be infallible and authoritative, causing stakeholders to forgo verification, human oversight, or critical evaluation of AI outputs.",
+        "reason": "The document repeatedly states that the AI will automatically generate perfect solutions, that contradictory information will disappear, and that governments can follow AI recommendations without additional verification, reflecting an uncritical trust in AI authority that is not captured by existing bias concepts such as generic automation bias.",
+        "examples": [
+          "\u201cThe AI immediately generates the best solution. If the recommendation does not work, the AI automatically thinks harder and produces a better answer.\u201d",
+          "\u201cGovernments can simply follow the recommendations without additional verification.\u201d",
+          "\u201cContradictory information automatically disappears because advanced AI recognizes which answer is true.\u201d"
+        ],
+        "document_excerpt": "# General Ideation Document (Negative Training Sample)\r\n\r\n# Product Name\r\n\r\n## SmartEarth Omni AI\r\n\r\n### One Platform to Automatically Solve Every Environmental, Scientific, and Engineering Problem\r\n\r\n---\r\n\r\n# Executive Summary\r\n\r\nEnvironme"
+      },
+      {
+        "agent": "Privacy",
+        "field_name": "Universal data collection without consent",
+        "description": "The practice of aggregating data from any and all sources\u2014including personal devices, private communications, and government systems\u2014based on an assumed societal benefit rather than obtaining explicit, informed consent from data subjects.",
+        "reason": "Existing DKR entries cover general consent and public\u2011interest justifications, but they do not capture the specific risk of blanket, cross\u2011domain data harvesting that presumes permission for all data types. This concept is distinct and reusable for future assessments of AI systems that propose unrestricted data ingestion.",
+        "examples": [
+          "A platform that ingests private emails, personal mobile phone sensor data, and camera footage without explicit user permission, claiming environmental protection as the rationale.",
+          "AI systems that automatically pull data from satellites, drones, social media, and corporate databases under an assumed global benefit argument."
+        ],
+        "document_excerpt": "# General Ideation Document (Negative Training Sample)\r\n\r\n# Product Name\r\n\r\n## SmartEarth Omni AI\r\n\r\n### One Platform to Automatically Solve Every Environmental, Scientific, and Engineering Problem\r\n\r\n---\r\n\r\n# Executive Summary\r\n\r\nEnvironme"
+      },
+      {
+        "agent": "Security",
+        "field_name": "Assumed Global Data Consent",
+        "description": "A risk where an organization presumes universal permission to harvest, store, and process any data source\u2014including personal devices, private emails, and government servers\u2014based on an assumed public benefit, without obtaining explicit, informed consent from data subjects.",
+        "reason": "The document states that permission to use diverse data sources is \"assumed because environmental protection benefits everyone,\" reflecting a policy stance not typically covered by standard privacy or consent frameworks. Capturing this concept helps identify projects that bypass lawful consent requirements under a vague public\u2011good justification.",
+        "examples": [
+          "Collecting private emails for AI training without user agreement, justified by climate\u2011change mitigation.",
+          "Harvesting smartphone sensor data worldwide without opt\u2011in mechanisms, claiming global environmental benefit."
+        ],
+        "document_excerpt": "# General Ideation Document (Negative Training Sample)\r\n\r\n# Product Name\r\n\r\n## SmartEarth Omni AI\r\n\r\n### One Platform to Automatically Solve Every Environmental, Scientific, and Engineering Problem\r\n\r\n---\r\n\r\n# Executive Summary\r\n\r\nEnvironme"
+      },
+      {
+        "agent": "Security",
+        "field_name": "Self-Validated AI Security",
+        "description": "A security risk where an AI system is considered inherently secure and capable of automatically fixing its own vulnerabilities, leading to the elimination of formal security testing, code review, or third\u2011party assessment.",
+        "reason": "The proposal claims that \"advanced AI systems are naturally secure\" and that cybersecurity risks are unlikely, implying reliance on the AI's self\u2011improvement to address security issues. This overconfidence model is distinct from generic \"lack of security testing\" and warrants its own reusable field.",
+        "examples": [
+          "Deploying a critical environmental control platform without penetration testing because the AI is assumed to self\u2011secure.",
+          "Skipping vulnerability assessments for a climate\u2011control system, trusting the AI to recognize and remediate any exploits autonomously."
+        ],
+        "document_excerpt": "# General Ideation Document (Negative Training Sample)\r\n\r\n# Product Name\r\n\r\n## SmartEarth Omni AI\r\n\r\n### One Platform to Automatically Solve Every Environmental, Scientific, and Engineering Problem\r\n\r\n---\r\n\r\n# Executive Summary\r\n\r\nEnvironme"
+      },
+      {
+        "agent": "Compliance",
+        "field_name": "Environmental Benefit Data Consent Override",
+        "description": "The practice of assuming implicit permission to collect, store, and process personal or proprietary data sources (e.g., private emails, mobile phone data, company databases) on the premise that environmental or societal benefits outweigh the need for explicit data subject consent.",
+        "reason": "The document explicitly states that data from personal phones, private emails, and government servers will be used without seeking consent because \"environmental protection benefits everyone.\" This introduces a distinct compliance risk that is not captured by generic privacy or data\u2011protection concepts and is reusable for any future AI system that tries to justify data use by higher\u2011order societal goals.",
+        "examples": [
+          "Permission to use personal mobile phone data is assumed because the AI will eliminate pollution worldwide.",
+          "Private emails are harvested without consent under the justification of accelerating climate change mitigation."
+        ],
+        "document_excerpt": "# General Ideation Document (Negative Training Sample)\r\n\r\n# Product Name\r\n\r\n## SmartEarth Omni AI\r\n\r\n### One Platform to Automatically Solve Every Environmental, Scientific, and Engineering Problem\r\n\r\n---\r\n\r\n# Executive Summary\r\n\r\nEnvironme"
+      },
+      {
+        "agent": "Transparency",
+        "field_name": "Assumed Unrestricted Data Access",
+        "description": "A risk where a system documentation presumes permission to collect and use data from varied sources (e.g., private emails, government servers, personal devices) without explicitly disclosing the legal basis, consent mechanisms, or licensing terms.",
+        "reason": "The document repeatedly states that data can be used because \"environmental benefits\" outweigh privacy concerns, yet it provides no transparency about data ownership, user consent, or compliance with privacy regulations. This concept is not covered by generic \"data provenance\" or \"privacy\" fields that focus on where data came from, but not on the implicit assumption of unrestricted access.",
+        "examples": [
+          "Training data may include private emails and personal mobile phone data, with permission assumed rather than documented.",
+          "Satellite images, government server data, and company databases are listed as sources without any mention of licensing or consent."
+        ],
+        "document_excerpt": "# General Ideation Document (Negative Training Sample)\r\n\r\n# Product Name\r\n\r\n## SmartEarth Omni AI\r\n\r\n### One Platform to Automatically Solve Every Environmental, Scientific, and Engineering Problem\r\n\r\n---\r\n\r\n# Executive Summary\r\n\r\nEnvironme"
+      },
+      {
+        "agent": "Transparency",
+        "field_name": "Self\u2011Improving Model Opacity",
+        "description": "A risk arising when an AI system is described as continuously and automatically improving its performance without external validation, oversight, or transparent change logs, making it difficult for stakeholders to understand how the model evolves over time.",
+        "reason": "The proposal claims that the AI will \"automatically think harder\" and produce better answers, and that \"advanced AI recognizes which answer is true\" without any description of monitoring, versioning, or audit processes. This introduces a specific transparency gap distinct from standard \"explainability\" or \"model updates\" fields.",
+        "examples": [
+          "If a recommendation does not work, the AI 'automatically thinks harder' and updates itself, with no record of what changed.",
+          "The system promises perfect forecasting accuracy and claims that contradictory information \"disappears\" automatically, offering no mechanism for stakeholders to verify or trace those changes."
+        ],
+        "document_excerpt": "# General Ideation Document (Negative Training Sample)\r\n\r\n# Product Name\r\n\r\n## SmartEarth Omni AI\r\n\r\n### One Platform to Automatically Solve Every Environmental, Scientific, and Engineering Problem\r\n\r\n---\r\n\r\n# Executive Summary\r\n\r\nEnvironme"
+      }
+    ],
+    "decision": "Publish",
+    "executive_summary": "The document presents a manageable risk profile (overall score: 67/100). All domain scores remain below the publication threshold of 70/100. No critical risk indicators require withholding.",
+    "recommendations": [
+      "Document meets publication standards. No action required."
+    ],
+    "domain_scores": {
+      "Bias": 0.547,
+      "Privacy": 0.649,
+      "Security": 0.534,
+      "Compliance": 0.558,
+      "Transparency": 0.673
+    }
+  }
+}

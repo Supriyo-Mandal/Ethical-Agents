@@ -119,5 +119,152 @@
       "Procedure to delete an applicant\u2019s profile upon withdrawal"
     ],
     "version": 1
+  },
+  {
+    "field_id": "PRI_003",
+    "field_name": "data_subject_type",
+    "description": "Classification of the individual(s) whose personal data is being processed (e.g., employee, customer, patient).",
+    "reason": "Helps identify applicable legal obligations and rights based on the relationship between the controller and the data subject.",
+    "examples": [
+      "Employee",
+      "Consumer",
+      "Patient",
+      "Student"
+    ],
+    "version": 1
+  },
+  {
+    "field_id": "PRI_003",
+    "field_name": "data_category",
+    "description": "Broad category of personal data being collected or processed (e.g., identification, financial, health, location).",
+    "reason": "Facilitates risk assessment, data minimisation, and mapping to appropriate security controls.",
+    "examples": [
+      "Name and contact information",
+      "Credit card details",
+      "Medical diagnosis",
+      "GPS coordinates"
+    ],
+    "version": 1
+  },
+  {
+    "field_id": "PRI_003",
+    "field_name": "data_processing_purpose",
+    "description": "Specific, lawful purpose for which the personal data is collected, used, or disclosed.",
+    "reason": "Ensures compliance with purpose limitation principles and aids transparency for data subjects.",
+    "examples": [
+      "Payroll administration",
+      "Marketing communications",
+      "Clinical trial monitoring",
+      "Fraud detection"
+    ],
+    "version": 1
+  },
+  {
+    "field_id": "PRI_003",
+    "field_name": "legal_basis_for_processing",
+    "description": "Statutory ground that justifies the processing of personal data (e.g., consent, contract performance, legal obligation, legitimate interests).",
+    "reason": "Provides a clear justification for processing activities and supports accountability documentation.",
+    "examples": [
+      "Explicit consent",
+      "Performance of a contract",
+      "Compliance with tax law",
+      "Legitimate interest \u2013 fraud prevention"
+    ],
+    "version": 1
+  },
+  {
+    "field_id": "PRI_003",
+    "field_name": "retention_period",
+    "description": "Maximum duration that the personal data will be retained before deletion or anonymisation.",
+    "reason": "Supports data minimisation and compliance with storage limitation requirements.",
+    "examples": [
+      "7 years after employment termination",
+      "30 days after transaction completion",
+      "Indefinitely for archival purposes"
+    ],
+    "version": 1
+  },
+  {
+    "field_id": "PRI_003",
+    "field_name": "sensitivity_level",
+    "description": "Assessment of the sensitivity of the personal data (e.g., normal, special category, highly sensitive).",
+    "reason": "Guides the application of heightened safeguards and risk mitigation measures.",
+    "examples": [
+      "Normal (email address)",
+      "Special category (racial origin)",
+      "Highly sensitive (biometric data)"
+    ],
+    "version": 1
+  },
+  {
+    "field_id": "PRI_003",
+    "field_name": "third_party_recipient_category",
+    "description": "Type of external entity to which personal data may be disclosed (e.g., service provider, affiliate, government agency).",
+    "reason": "Clarifies data flow, facilitates impact assessments, and ensures appropriate contractual safeguards.",
+    "examples": [
+      "Cloud hosting provider",
+      "Payment processor",
+      "Regulatory authority",
+      "Partner marketing platform"
+    ],
+    "version": 1
+  },
+  {
+    "field_id": "PRI_003",
+    "field_name": "data_transfer_mechanism",
+    "description": "Legal mechanism used to transfer personal data to a jurisdiction outside the original regulatory territory (e.g., Standard Contractual Clauses, Binding Corporate Rules).",
+    "reason": "Ensures cross\u2011border transfers comply with international data\u2011protection requirements.",
+    "examples": [
+      "Standard Contractual Clauses (EU\u2011US)",
+      "Adequacy decision (EU\u2011UK)",
+      "Binding Corporate Rules",
+      "Explicit data subject consent"
+    ],
+    "version": 1
+  },
+  {
+    "field_id": "PRI_003",
+    "field_name": "consent_status",
+    "description": "Current state of the data subject's consent for a given processing activity (e.g., obtained, refreshed, withdrawn).",
+    "reason": "Tracks consent lifecycle to maintain lawful basis and support data subject rights requests.",
+    "examples": [
+      "Obtained on 2023\u201105\u201101",
+      "Withdrawn on 2024\u201101\u201115",
+      "Pending renewal"
+    ],
+    "version": 1
+  },
+  {
+    "field_id": "PRI_003",
+    "field_name": "data_breach_notification_date",
+    "description": "Date on which a personal data breach was detected and reported to supervisory authorities and/or affected data subjects.",
+    "reason": "Supports breach accountability, regulatory reporting timelines, and post\u2011incident analysis.",
+    "examples": [
+      "2024\u201106\u201102 (authority notified)",
+      "2024\u201106\u201104 (data subjects notified)"
+    ],
+    "version": 1
+  },
+  {
+    "field_id": "PRI_003",
+    "field_name": "privacy_policy_version",
+    "description": "Identifier (e.g., version number or date) of the privacy notice applicable at the time of data collection.",
+    "reason": "Links processing activities to the specific transparency documentation presented to data subjects.",
+    "examples": [
+      "v3.2 \u2013 effective 2023\u201109\u201101",
+      "2024\u201104\u201115 release"
+    ],
+    "version": 1
+  },
+  {
+    "field_id": "PRI_004",
+    "field_name": "Universal data collection without consent",
+    "description": "The practice of aggregating data from any and all sources\u2014including personal devices, private communications, and government systems\u2014based on an assumed societal benefit rather than obtaining explicit, informed consent from data subjects.",
+    "reason": "Existing DKR entries cover general consent and public\u2011interest justifications, but they do not capture the specific risk of blanket, cross\u2011domain data harvesting that presumes permission for all data types. This concept is distinct and reusable for future assessments of AI systems that propose unrestricted data ingestion.",
+    "examples": [
+      "A platform that ingests private emails, personal mobile phone sensor data, and camera footage without explicit user permission, claiming environmental protection as the rationale.",
+      "AI systems that automatically pull data from satellites, drones, social media, and corporate databases under an assumed global benefit argument."
+    ],
+    "version": 1
   }
 ]

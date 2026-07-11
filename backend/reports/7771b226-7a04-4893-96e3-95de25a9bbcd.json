@@ -1,0 +1,24 @@
+{
+  "id": "7771b226-7a04-4893-96e3-95de25a9bbcd",
+  "document_name": "positive_doc.txt",
+  "publish": true,
+  "overall_score": 0.0,
+  "summary": "No risk indicators were detected across any domain. The document is clear for publication.",
+  "metadata": {
+    "fields": [],
+    "high_risk_fields": [],
+    "newly_learned_fields": [],
+    "decision": "Publish",
+    "executive_summary": "No risk indicators were detected across any domain. The document is clear for publication.",
+    "recommendations": [
+      "Document meets publication standards. No action required."
+    ],
+    "domain_scores": {
+      "Bias": 0.0,
+      "Privacy": 0.0,
+      "Security": 0.0,
+      "Compliance": 0.0,
+      "Transparency": 0.0
+    }
+  }
+}
