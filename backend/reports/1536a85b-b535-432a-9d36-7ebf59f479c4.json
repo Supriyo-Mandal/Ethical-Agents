@@ -1,0 +1,25 @@
+{
+  "id": "1536a85b-b535-432a-9d36-7ebf59f479c4",
+  "document_name": "sample.txt",
+  "document_type": "txt",
+  "document": {
+    "name": "sample.txt",
+    "type": "txt",
+    "content": "Alpha beta",
+    "uploaded_at": "2026-07-11T10:12:47.400815+00:00"
+  },
+  "publish": false,
+  "overall_score": 0.82,
+  "summary": "The document was analyzed by the AI framework.",
+  "metadata": {
+    "fields": [
+      {
+        "agent": "Bias",
+        "field": "Automated Decision Making",
+        "score": 0.88,
+        "reason": "The document discusses automated decisions without a clear human review path."
+      }
+    ]
+  },
+  "content_preview": "Alpha beta"
+}

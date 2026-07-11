@@ -1,41 +1,44 @@
 from __future__ import annotations
 
 import json
-from pathlib import Path
-from typing import Any, Dict, List
+from typing import Any
 from uuid import uuid4
 
-
-ROOT_DIR = Path(__file__).resolve().parents[2]
-DATA_DIR = ROOT_DIR / "data"
-DATA_FILE = DATA_DIR / "documents.json"
+from .config import REPORT_DIRECTORY
 
 
-def ensure_storage() -> None:
-    DATA_DIR.mkdir(parents=True, exist_ok=True)
-    if not DATA_FILE.exists():
-        DATA_FILE.write_text("[]", encoding="utf-8")
+REPORT_DIRECTORY.mkdir(parents=True, exist_ok=True)
 
 
-def load_documents() -> List[Dict[str, Any]]:
-    ensure_storage()
-    with DATA_FILE.open("r", encoding="utf-8") as handle:
-        return json.load(handle)
+def save_analysis(document_payload: dict[str, Any], result: dict[str, Any]) -> dict[str, Any]:
+    analysis_id = str(uuid4())
+    report_path = REPORT_DIRECTORY / f"{analysis_id}.json"
+    document = document_payload.get("document", {})
+    payload = {
+        "id": analysis_id,
+        "document_name": document.get("name", "document"),
+        "document_type": document.get("type", "txt"),
+        "document": document,
+        **result,
+    }
+    report_path.write_text(json.dumps(payload, indent=2), encoding="utf-8")
+    return payload
 
 
-def save_documents(records: List[Dict[str, Any]]) -> None:
-    ensure_storage()
-    with DATA_FILE.open("w", encoding="utf-8") as handle:
-        json.dump(records, handle, indent=2)
+def load_analysis(analysis_id: str) -> dict[str, Any] | None:
+    report_path = REPORT_DIRECTORY / f"{analysis_id}.json"
+    if not report_path.exists():
+        return None
+    return json.loads(report_path.read_text(encoding="utf-8"))
 
 
-def add_document_record(record: Dict[str, Any]) -> Dict[str, Any]:
-    records = load_documents()
-    record.setdefault("id", str(uuid4()))
-    records.append(record)
-    save_documents(records)
-    return record
+def get_history() -> list[dict[str, Any]]:
+    return [json.loads(path.read_text(encoding="utf-8")) for path in sorted(REPORT_DIRECTORY.glob("*.json"))]
 
 
-def get_document_summaries() -> List[Dict[str, Any]]:
-    return load_documents()
+def delete_analysis(analysis_id: str) -> bool:
+    report_path = REPORT_DIRECTORY / f"{analysis_id}.json"
+    if report_path.exists():
+        report_path.unlink()
+        return True
+    return False
