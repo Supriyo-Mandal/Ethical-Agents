@@ -1,0 +1,10 @@
+[
+  {
+    "field_id": "CMP_001",
+    "field_name": "Regulatory Obligations",
+    "description": "The system must meet or document relevant legal obligations.",
+    "reason": "Non-compliance can create legal and operational risk.",
+    "examples": ["GDPR", "HIPAA", "Audit Trail"],
+    "version": 1
+  }
+]

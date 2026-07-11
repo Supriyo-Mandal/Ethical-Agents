@@ -1,0 +1,10 @@
+[
+  {
+    "field_id": "PRV_001",
+    "field_name": "Sensitive Personal Data",
+    "description": "The system processes personal or sensitive user data.",
+    "reason": "Sensitive data handling requires careful protection and consent controls.",
+    "examples": ["Location History", "Health Data"],
+    "version": 1
+  }
+]

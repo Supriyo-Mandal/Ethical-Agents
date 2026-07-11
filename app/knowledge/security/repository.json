@@ -1,0 +1,10 @@
+[
+  {
+    "field_id": "SEC_001",
+    "field_name": "Authentication Controls",
+    "description": "The system relies on authentication and access boundaries.",
+    "reason": "Weak authentication can expose services to abuse.",
+    "examples": ["Password Reset", "OAuth Tokens"],
+    "version": 1
+  }
+]
