@@ -1,14 +1,11 @@
 from __future__ import annotations
 
-import tempfile
 from pathlib import Path
 from typing import Any
 
-import docx
-import PyPDF2
 from fastapi import APIRouter, File, HTTPException, UploadFile
 
-from ..analysis import analyze, build_document_payload
+from ..analysis import analyze
 from ..schemas import AnalysisResponse, HistoryResponse
 from ..storage import get_history, load_analysis, save_analysis
 
@@ -29,32 +26,8 @@ async def upload(file: UploadFile = File(...)) -> dict[str, Any]:
     if suffix not in {".pdf", ".docx", ".txt"}:
         raise HTTPException(status_code=400, detail="Unsupported file type")
 
-    contents = await file.read()
-    if not contents:
-        raise HTTPException(status_code=400, detail="Document content is required")
-
-    if suffix == ".txt":
-        text = contents.decode("utf-8", errors="ignore")
-    elif suffix == ".pdf":
-        with tempfile.NamedTemporaryFile(suffix=".pdf", delete=False) as handle:
-            handle.write(contents)
-            temp_path = handle.name
-        try:
-            text = "\n".join(page.extract_text() or "" for page in PyPDF2.PdfReader(temp_path).pages)
-        finally:
-            Path(temp_path).unlink(missing_ok=True)
-    else:
-        with tempfile.NamedTemporaryFile(suffix=".docx", delete=False) as handle:
-            handle.write(contents)
-            temp_path = handle.name
-        try:
-            text = "\n".join(paragraph.text for paragraph in docx.Document(temp_path).paragraphs if paragraph.text)
-        finally:
-            Path(temp_path).unlink(missing_ok=True)
-
-    document_payload = build_document_payload(file.filename, suffix.lstrip("."), text)
-    analysis_result = analyze(document_payload)
-    save_analysis(document_payload, analysis_result)
+    analysis_result = analyze(file)
+    save_analysis(file.filename, analysis_result)
 
     return {
         "publish": bool(analysis_result.get("publish", False)),
