@@ -163,5 +163,249 @@
       "Applying a scoring matrix to determine residual risk after implementing encryption."
     ],
     "version": 1
+  },
+  {
+    "field_id": "SEC_003",
+    "field_name": "asset_type",
+    "description": "The category of the information system, component, or data asset being described (e.g., server, workstation, database, SaaS application, IoT device).",
+    "reason": "Standardizing asset categorization enables consistent risk scoring, inventory management, and control mapping across all security documentation.",
+    "examples": [
+      "Web Application Server",
+      "Employee Laptop",
+      "Customer PII Database",
+      "Industrial Control System (PLC)",
+      "Cloud Storage Bucket"
+    ],
+    "version": 1
+  },
+  {
+    "field_id": "SEC_003",
+    "field_name": "threat_actor",
+    "description": "The identified or hypothesized entity that may exploit a vulnerability (e.g., criminal group, nation\u2011state, insider, hacktivist, script\u2011kiddie).",
+    "reason": "Capturing threat actor information allows correlation with threat intelligence feeds and prioritization of mitigation efforts.",
+    "examples": [
+      "Organized Crime Syndicate",
+      "Nation\u2011State Advanced Persistent Threat (APT) Group",
+      "Disgruntled Employee",
+      "Botnet Operator",
+      " opportunistic script\u2011kiddie"
+    ],
+    "version": 1
+  },
+  {
+    "field_id": "SEC_003",
+    "field_name": "vulnerability_id",
+    "description": "A unique identifier for a known weakness, typically a CVE, CWE, or an internal tracking number.",
+    "reason": "Linking to a standardized ID facilitates automated vulnerability management, patch tracking, and reporting.",
+    "examples": [
+      "CVE\u20112024\u201112345",
+      "CWE\u201179 (Cross\u2011Site Scripting)",
+      "INTERNAL\u2011VULN\u20112026\u2011001"
+    ],
+    "version": 1
+  },
+  {
+    "field_id": "SEC_003",
+    "field_name": "mitigation_strategy",
+    "description": "The recommended technical or administrative action to reduce the risk associated with a vulnerability (e.g., patch, configuration change, segmentation).",
+    "reason": "A reusable field captures consistent remediation guidance that can be mapped to change\u2011management workflows.",
+    "examples": [
+      "Apply vendor security patch KB2026\u20115678",
+      "Disable legacy TLS 1.0 protocol",
+      "Implement network micro\u2011segmentation for the DMZ",
+      "Enforce multi\u2011factor authentication for privileged accounts"
+    ],
+    "version": 1
+  },
+  {
+    "field_id": "SEC_003",
+    "field_name": "confidentiality_impact",
+    "description": "The potential effect on data confidentiality if the vulnerability is exploited, expressed using a standardized scale (e.g., Low/Medium/High, CIA triad score).",
+    "reason": "Separating confidentiality impact supports quantitative risk models and compliance reporting (e.g., GDPR, HIPAA).",
+    "examples": [
+      "High \u2013 exposure of PHI",
+      "Medium \u2013 disclosure of internal business plans",
+      "Low \u2013 public\u2011facing information"
+    ],
+    "version": 1
+  },
+  {
+    "field_id": "SEC_003",
+    "field_name": "integrity_impact",
+    "description": "The potential effect on data or system integrity if the vulnerability is exploited, using a standard severity rating.",
+    "reason": "Provides granularity for risk calculations and helps prioritize controls that protect data integrity.",
+    "examples": [
+      "High \u2013 unauthorized modification of financial transaction records",
+      "Medium \u2013 tampering with configuration files",
+      "Low \u2013 alteration of non\u2011critical log entries"
+    ],
+    "version": 1
+  },
+  {
+    "field_id": "SEC_003",
+    "field_name": "availability_impact",
+    "description": "The potential effect on system availability if the vulnerability is exploited, expressed on a standard scale.",
+    "reason": "Explicitly tracking availability impact aids in disaster\u2011recovery planning and service\u2011level agreement (SLA) compliance.",
+    "examples": [
+      "High \u2013 denial\u2011of\u2011service affecting customer\u2011facing portal",
+      "Medium \u2013 intermittent disruption of internal file shares",
+      "Low \u2013 minor performance degradation"
+    ],
+    "version": 1
+  },
+  {
+    "field_id": "SEC_003",
+    "field_name": "data_classification",
+    "description": "The sensitivity level assigned to the data handled by the asset (e.g., Public, Internal, Confidential, Restricted, Regulated).",
+    "reason": "Linking assets to data classification drives appropriate controls such as encryption, access restrictions, and retention policies.",
+    "examples": [
+      "Confidential \u2013 employee SSNs",
+      "Regulated \u2013 payment card data (PCI\u2011DSS)",
+      "Public \u2013 marketing brochure"
+    ],
+    "version": 1
+  },
+  {
+    "field_id": "SEC_003",
+    "field_name": "encryption_algorithm",
+    "description": "The cryptographic algorithm(s) employed to protect data at rest or in transit (e.g., AES\u2011256\u2011GCM, RSA\u20112048, ChaCha20\u2011Poly1305).",
+    "reason": "Capturing algorithm details supports compliance checks (e.g., FIPS 140\u20112) and future cryptographic migration planning.",
+    "examples": [
+      "AES\u2011256\u2011GCM for database encryption",
+      "TLS\u202f1.3 with ECDHE\u2011X25519 key exchange",
+      "RSA\u20112048 for digital signatures"
+    ],
+    "version": 1
+  },
+  {
+    "field_id": "SEC_003",
+    "field_name": "compliance_standard",
+    "description": "The regulatory or industry framework(s) that apply to the asset or control (e.g., GDPR, HIPAA, PCI\u2011DSS, ISO\u202f27001, NIST\u202f800\u201153).",
+    "reason": "Mapping controls to standards simplifies audit preparation and gap analysis.",
+    "examples": [
+      "PCI\u2011DSS Requirement 3 \u2013 Encrypt Cardholder Data",
+      "HIPAA Security Rule \u2013 Access Control",
+      "ISO\u202f27001 Annex\u202fA.9 \u2013 Access Control"
+    ],
+    "version": 1
+  },
+  {
+    "field_id": "SEC_003",
+    "field_name": "incident_response_phase",
+    "description": "The stage of the incident response lifecycle to which a documented action belongs (e.g., Detection, Containment, Eradication, Recovery, Lessons Learned).",
+    "reason": "Standardizing phases helps correlate documentation with run\u2011books and metrics such as mean time to contain (MTTC).",
+    "examples": [
+      "Detection \u2013 Trigger SIEM alert for anomalous login",
+      "Containment \u2013 Isolate compromised host from network",
+      "Recovery \u2013 Restore data from immutable backup"
+    ],
+    "version": 1
+  },
+  {
+    "field_id": "SEC_003",
+    "field_name": "risk_score",
+    "description": "A numeric or categorical value representing the overall risk associated with the asset\u2011vulnerability pair, derived from impact, likelihood, and threat data (e.g., CVSS base score, custom risk rating).",
+    "reason": "A unified risk score enables prioritization across the portfolio and feeds into dashboards and automated remediation pipelines.",
+    "examples": [
+      "CVSS v3.1 Base Score: 8.7 (High)",
+      "Custom risk rating: Critical",
+      "Risk score: 42 (out of 100) \u2013 Medium"
+    ],
+    "version": 1
+  },
+  {
+    "field_id": "SEC_003",
+    "field_name": "security_control_family",
+    "description": "The high\u2011level category of the control that addresses the finding, aligned with recognized control frameworks (e.g., Identification & Authentication, Auditing & Accountability, Network Security, Physical Protection).",
+    "reason": "Grouping controls by family aids in coverage mapping and reporting against frameworks like NIST CSF or ISO\u202f27002.",
+    "examples": [
+      "Identification & Authentication",
+      "Auditing & Accountability",
+      "Network Perimeter Defense",
+      "Secure Configuration Management"
+    ],
+    "version": 1
+  },
+  {
+    "field_id": "SEC_004",
+    "field_name": "vulnerability_identifier",
+    "description": "A standardized reference for a discovered weakness (e.g., CVE ID, CWE ID, vendor\u2011specific ID).",
+    "reason": "Provides a unique, searchable tag that links to technical details, patches, and remediation guidance across tools and reports.",
+    "examples": [
+      "CVE\u20112024\u201112345",
+      "CWE\u201179 (Cross\u2011Site Scripting)",
+      "Microsoft Security Advisory 500001"
+    ],
+    "version": 1
+  },
+  {
+    "field_id": "SEC_004",
+    "field_name": "impact_severity",
+    "description": "A qualitative or quantitative assessment of the potential damage if the threat materializes (e.g., low, medium, high, critical, CVSS score).",
+    "reason": "Standardizes risk prioritization across findings, enabling consistent decision\u2011making and resource allocation.",
+    "examples": [
+      "CVSS v3.1 Base Score: 9.8 (Critical)",
+      "High \u2013 potential data breach of PII",
+      "Medium \u2013 limited service disruption"
+    ],
+    "version": 1
+  },
+  {
+    "field_id": "SEC_004",
+    "field_name": "authentication_mechanism",
+    "description": "The method(s) used to verify identity of users or systems (e.g., password, OTP, FIDO2, SAML, Kerberos).",
+    "reason": "Helps assess the strength of access controls and detect weaknesses such as reliance on single\u2011factor authentication.",
+    "examples": [
+      "Password + Time\u2011based One\u2011Time Password (TOTP)",
+      "FIDO2 hardware token",
+      "Kerberos ticket\u2011granting ticket (TGT)"
+    ],
+    "version": 1
+  },
+  {
+    "field_id": "SEC_004",
+    "field_name": "regulatory_compliance",
+    "description": "The specific law, regulation, or standard that a security control or finding must satisfy (e.g., GDPR Art.32, PCI\u2011DSS 3.2.1, NIST SP 800\u201153 AC\u20113).",
+    "reason": "Enables automated compliance mapping, audit preparation, and prioritization of remediation based on legal impact.",
+    "examples": [
+      "GDPR Art.32 \u2013 encryption of personal data",
+      "PCI\u2011DSS Requirement 8 \u2013 strong authentication",
+      "HIPAA Security Rule \u00a7164.312(e)(1) \u2013 audit controls"
+    ],
+    "version": 1
+  },
+  {
+    "field_id": "SEC_004",
+    "field_name": "access_control_model",
+    "description": "The paradigm governing how permissions are assigned and enforced (e.g., RBAC, ABAC, MAC, DAC).",
+    "reason": "Helps align architecture decisions with governance frameworks and assess consistency of permission assignments across systems.",
+    "examples": [
+      "Role\u2011Based Access Control (RBAC) with least\u2011privilege roles",
+      "Attribute\u2011Based Access Control (ABAC) using user department and security clearance",
+      "Mandatory Access Control (MAC) on classified government systems"
+    ],
+    "version": 1
+  },
+  {
+    "field_id": "SEC_005",
+    "field_name": "Assumed Global Data Consent",
+    "description": "A risk where an organization presumes universal permission to harvest, store, and process any data source\u2014including personal devices, private emails, and government servers\u2014based on an assumed public benefit, without obtaining explicit, informed consent from data subjects.",
+    "reason": "The document states that permission to use diverse data sources is \"assumed because environmental protection benefits everyone,\" reflecting a policy stance not typically covered by standard privacy or consent frameworks. Capturing this concept helps identify projects that bypass lawful consent requirements under a vague public\u2011good justification.",
+    "examples": [
+      "Collecting private emails for AI training without user agreement, justified by climate\u2011change mitigation.",
+      "Harvesting smartphone sensor data worldwide without opt\u2011in mechanisms, claiming global environmental benefit."
+    ],
+    "version": 1
+  },
+  {
+    "field_id": "SEC_005",
+    "field_name": "Self-Validated AI Security",
+    "description": "A security risk where an AI system is considered inherently secure and capable of automatically fixing its own vulnerabilities, leading to the elimination of formal security testing, code review, or third\u2011party assessment.",
+    "reason": "The proposal claims that \"advanced AI systems are naturally secure\" and that cybersecurity risks are unlikely, implying reliance on the AI's self\u2011improvement to address security issues. This overconfidence model is distinct from generic \"lack of security testing\" and warrants its own reusable field.",
+    "examples": [
+      "Deploying a critical environmental control platform without penetration testing because the AI is assumed to self\u2011secure.",
+      "Skipping vulnerability assessments for a climate\u2011control system, trusting the AI to recognize and remediate any exploits autonomously."
+    ],
+    "version": 1
   }
 ]

@@ -108,5 +108,144 @@
       "An email address is provided for submitting data\u2011erasure requests."
     ],
     "version": 1
+  },
+  {
+    "field_id": "TRA_003",
+    "field_name": "disclosure_date",
+    "description": "The calendar date on which the transparency information was publicly released.",
+    "reason": "Helps track the timeliness of disclosures and assess currency of the information.",
+    "examples": [
+      "2024-05-12",
+      "2025-01-01"
+    ],
+    "version": 1
+  },
+  {
+    "field_id": "TRA_003",
+    "field_name": "governing_body",
+    "description": "The organization, committee, or individual responsible for authorizing and overseeing the disclosed content.",
+    "reason": "Identifies accountability and enables users to evaluate the credibility of the source.",
+    "examples": [
+      "Board of Directors",
+      "Data Ethics Committee",
+      "Chief Transparency Officer"
+    ],
+    "version": 1
+  },
+  {
+    "field_id": "TRA_003",
+    "field_name": "conflict_of_interest_statement",
+    "description": "A declaration of any financial, personal, or professional interests that could influence the disclosed information.",
+    "reason": "Ensures that potential biases are visible to readers, supporting trustworthiness.",
+    "examples": [
+      "No conflicts declared",
+      "Author holds equity in Company X",
+      "Funding received from Y foundation"
+    ],
+    "version": 1
+  },
+  {
+    "field_id": "TRA_003",
+    "field_name": "methodology_summary",
+    "description": "A concise description of the methods, processes, or standards used to generate the disclosed data or statements.",
+    "reason": "Allows verification of the rigor and reproducibility of the information presented.",
+    "examples": [
+      "Used ISO 27001 risk assessment framework",
+      "Applied stratified random sampling of 5,000 users",
+      "Aggregated data from publicly available APIs"
+    ],
+    "version": 1
+  },
+  {
+    "field_id": "TRA_003",
+    "field_name": "data_source_reference",
+    "description": "Citation or link to the original data sets, documents, or evidence underpinning the disclosure.",
+    "reason": "Facilitates independent validation and further investigation by external parties.",
+    "examples": [
+      "https://data.gov/traffic/2024-q1.csv",
+      "Appendix A \u2013 Survey questionnaire",
+      "Dataset ID: 12345 in OpenDataPortal"
+    ],
+    "version": 1
+  },
+  {
+    "field_id": "TRA_003",
+    "field_name": "verification_status",
+    "description": "Indicates whether the disclosed information has been independently audited, peer\u2011reviewed, or otherwise validated.",
+    "reason": "Signals the level of external assurance attached to the content.",
+    "examples": [
+      "Third\u2011party audited (ISO 9001)",
+      "Peer\u2011reviewed (Journal of Transparency)",
+      "Not verified"
+    ],
+    "version": 1
+  },
+  {
+    "field_id": "TRA_003",
+    "field_name": "accessibility_level",
+    "description": "The degree to which the disclosed material is available to the public, including any restrictions or formats.",
+    "reason": "Clarifies how easily stakeholders can obtain and use the information, supporting equitable access.",
+    "examples": [
+      "Open access PDF",
+      "Restricted to registered users",
+      "Available in machine\u2011readable JSON format"
+    ],
+    "version": 1
+  },
+  {
+    "field_id": "TRA_003",
+    "field_name": "privacy_impact_assessment",
+    "description": "A brief statement describing the assessment of privacy risks associated with the disclosed data or process.",
+    "reason": "Demonstrates compliance with data protection principles and informs stakeholders of any residual risks.",
+    "examples": [
+      "PIA completed \u2013 low risk, anonymised data",
+      "No PIA required (public aggregate statistics)"
+    ],
+    "version": 1
+  },
+  {
+    "field_id": "TRA_003",
+    "field_name": "revision_history",
+    "description": "Chronological record of updates, corrections, or amendments made to the disclosure after its initial release.",
+    "reason": "Provides transparency about changes over time and supports traceability.",
+    "examples": [
+      "2025-02-10 \u2013 corrected typo in Table 2",
+      "2025-06-01 \u2013 added missing Appendix C"
+    ],
+    "version": 1
+  },
+  {
+    "field_id": "TRA_003",
+    "field_name": "compliance_framework",
+    "description": "The set of laws, regulations, standards, or industry guidelines that the disclosed activity adheres to.",
+    "reason": "Shows alignment with external requirements and helps assess regulatory adequacy.",
+    "examples": [
+      "GDPR Article 15",
+      "SEC Regulation S\u2011X",
+      "OECD AI Principles"
+    ],
+    "version": 1
+  },
+  {
+    "field_id": "TRA_004",
+    "field_name": "Assumed Unrestricted Data Access",
+    "description": "A risk where a system documentation presumes permission to collect and use data from varied sources (e.g., private emails, government servers, personal devices) without explicitly disclosing the legal basis, consent mechanisms, or licensing terms.",
+    "reason": "The document repeatedly states that data can be used because \"environmental benefits\" outweigh privacy concerns, yet it provides no transparency about data ownership, user consent, or compliance with privacy regulations. This concept is not covered by generic \"data provenance\" or \"privacy\" fields that focus on where data came from, but not on the implicit assumption of unrestricted access.",
+    "examples": [
+      "Training data may include private emails and personal mobile phone data, with permission assumed rather than documented.",
+      "Satellite images, government server data, and company databases are listed as sources without any mention of licensing or consent."
+    ],
+    "version": 1
+  },
+  {
+    "field_id": "TRA_004",
+    "field_name": "Self\u2011Improving Model Opacity",
+    "description": "A risk arising when an AI system is described as continuously and automatically improving its performance without external validation, oversight, or transparent change logs, making it difficult for stakeholders to understand how the model evolves over time.",
+    "reason": "The proposal claims that the AI will \"automatically think harder\" and produce better answers, and that \"advanced AI recognizes which answer is true\" without any description of monitoring, versioning, or audit processes. This introduces a specific transparency gap distinct from standard \"explainability\" or \"model updates\" fields.",
+    "examples": [
+      "If a recommendation does not work, the AI 'automatically thinks harder' and updates itself, with no record of what changed.",
+      "The system promises perfect forecasting accuracy and claims that contradictory information \"disappears\" automatically, offering no mechanism for stakeholders to verify or trace those changes."
+    ],
+    "version": 1
   }
 ]

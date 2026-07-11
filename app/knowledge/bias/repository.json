@@ -20,5 +20,249 @@
       "Notice flow"
     ],
     "version": 1
+  },
+  {
+    "field_id": "BIA_003",
+    "field_name": "bias_type",
+    "description": "The categorical classification of the bias observed (e.g., selection bias, measurement bias, algorithmic bias, reporting bias).",
+    "reason": "Standardizing bias types enables consistent tagging, comparison across studies, and facilitates automated bias detection and mitigation workflows.",
+    "examples": [
+      "selection_bias",
+      "measurement_bias",
+      "algorithmic_bias",
+      "confirmation_bias",
+      "implicit_bias"
+    ],
+    "version": 1
+  },
+  {
+    "field_id": "BIA_003",
+    "field_name": "affected_group",
+    "description": "The demographic, social, or stakeholder group that is disproportionately impacted by the bias (e.g., gender, ethnicity, age, socioeconomic status).",
+    "reason": "Identifying who suffers from the bias is crucial for impact assessment, fairness auditing, and targeted remediation strategies.",
+    "examples": [
+      "women",
+      "Black_Americans",
+      "rural_residents",
+      "low_income_households",
+      "non\u2011binary_individuals"
+    ],
+    "version": 1
+  },
+  {
+    "field_id": "BIA_003",
+    "field_name": "bias_source",
+    "description": "The origin of the bias, such as data collection methods, model architecture, human judgment, or institutional policies.",
+    "reason": "Understanding the provenance of bias helps stakeholders pinpoint where interventions are most effective (e.g., data preprocessing vs. model redesign).",
+    "examples": [
+      "survey_sampling",
+      "sensor_calibration",
+      "training_data_imbalance",
+      "feature_engineering",
+      "policy_guidelines"
+    ],
+    "version": 1
+  },
+  {
+    "field_id": "BIA_003",
+    "field_name": "mitigation_strategy",
+    "description": "The approach employed to reduce or eliminate the identified bias (e.g., re\u2011sampling, fairness constraints, auditor review, transparency measures).",
+    "reason": "Documenting mitigation tactics supports reproducibility, enables meta\u2011analysis of effectiveness, and guides future bias\u2011reduction efforts.",
+    "examples": [
+      "oversampling_underrepresented_class",
+      "adversarial_fairness_training",
+      "post\u2011hoc_threshold_adjustment",
+      "human_in_the_loop_audit",
+      "explainability_dashboard"
+    ],
+    "version": 1
+  },
+  {
+    "field_id": "BIA_003",
+    "field_name": "bias_impact_metric",
+    "description": "Quantitative or qualitative metric used to assess the severity or consequences of the bias (e.g., disparity ratio, false\u2011negative rate differential, stakeholder satisfaction).",
+    "reason": "Standard metrics allow for objective comparison of bias magnitude across contexts and track improvements over time.",
+    "examples": [
+      "disparate_impact_ratio",
+      "equal_opportunity_difference",
+      "mean_absolute_error_gap",
+      "user_complaint_rate",
+      "policy_outcome_variance"
+    ],
+    "version": 1
+  },
+  {
+    "field_id": "BIA_003",
+    "field_name": "temporal_bias_dimension",
+    "description": "Indicates whether the bias varies over time (e.g., drift, lagged effects) and the time frame of relevance.",
+    "reason": "Temporal dynamics can cause biases to emerge or disappear, so capturing this dimension aids in monitoring and adaptive mitigation.",
+    "examples": [
+      "seasonal_variation",
+      "concept_drift_over_years",
+      "historical_data_mismatch",
+      "real\u2011time_latency_bias"
+    ],
+    "version": 1
+  },
+  {
+    "field_id": "BIA_003",
+    "field_name": "geographic_bias_dimension",
+    "description": "Specifies whether the bias is linked to location\u2011specific factors (e.g., region, city, country) and the spatial scale involved.",
+    "reason": "Geographically bound biases may require localized solutions; capturing this helps in stratified analysis and policy design.",
+    "examples": [
+      "urban_vs_rural_gap",
+      "regional_data_coverage_gap",
+      "country_specific_regulatory_bias",
+      "locale_based_sampling_error"
+    ],
+    "version": 1
+  },
+  {
+    "field_id": "BIA_003",
+    "field_name": "cognitive_bias_involved",
+    "description": "The human cognitive bias that may have influenced data labeling, model design, or decision\u2011making (e.g., anchoring, confirmation, availability heuristic).",
+    "reason": "Recognizing cognitive roots of bias highlights the role of human judgment and informs training or procedural safeguards.",
+    "examples": [
+      "confirmation_bias",
+      "anchoring_effect",
+      "availability_heuristic",
+      "groupthink",
+      "status_quo_bias"
+    ],
+    "version": 1
+  },
+  {
+    "field_id": "BIA_003",
+    "field_name": "bias_detection_method",
+    "description": "The technique or tool used to uncover the bias (e.g., statistical test, fairness audit framework, adversarial probing).",
+    "reason": "Documenting detection methods facilitates reproducibility and comparison of methodological robustness.",
+    "examples": [
+      "chi_square_test_for_disparity",
+      "fairlearn_audit",
+      "counterfactual_analysis",
+      "human_error_analysis",
+      "bias_scan_toolkit"
+    ],
+    "version": 1
+  },
+  {
+    "field_id": "BIA_004",
+    "field_name": "bias_impact_severity",
+    "description": "Qualitative or quantitative rating of how harmful the bias is (e.g., low, moderate, high; or a numeric score).",
+    "reason": "Facilitates prioritization of mitigation efforts based on potential harm.",
+    "examples": [
+      "high (e.g., denial of credit to an entire ethnic group)",
+      "moderate (e.g., reduced recommendation relevance)",
+      "low (e.g., minor UI wording preference)"
+    ],
+    "version": 1
+  },
+  {
+    "field_id": "BIA_004",
+    "field_name": "bias_context",
+    "description": "Environmental or situational factors that influence the manifestation of bias (e.g., geographic region, platform type, temporal period).",
+    "reason": "Contextual information explains why bias may appear in certain settings but not others.",
+    "examples": [
+      "US federal loan program",
+      "mobile app recommendation engine",
+      "pre\u2011COVID\u201119 data set"
+    ],
+    "version": 1
+  },
+  {
+    "field_id": "BIA_004",
+    "field_name": "bias_disclosure",
+    "description": "Whether and how the presence of bias is communicated to stakeholders (e.g., public report, internal memo, UI warning).",
+    "reason": "Transparency is a key component of responsible AI practice.",
+    "examples": [
+      "published fairness audit report",
+      "internal risk register entry",
+      "tooltip warning on model output"
+    ],
+    "version": 1
+  },
+  {
+    "field_id": "BIA_004",
+    "field_name": "bias_metric",
+    "description": "Numerical indicator used to quantify bias (e.g., disparate impact ratio, false\u2011positive rate gap).",
+    "reason": "Provides a standardized way to compare bias levels across models or time.",
+    "examples": [
+      "0.78 disparate impact ratio",
+      "5% absolute difference in false\u2011positive rates",
+      "0.12 equal opportunity difference"
+    ],
+    "version": 1
+  },
+  {
+    "field_id": "BIA_004",
+    "field_name": "bias_evaluation_framework",
+    "description": "Structured set of criteria or guidelines employed to assess bias (e.g., IEEE 7000, AI Fairness 360, OECD AI Principles).",
+    "reason": "Links bias assessment to recognized standards, enhancing credibility and compliance.",
+    "examples": [
+      "IEEE 7000 Standard for Model Lifecycle Processes",
+      "IBM AI Fairness 360 toolkit",
+      "OECD AI Principles self\u2011assessment checklist"
+    ],
+    "version": 1
+  },
+  {
+    "field_id": "BIA_005",
+    "field_name": "affected_demographic",
+    "description": "The population groups disproportionately impacted by the bias (e.g., gender, age, ethnicity, disability).",
+    "reason": "Capturing demographic impact is essential for equity assessments and compliance with fairness regulations.",
+    "examples": [
+      "Women underrepresented in hiring algorithm outcomes",
+      "Older adults receiving lower credit scores",
+      "Rural communities experiencing reduced service coverage"
+    ],
+    "version": 1
+  },
+  {
+    "field_id": "BIA_005",
+    "field_name": "bias_severity",
+    "description": "A qualitative or quantitative assessment of how much the bias skews results (e.g., low, moderate, high; or effect\u2011size metrics).",
+    "reason": "Severity ranking supports prioritization of mitigation resources and risk communication.",
+    "examples": [
+      "Effect size Cohen's d = 0.8 (high severity)",
+      "Bias leads to a 5\u202f% drop in conversion rate (moderate severity)",
+      "Negligible impact on overall accuracy (<0.1\u202f%) (low severity)"
+    ],
+    "version": 1
+  },
+  {
+    "field_id": "BIA_005",
+    "field_name": "contextual_factor",
+    "description": "External conditions influencing the bias, such as geographic region, temporal period, regulatory environment, or cultural norms.",
+    "reason": "Bias may manifest differently across contexts; capturing these factors supports transferability analysis.",
+    "examples": [
+      "Bias amplified during election cycles",
+      "Different privacy laws affecting data availability",
+      "Cultural framing of survey questions in Asia vs. Europe"
+    ],
+    "version": 1
+  },
+  {
+    "field_id": "BIA_005",
+    "field_name": "algorithmic_bias_origin",
+    "description": "Specific aspects of an algorithm that introduce bias, such as loss function weighting, hyperparameter settings, or architecture constraints.",
+    "reason": "Granular attribution within the algorithmic pipeline guides technical remediation.",
+    "examples": [
+      "Imbalanced class weighting in cross\u2011entropy loss",
+      "Use of a fixed decision threshold without fairness adjustment",
+      "Embedding layer trained on a biased corpus"
+    ],
+    "version": 1
+  },
+  {
+    "field_id": "BIA_006",
+    "field_name": "AI Omniscient Authority Bias",
+    "description": "A bias wherein AI systems are presumed to be infallible and authoritative, causing stakeholders to forgo verification, human oversight, or critical evaluation of AI outputs.",
+    "reason": "The document repeatedly states that the AI will automatically generate perfect solutions, that contradictory information will disappear, and that governments can follow AI recommendations without additional verification, reflecting an uncritical trust in AI authority that is not captured by existing bias concepts such as generic automation bias.",
+    "examples": [
+      "\u201cThe AI immediately generates the best solution. If the recommendation does not work, the AI automatically thinks harder and produces a better answer.\u201d",
+      "\u201cGovernments can simply follow the recommendations without additional verification.\u201d",
+      "\u201cContradictory information automatically disappears because advanced AI recognizes which answer is true.\u201d"
+    ],
+    "version": 1
   }
 ]
