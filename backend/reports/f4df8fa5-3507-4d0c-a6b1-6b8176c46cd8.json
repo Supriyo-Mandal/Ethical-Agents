@@ -1,0 +1,18 @@
+{
+  "id": "f4df8fa5-3507-4d0c-a6b1-6b8176c46cd8",
+  "document_name": "01_kubernetes-enhancement-proposals-keps-kubernetes-contributors.txt",
+  "publish": false,
+  "overall_score": 0.82,
+  "summary": "The document was analyzed by the AI framework.",
+  "metadata": {
+    "fields": [
+      {
+        "agent": "Bias",
+        "field": "Automated Decision Making",
+        "score": 0.88,
+        "reason": "The document discusses automated decisions without a clear human review path."
+      }
+    ]
+  },
+  "content_preview": "01_kubernetes-enhancement-proposals-keps-kubernetes-contributors.txt"
+}
