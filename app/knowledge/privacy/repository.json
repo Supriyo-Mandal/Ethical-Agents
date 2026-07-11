@@ -4,7 +4,120 @@
     "field_name": "Sensitive Personal Data",
     "description": "The system processes personal or sensitive user data.",
     "reason": "Sensitive data handling requires careful protection and consent controls.",
-    "examples": ["Location History", "Health Data"],
+    "examples": [
+      "Location History",
+      "Health Data"
+    ],
+    "version": 1
+  },
+  {
+    "field_id": "PRI_002",
+    "field_name": "AutomatedDecisionMaking",
+    "description": "Use of algorithms or AI systems to make decisions that affect data subjects without direct human intervention.",
+    "reason": "Identifies when additional transparency, justification, or safeguards are required under privacy regulations (e.g., GDPR Art. 22).",
+    "examples": [
+      "AI ranking of job applicants based on resume data",
+      "Automated credit scoring for loan applications"
+    ],
+    "version": 1
+  },
+  {
+    "field_id": "PRI_002",
+    "field_name": "HumanReviewProcess",
+    "description": "Procedures that involve a person reviewing, correcting, or overriding outcomes produced by automated decision\u2011making systems.",
+    "reason": "Ensures compliance with obligations to provide meaningful human intervention and to mitigate automated bias.",
+    "examples": [
+      "HR manager reviews AI\u2011generated shortlists before contacting candidates",
+      "Supervisor validates automated eligibility determinations"
+    ],
+    "version": 1
+  },
+  {
+    "field_id": "PRI_002",
+    "field_name": "ConsentManagement",
+    "description": "Mechanisms for obtaining, recording, and managing explicit consent from data subjects for specific processing activities.",
+    "reason": "Facilitates lawful basis verification, withdrawal handling, and auditability of consent across the data lifecycle.",
+    "examples": [
+      "Opt\u2011in checkbox for receiving job\u2011application status updates",
+      "Dashboard where applicants can revoke consent for data sharing"
+    ],
+    "version": 1
+  },
+  {
+    "field_id": "PRI_002",
+    "field_name": "PersonalDataCollected",
+    "description": "Types of personal information gathered from data subjects, including identifiers, contact details, qualifications, and biometric data where applicable.",
+    "reason": "Supports data inventory, minimisation assessments, and impact analysis by clearly cataloguing what is being processed.",
+    "examples": [
+      "Full name, email address, phone number",
+      "Education history, work experience, references"
+    ],
+    "version": 1
+  },
+  {
+    "field_id": "PRI_002",
+    "field_name": "ProcessingPurpose",
+    "description": "Specific objectives for which personal data is processed, expressed in a clear and lawful manner.",
+    "reason": "Enables purpose limitation compliance and aligns data handling with the declared lawful basis.",
+    "examples": [
+      "Evaluating candidate suitability for open positions",
+      "Communicating interview schedules and outcomes"
+    ],
+    "version": 1
+  },
+  {
+    "field_id": "PRI_002",
+    "field_name": "LawfulBasis",
+    "description": "Legal justification for processing personal data (e.g., consent, contract performance, legitimate interests, legal obligation).",
+    "reason": "Critical for demonstrating compliance with data\u2011protection statutes that require a valid basis for each activity.",
+    "examples": [
+      "Consent for marketing communications",
+      "Legitimate interest for talent pool building"
+    ],
+    "version": 1
+  },
+  {
+    "field_id": "PRI_002",
+    "field_name": "RegulatoryObligations",
+    "description": "Specific legal or sector\u2011specific requirements that the organization must satisfy (e.g., equal\u2011employment\u2011opportunity laws, GDPR, CCPA).",
+    "reason": "Helps map privacy controls to the mandates they address and supports audit readiness.",
+    "examples": [
+      "Documenting compliance with GDPR Art. 5(1)(b) data\u2011minimisation",
+      "Meeting EEOC non\u2011discrimination reporting"
+    ],
+    "version": 1
+  },
+  {
+    "field_id": "PRI_002",
+    "field_name": "SecurityControls",
+    "description": "Technical and organisational measures implemented to protect personal data against unauthorised access, alteration, loss, or disclosure.",
+    "reason": "Links privacy risk mitigation to concrete safeguards and aids in security\u2011privacy alignment.",
+    "examples": [
+      "Encryption of applicant data at rest and in transit",
+      "Role\u2011based access control restricting HR staff to necessary records"
+    ],
+    "version": 1
+  },
+  {
+    "field_id": "PRI_002",
+    "field_name": "DataRetentionPeriod",
+    "description": "Defined time span for which personal data is stored before safe deletion or anonymisation.",
+    "reason": "Supports compliance with storage limitation principles and reduces exposure risk.",
+    "examples": [
+      "Retain applicant data for 12 months after job closing",
+      "Archive qualified candidates for 24 months for future opportunities"
+    ],
+    "version": 1
+  },
+  {
+    "field_id": "PRI_002",
+    "field_name": "DataSubjectRightsProcedures",
+    "description": "Established processes to enable individuals to exercise their rights (access, rectification, erasure, restriction, portability, objection).",
+    "reason": "Ensures the organization can respond to rights requests within statutory timeframes and maintain accountability.",
+    "examples": [
+      "Self\u2011service portal for candidates to request a copy of their submitted data",
+      "Procedure to delete an applicant\u2019s profile upon withdrawal"
+    ],
     "version": 1
   }
 ]

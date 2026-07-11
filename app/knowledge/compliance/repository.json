@@ -4,7 +4,133 @@
     "field_name": "Regulatory Obligations",
     "description": "The system must meet or document relevant legal obligations.",
     "reason": "Non-compliance can create legal and operational risk.",
-    "examples": ["GDPR", "HIPAA", "Audit Trail"],
+    "examples": [
+      "GDPR",
+      "HIPAA",
+      "Audit Trail"
+    ],
+    "version": 1
+  },
+  {
+    "field_id": "COM_002",
+    "field_name": "automated_decision_making",
+    "description": "Indicates whether the system employs automated or algorithmic decision processes that affect individuals.",
+    "reason": "Relevant for regulations such as GDPR Art. 22, AI governance frameworks, and transparency obligations.",
+    "examples": [
+      "true",
+      "false",
+      "partial (e.g., score generated, final decision by human)"
+    ],
+    "version": 1
+  },
+  {
+    "field_id": "COM_002",
+    "field_name": "human_in_the_loop",
+    "description": "Specifies the presence and role of human review or intervention in automated decision workflows.",
+    "reason": "Helps assess compliance with requirements for meaningful human oversight and mitigation of bias.",
+    "examples": [
+      "mandatory final approval",
+      "optional review for high\u2011risk outcomes",
+      "no human review"
+    ],
+    "version": 1
+  },
+  {
+    "field_id": "COM_002",
+    "field_name": "consent_management_process",
+    "description": "Describes how consent is obtained, recorded, and withdrawn for the processing of personal data.",
+    "reason": "Critical for lawful basis documentation under data protection laws and for demonstrating user control.",
+    "examples": [
+      "explicit opt\u2011in via checkbox with timestamp",
+      "e\u2011signature captured in consent log",
+      "dynamic consent portal allowing partial withdrawals"
+    ],
+    "version": 1
+  },
+  {
+    "field_id": "COM_002",
+    "field_name": "legal_basis_for_processing",
+    "description": "The lawful justification for handling personal data (e.g., consent, contractual necessity, legitimate interests).",
+    "reason": "Fundamental for data protection compliance and for mapping obligations to processing activities.",
+    "examples": [
+      "consent",
+      "performance of a contract",
+      "legal obligation",
+      "legitimate interests \u2013 recruitment"
+    ],
+    "version": 1
+  },
+  {
+    "field_id": "COM_002",
+    "field_name": "data_category",
+    "description": "Classification of the personal data being processed (e.g., identifiers, employment history, biometric data).",
+    "reason": "Enables risk assessment, appropriate safeguards, and compliance with special\u2011category data rules.",
+    "examples": [
+      "personal identifiers",
+      "professional experience",
+      "sensitive health information",
+      "biometric identifiers"
+    ],
+    "version": 1
+  },
+  {
+    "field_id": "COM_002",
+    "field_name": "processing_purpose",
+    "description": "The specific objective for which personal data is collected and used (e.g., candidate evaluation, background check).",
+    "reason": "Supports purpose limitation principles and helps auditors verify that data is not repurposed unlawfully.",
+    "examples": [
+      "assessment of job qualifications",
+      "eligibility verification",
+      "security clearance screening"
+    ],
+    "version": 1
+  },
+  {
+    "field_id": "COM_002",
+    "field_name": "data_retention_period",
+    "description": "The defined timeframe for which personal data is retained before deletion or anonymization.",
+    "reason": "Needed to demonstrate compliance with storage limitation requirements and to plan for data lifecycle management.",
+    "examples": [
+      "30 days after application closure",
+      "2 years for unsuccessful candidates",
+      "indefinite for successful hires (as employee record)"
+    ],
+    "version": 1
+  },
+  {
+    "field_id": "COM_002",
+    "field_name": "regulatory_obligation_documentation",
+    "description": "References to policies, standards, or legal texts that impose compliance requirements on the system.",
+    "reason": "Provides traceability between technical controls and the external obligations they satisfy.",
+    "examples": [
+      "GDPR Art. 22",
+      "EEOC Guidelines on Automated Hiring",
+      "ISO/IEC 27001 A.12.1.1"
+    ],
+    "version": 1
+  },
+  {
+    "field_id": "COM_002",
+    "field_name": "security_control_reference",
+    "description": "Identification of specific security measures implemented to protect personal data (e.g., encryption, access controls).",
+    "reason": "Links technical safeguards to risk mitigation and allows verification against security frameworks.",
+    "examples": [
+      "AES\u2011256 encryption at rest",
+      "RBAC with least\u2011privilege for recruiter accounts",
+      "audit logging per NIST SP 800\u201153 AU\u20112"
+    ],
+    "version": 1
+  },
+  {
+    "field_id": "COM_002",
+    "field_name": "risk_assessment_outcome",
+    "description": "Result of the privacy or security risk assessment performed for the system, including risk level and mitigation actions.",
+    "reason": "Essential for demonstrating proactive compliance management and for prioritizing controls.",
+    "examples": [
+      "high risk \u2013 mitigated by multi\u2011factor authentication",
+      "moderate risk \u2013 pending implementation of data minimization",
+      "low risk \u2013 controls fully cover identified threats"
+    ],
     "version": 1
   }
 ]

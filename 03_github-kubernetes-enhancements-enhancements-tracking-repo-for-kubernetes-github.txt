@@ -1,0 +1,52 @@
+Title: GitHub - kubernetes/enhancements: Enhancements tracking repo for Kubernetes Â· GitHub
+Source: https://github.com/kubernetes/enhancements
+
+- When to Create a New Enhancement Issue - Why Are Enhancements Tracked - When to Comment on an Enhancement Issue - Enhancements Tracking Board - Enhancements Tracking Spreadsheet - Current Release Cycle - Exceptions to Enhancement Milestone Dates - Labels - Glossary Enhancement tracking repo for Kubernetes releases.
+
+These issues are umbrellas for new enhancements to be added to Kubernetes.
+
+An enhancement usually takes multiple releases to complete.
+
+And an enhancement can be tracked as backlog items before work begins.
+
+An enhancement may be filed once there is consensus in at least one Kubernetes SIG.
+
+We are trying to figure out the exact shape of an enhancement.
+
+Until then, here are a few rough heuristics.
+
+An enhancement is anything that: - a blog post would be written about after its release (ex.
+
+minikube, StatefulSets, rkt container runtime) - requires multiple parties/SIGs/owners participating to complete (ex.
+
+GPU scheduling [API, Core, & Node], StatefulSets [Storage & API]) - will be graduating from one stage to another (ex.
+
+alpha to beta, beta to GA) - needs significant effort or changes Kubernetes in a significant way (ex.
+
+something that would take 10 person-weeks to implement, introduce or redesign a system component, or introduces API changes) - impacts the UX or operation of Kubernetes substantially such that engineers using Kubernetes will need retraining - users will notice and come to rely on It is unlikely an enhancement if it is: - implemented using a CustomResourceDefinition - fixing a flaky test - refactoring code - performance improvements, which are only visible to users as faster API operations, or faster control loops - adding error messages or events If you are not sure, ask someone in the SIG where you initially circulated the idea.
+
+If they aren't sure, jump into #enhancements on Slack or ping someone listed in OWNERS.
+
+Create an issue in this repository once you: - have circulated your idea to see if there is interest - through Community Meetings, SIG meetings, SIG mailing lists, or an issue in github.com/kubernetes/kubernetes - (optionally) have done a prototype in your own fork - have identified people who agree to work on the enhancement - many enhancements will take several releases to progress through Alpha, Beta, and Stable stages - you and your team should be prepared to work on the approx.
+
+9mo - 1 year that it takes to progress to Stable status - are ready to be the project manager for the enhancement Once users adopt an enhancement, they expect to use it for an extended period of time.
+
+Therefore, we hold new enhancements to a high standard of conceptual integrity and require consistency with other parts of the system, thorough testing, and complete documentation.
+
+As the project grows, no single person can track whether all those requirements are met.
+
+The development of an enhancement often spans three stages: Alpha, Beta, and Stable.
+
+Enhancement Tracking Issues provide a checklist that allows for different approvers for different aspects, and ensures that nothing is forgotten across the development lifetime of an enhancement.
+
+Please comment on the enhancement issue to: - request a review or clarification on the process - update status of the enhancement effort - link to relevant issues in other repos Please do not comment on the enhancement issue to: - discuss a detail of the design, code or docs.
+
+Use a linked-to-issue or PR for that As of the 1.26 release, enhancements from this repo are visualized in the Enhancements Tracking Boards.
+
+Links: - 1.36 Milestone - 1.35 Milestone - 1.34 Milestone - 1.33 Milestone - 1.32 Milestone - 1.31 Milestone - 1.30 Milestone - 1.29 Milestone - 1.28 Milestone - 1.27 Milestone - 1.26 Milestone Prior to the 1.26 release, enhancements from this repo were visualized using Enhancements Tracking Spreadsheets.
+
+Please refer to the Enhancements Tracking Spreadsheet Archive for links to these sheets.
+
+Procedure: TBA The Exceptions Process is handled by the Release Team, please see their documentation for further details.
+
+Please refer to the Glossary for the definition of any terminology and acronyms used in the Enhancements subproject.
