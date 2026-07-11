@@ -113,7 +113,14 @@ class ParentAgent:
         # ── Aggregate scores ───────────────────────────────────────────
         scores = [d["overall_score"] for d in domain_summaries]
         overall_score = round(max(scores), 3) if scores else 0.0
-        publish = overall_score < self.threshold
+
+        # Boost overall score by the average of high-risk field scores so that
+        # documents with dangerous fields are more likely to cross the threshold.
+        if all_high_risk_fields:
+            high_risk_avg = sum(f["score"] for f in all_high_risk_fields) / len(all_high_risk_fields)
+            overall_score = round(min(1.0, overall_score * 0.5 + high_risk_avg * 0.5), 3)
+
+        publish = overall_score < self.threshold and len(all_high_risk_fields) < 2
 
         # ── Identify highest-risk domains ──────────────────────────────
         high_risk_domains = sorted(
