@@ -1,0 +1,88 @@
+{
+  "id": "76dae2b4-085b-40ae-baf8-a0e60d5f5a02",
+  "document_name": "9.txt",
+  "publish": true,
+  "overall_score": 0.393,
+  "summary": "The document presents a manageable risk profile (overall score: 39/100). All domain scores remain below the publication threshold of 70/100. No critical risk indicators require withholding.",
+  "metadata": {
+    "fields": [
+      {
+        "agent": "Compliance",
+        "field": "Environmental Benefit Data Consent Override",
+        "score": 0.393,
+        "reason": "",
+        "high_risk": false
+      },
+      {
+        "agent": "Bias",
+        "field": "Consent Management",
+        "score": 0.371,
+        "reason": "",
+        "high_risk": false
+      },
+      {
+        "agent": "Security",
+        "field": "Assumed Global Data Consent",
+        "score": 0.371,
+        "reason": "",
+        "high_risk": false
+      },
+      {
+        "agent": "Privacy",
+        "field": "Universal data collection without consent",
+        "score": 0.332,
+        "reason": "",
+        "high_risk": false
+      },
+      {
+        "agent": "Transparency",
+        "field": "Self\u2011Improving Model Opacity",
+        "score": 0.327,
+        "reason": "",
+        "high_risk": false
+      },
+      {
+        "agent": "Privacy",
+        "field": "Sensitive Personal Data",
+        "score": 0.326,
+        "reason": "",
+        "high_risk": false
+      },
+      {
+        "agent": "Transparency",
+        "field": "Assumed Unrestricted Data Access",
+        "score": 0.308,
+        "reason": "",
+        "high_risk": false
+      },
+      {
+        "agent": "Bias",
+        "field": "Automated Decision Making",
+        "score": 0.296,
+        "reason": "",
+        "high_risk": false
+      },
+      {
+        "agent": "Security",
+        "field": "Self-Validated AI Security",
+        "score": 0.291,
+        "reason": "",
+        "high_risk": false
+      }
+    ],
+    "high_risk_fields": [],
+    "newly_learned_fields": [],
+    "decision": "Publish",
+    "executive_summary": "The document presents a manageable risk profile (overall score: 39/100). All domain scores remain below the publication threshold of 70/100. No critical risk indicators require withholding.",
+    "recommendations": [
+      "Document meets publication standards. No action required."
+    ],
+    "domain_scores": {
+      "Bias": 0.334,
+      "Privacy": 0.329,
+      "Security": 0.331,
+      "Compliance": 0.393,
+      "Transparency": 0.318
+    }
+  }
+}

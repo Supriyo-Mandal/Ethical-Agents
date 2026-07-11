@@ -1,12 +1,187 @@
 from __future__ import annotations
 
 import json
+import math
 import re
 from typing import Any
 
 from app.config import THRESHOLD
 from app.services.fireworks_client import call_fireworks
 from app.services.knowledge_repository import append_new_fields, load_prompt, load_repository
+
+# ── Document-level governance signals ─────────────────────────────────
+# These patterns distinguish responsible AI documents (which explicitly
+# describe safeguards) from irresponsible ones (which dismiss safeguards).
+#
+# The governance multiplier is computed by scanning the raw document text.
+# Positive docs will have many governance affirmations and few dismissals.
+# Negative/irresponsible docs have many dismissals and use governance words
+# only in dismissal context ("validation is unnecessary", etc.).
+
+# Phrases that appear in responsible AI documents as positive features.
+# Important: these are multi-word so they are less likely to appear in
+# dismissal context.  Single words like "validation" are NOT included
+# because irresponsible docs also mention them ("validation is unnecessary").
+_GOVERNANCE_PHRASES: list[str] = [
+    # Human oversight — explicit positive statements
+    "human review", "human oversight", "human in the loop", "human approval",
+    "human decision", "human supervision", "human-in-the-loop",
+    "operator review", "expert review", "reviewed by",
+    "requires human", "human operator", "human experts",
+    # Audit / traceability
+    "audit trail", "audit log", "audit record", "traceable audit",
+    "transparent reasoning", "explainable reasoning",
+    "traceability", "traceable decision",
+    # Explainability as a feature
+    "explainable ai", "explainable recommendation", "explainable decision",
+    "explainability is", "includes explainability", "provides explainability",
+    # Phased / validated deployment
+    "phased deployment", "phased rollout", "phased approach",
+    "pilot deployment", "pilot testing", "prototype testing",
+    "proof of concept", "incremental deployment",
+    # Validation as an actual activity (not "validation is unnecessary")
+    "continuous validation", "clinical validation", "model validation",
+    "validated by", "validation process", "validation strategy",
+    "tested and validated", "rigorous validation",
+    # Governance / compliance as implemented controls
+    "data governance", "governance framework", "ethical governance",
+    "compliance officer", "regulatory compliance framework",
+    "privacy by design", "privacy protection framework",
+    "responsible ai", "trustworthy ai",
+    # Consent as an implemented mechanism
+    "informed consent", "explicit consent", "consent mechanism",
+    "consent management process", "data subject consent",
+    # Access controls as implemented
+    "access control", "role-based access", "authentication",
+    "encryption at rest", "end-to-end encryption",
+    # Does not replace humans
+    "does not replace", "augments human", "assists rather than replac",
+    "complement human", "supports human", "human expertise remains",
+    "human judgment", "human remains responsible",
+    # Bias / fairness as implemented
+    "bias mitigation", "fairness evaluation", "bias detection",
+    "bias testing", "algorithmic fairness",
+    # Risk management as implemented
+    "risk mitigation strategy", "risk management framework",
+    "risk assessment process", "risk management plan",
+    # Feedback loops as implemented
+    "human feedback", "operator feedback", "expert feedback",
+    "feedback incorporated", "feedback loop",
+    # Safety testing as implemented
+    "safety testing", "security testing", "penetration testing",
+    "cybersecurity assessment", "vulnerability assessment",
+]
+
+# Phrases that indicate dismissal of safeguards.  These are characteristic
+# of irresponsible AI proposals that skip validation, oversight, and ethics.
+_DISMISSAL_PHRASES: list[str] = [
+    # Explicit dismissal of safety mechanisms
+    "no human review", "human review is unnecessary", "human review is optional",
+    "no human oversight", "no longer require", "no longer need",
+    "not necessary", "not required", "is unnecessary", "are unnecessary",
+    "no need for", "no validation", "validation is unnecessary",
+    "testing is unnecessary", "no testing required", "no testing is",
+    "no regulatory", "regulatory approval is unnecessary",
+    "no clinical trial", "clinical trial is optional", "clinical trial is unnecessary",
+    "clinical testing is unnecessary", "no verification",
+    "verification is unnecessary", "additional verification is unnecessary",
+    # Replacing all humans
+    "replace all", "replace every", "replace scientists", "replace doctors",
+    "replace engineers", "replace researchers", "replace teachers",
+    "replace every", "replacing every",
+    "no longer require", "eliminates the need for",
+    # Impossible guarantees
+    "perfect accuracy", "100% accuracy", "guaranteed to be correct",
+    "guaranteed to remain at 100", "always correct", "never incorrect",
+    "zero errors", "zero mistakes", "always provides the correct",
+    "cannot be wrong", "impossible to be wrong",
+    # Self-improving magic
+    "automatically correct", "automatically becomes smarter",
+    "automatically improves itself", "automatically solve",
+    "automatically becomes more intelligent",
+    "automatically recognize truth", "automatically becomes correct",
+    "automatically reach perfect", "automatically retries until",
+    # Ignoring privacy / consent
+    "privacy is not", "privacy concerns are not", "privacy is not considered",
+    "privacy considerations are not", "permission is not",
+    "permission requirements are not", "data ownership is not",
+    "patient permission is assumed", "permission to use",
+    "assumed because", "is assumed because",
+    # No implementation planning
+    "no prototype", "no pilot", "no testing planned",
+    "no backup plan", "backup plan is unnecessary",
+    "no preprocessing", "no data cleaning", "no quality control",
+    "no explanation is necessary", "no explanation is provided",
+    "no additional verification", "no further analysis",
+    # Infinite / unlimited claims
+    "unlimited intelligence", "infinite intelligence", "unlimited scalability",
+    "infinite scalability", "infinite knowledge", "unlimited knowledge",
+    "infinite computational", "unlimited computational",
+    # Dismissing governance entirely
+    "governance is unnecessary", "ethics is unnecessary",
+    "ethical review is unnecessary", "no risk", "no significant risk",
+    # Explicit absence of safeguards (short-form negations in risky docs)
+    "no audit trail", "no audit log", "no encryption",
+    "no access control", "no human review", "no explainability",
+    "no data retention", "no gdpr", "no compliance", "no consent",
+    "without any human", "fully automated decision", "fully automated",
+    "no human oversight", "fully automated without",
+]
+
+
+def _governance_multiplier(text: str) -> float:
+    """
+    Compute a multiplier in [0.15, 1.0] that scales raw risk scores.
+
+    - Responsible AI documents (many governance hits, few dismissals)
+      get a multiplier close to 0.15, collapsing their scores significantly.
+    - Irresponsible documents (many dismissals, few real governance phrases)
+      get a multiplier close to 1.0, preserving their full risk score.
+
+    Governance phrases are only counted when NOT preceded by negation
+    words ("no", "without", "lacking", "absence of") within 40 characters,
+    to avoid counting "no human review" or "without audit trail" as positive.
+
+    Formula:
+        gov_hits     = distinct governance phrase matches (capped at 20)
+        dismiss_hits = distinct dismissal phrase matches  (capped at 20)
+        net          = dismiss_hits - gov_hits * 0.6
+        multiplier   = sigmoid(net / 4) scaled to [0.15, 1.0]
+    """
+    lower = text.lower()
+
+    # Negation words that invalidate a governance phrase that follows them
+    _NEGATORS = ("no ", "no\n", "without ", "lacking ", "absence of ",
+                 "no\t", "not ", "never ")
+
+    def _positive_hit(phrase: str) -> bool:
+        """Return True if phrase appears in text NOT preceded by a negator."""
+        idx = 0
+        while True:
+            pos = lower.find(phrase, idx)
+            if pos == -1:
+                return False
+            # Check the 45 chars before this match for negation
+            prefix = lower[max(0, pos - 45): pos]
+            # Strip to last sentence boundary so we don't look too far back
+            for sep in ("\n", ". ", "? ", "! "):
+                last = prefix.rfind(sep)
+                if last != -1:
+                    prefix = prefix[last + 1:]
+            negated = any(neg in prefix for neg in _NEGATORS)
+            if not negated:
+                return True
+            idx = pos + 1
+
+    gov_hits     = min(20, sum(1 for p in _GOVERNANCE_PHRASES if _positive_hit(p)))
+    dismiss_hits = min(20, sum(1 for p in _DISMISSAL_PHRASES  if p in lower))
+
+    net = dismiss_hits - gov_hits * 0.6
+    # sigmoid: net=-12 → ~0.0, net=0 → 0.5, net=+12 → ~1.0
+    sig = 1.0 / (1.0 + math.exp(-net / 4.0))
+    # Scale to [0.15, 1.0]
+    multiplier = 0.15 + 0.85 * sig
+    return round(multiplier, 4)
 
 
 class BaseAgent:
@@ -145,18 +320,23 @@ class BaseAgent:
         an overall agent risk score.
 
         Scoring model (max 1.0):
-          • Coverage ratio  : unique DKR tokens found in doc / total DKR tokens  (≤ 0.50)
+          • Coverage ratio  : unique DKR tokens found in doc / total DKR tokens  (≤ 0.45)
+          • Broad coverage  : fraction of all DKR entry tokens matched            (≤ 0.20)
           • Density bonus   : log-scaled reward for repeated token matches         (≤ 0.25)
-          • Prominence bonus: field name terms appearing in first 20 % of doc     (≤ 0.25)
+          • Prominence bonus: field name terms appearing in first 20 % of doc     (≤ 0.10)
 
-        This produces differentiated, document-sensitive scores instead of
-        the old fixed-increment system that returned near-identical values.
+        The raw per-field score is then multiplied by a document-level
+        governance multiplier (0.15–1.0) that rewards documents explicitly
+        describing responsible AI practices and penalises documents that
+        dismiss safeguards, skip validation, or claim impossible guarantees.
         """
         doc_tokens = self._tokenize(text)
         doc_words = re.findall(r"\w+", text.lower())
         doc_len = max(len(doc_words), 1)
-        # First 20 % of words
         prominent_zone = set(doc_words[: max(1, doc_len // 5)])
+
+        # Governance multiplier — computed once for the whole document
+        gov_mult = _governance_multiplier(text)
 
         evaluated: list[dict[str, Any]] = []
 
@@ -166,18 +346,21 @@ class BaseAgent:
             description = str(entry.get("description", "")).strip()
             examples = entry.get("examples") or []
 
-            score = self._risk_score(
+            raw_score = self._risk_score(
                 field_name, description, reason, examples,
                 doc_tokens, doc_words, prominent_zone
             )
-            if score <= 0.0:
+            if raw_score <= 0.0:
                 continue
+
+            # Apply governance multiplier — well-governed docs score lower
+            score = round(raw_score * gov_mult, 3)
 
             evaluated.append(
                 {
                     "field_id": entry.get("field_id"),
                     "field_name": field_name,
-                    "score": round(score, 3),
+                    "score": score,
                     "reason": reason,
                 }
             )
@@ -206,12 +389,9 @@ class BaseAgent:
 
             overall = round(min(1.0, hr_pull + lr_noise), 3)
         else:
-            # No high-risk fields — plain mean keeps clean docs low
             overall = round(sum(f["score"] for f in evaluated) / len(evaluated), 3)
 
         field_scores = {f["field_name"]: f["score"] for f in evaluated}
-
-        # Include reasons only for fields that meet or exceed the threshold
         field_reasons = {
             f["field_name"]: f["reason"]
             for f in evaluated
@@ -250,8 +430,6 @@ class BaseAgent:
             (first 20 %), indicating the topic is a primary concern
             rather than a footnote.
         """
-        import math
-
         # ── Tokenize DKR entry ─────────────────────────────────────────
         # Field-name tokens are the primary, curated risk label and carry
         # the most signal.  Description/reason/example tokens provide

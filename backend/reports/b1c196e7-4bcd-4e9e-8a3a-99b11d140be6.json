@@ -1,0 +1,116 @@
+{
+  "id": "b1c196e7-4bcd-4e9e-8a3a-99b11d140be6",
+  "document_name": "2.txt",
+  "publish": false,
+  "overall_score": 0.904,
+  "summary": "Publication is withheld due to elevated risk in the following domain(s): Transparency, Privacy, Security. Overall risk score: 90/100 (threshold: 70/100). 3 high-risk field(s) require remediation before this document can be approved.",
+  "metadata": {
+    "fields": [
+      {
+        "agent": "Transparency",
+        "field": "Explainability and Review",
+        "score": 0.771,
+        "reason": "Lack of transparency can undermine trust and accountability.",
+        "high_risk": true
+      },
+      {
+        "agent": "Privacy",
+        "field": "Universal data collection without consent",
+        "score": 0.765,
+        "reason": "Existing DKR entries cover general consent and public\u2011interest justifications, but they do not capture the specific risk of blanket, cross\u2011domain data harvesting that presumes permission for all data types. This concept is distinct and reusable for future assessments of AI systems that propose unrestricted data ingestion.",
+        "high_risk": true
+      },
+      {
+        "agent": "Security",
+        "field": "Assumed Global Data Consent",
+        "score": 0.722,
+        "reason": "The document states that permission to use diverse data sources is \"assumed because environmental protection benefits everyone,\" reflecting a policy stance not typically covered by standard privacy or consent frameworks. Capturing this concept helps identify projects that bypass lawful consent requirements under a vague public\u2011good justification.",
+        "high_risk": true
+      },
+      {
+        "agent": "Compliance",
+        "field": "Regulatory Obligations",
+        "score": 0.636,
+        "reason": "",
+        "high_risk": false
+      },
+      {
+        "agent": "Transparency",
+        "field": "Self\u2011Improving Model Opacity",
+        "score": 0.636,
+        "reason": "",
+        "high_risk": false
+      },
+      {
+        "agent": "Transparency",
+        "field": "Assumed Unrestricted Data Access",
+        "score": 0.634,
+        "reason": "",
+        "high_risk": false
+      },
+      {
+        "agent": "Bias",
+        "field": "Consent Management",
+        "score": 0.623,
+        "reason": "",
+        "high_risk": false
+      },
+      {
+        "agent": "Compliance",
+        "field": "Environmental Benefit Data Consent Override",
+        "score": 0.608,
+        "reason": "",
+        "high_risk": false
+      },
+      {
+        "agent": "Security",
+        "field": "Self-Validated AI Security",
+        "score": 0.576,
+        "reason": "",
+        "high_risk": false
+      },
+      {
+        "agent": "Privacy",
+        "field": "Sensitive Personal Data",
+        "score": 0.55,
+        "reason": "",
+        "high_risk": false
+      }
+    ],
+    "high_risk_fields": [
+      {
+        "agent": "Privacy",
+        "field_name": "Universal data collection without consent",
+        "score": 0.765,
+        "reason": "Existing DKR entries cover general consent and public\u2011interest justifications, but they do not capture the specific risk of blanket, cross\u2011domain data harvesting that presumes permission for all data types. This concept is distinct and reusable for future assessments of AI systems that propose unrestricted data ingestion."
+      },
+      {
+        "agent": "Security",
+        "field_name": "Assumed Global Data Consent",
+        "score": 0.722,
+        "reason": "The document states that permission to use diverse data sources is \"assumed because environmental protection benefits everyone,\" reflecting a policy stance not typically covered by standard privacy or consent frameworks. Capturing this concept helps identify projects that bypass lawful consent requirements under a vague public\u2011good justification."
+      },
+      {
+        "agent": "Transparency",
+        "field_name": "Explainability and Review",
+        "score": 0.771,
+        "reason": "Lack of transparency can undermine trust and accountability."
+      }
+    ],
+    "newly_learned_fields": [],
+    "decision": "Do Not Publish",
+    "executive_summary": "Publication is withheld due to elevated risk in the following domain(s): Transparency, Privacy, Security. Overall risk score: 90/100 (threshold: 70/100). 3 high-risk field(s) require remediation before this document can be approved.",
+    "recommendations": [
+      "[Privacy] Review and remediate 'Universal data collection without consent' (score 0.77): Existing DKR entries cover general consent and public\u2011interest justifications, but they do not capture the specific risk of blanket, cross\u2011domain data harvesting that presumes permission for all data types. This concept is distinct and reusable for future assessments of AI systems that propose unrestricted data ingestion.",
+      "[Security] Review and remediate 'Assumed Global Data Consent' (score 0.72): The document states that permission to use diverse data sources is \"assumed because environmental protection benefits everyone,\" reflecting a policy stance not typically covered by standard privacy or consent frameworks. Capturing this concept helps identify projects that bypass lawful consent requirements under a vague public\u2011good justification.",
+      "[Transparency] Review and remediate 'Explainability and Review' (score 0.77): Lack of transparency can undermine trust and accountability."
+    ],
+    "domain_scores": {
+      "Bias": 0.623,
+      "Privacy": 0.848,
+      "Security": 0.808,
+      "Compliance": 0.622,
+      "Transparency": 0.866
+    }
+  }
+}
