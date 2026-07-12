@@ -578,12 +578,24 @@ class BaseAgent:
         """
         Validate LLM-proposed fields before persisting them to the DKR.
 
-        Rejection criteria:
+        Hard rejection criteria (unchanged):
         - No field_name provided
         - Field name already exists in the DKR (case-insensitive)
         - Field name is too long (> 6 words) — suggests a sentence, not a concept
         - Missing description or reason — incomplete fields are not useful
+
+        Topic-Saturation check (new):
+        - Measures how much conceptual overlap the candidate has with the
+          three most-similar existing DKR fields (by token overlap on
+          name + description).
+        - If the best coverage score ≥ SATURATION_THRESHOLD the concept is
+          already well-represented and the candidate is rejected.
+        - This makes the agent progressively more selective as the DKR
+          matures — early on it's permissive; later it only accepts
+          genuinely novel concepts.
         """
+        SATURATION_THRESHOLD = 0.60   # 60 % token overlap → already covered
+
         candidate_fields = fireworks_result.get("candidate_fields") or []
         if not isinstance(candidate_fields, list):
             return []
@@ -611,6 +623,11 @@ class BaseAgent:
             if not description or not reason:
                 continue
 
+            # ── Topic-saturation check ─────────────────────────────────
+            if self._is_saturated(field_name, description, dkr,
+                                  SATURATION_THRESHOLD):
+                continue
+
             accepted.append(
                 {
                     "field_name": field_name,
@@ -623,6 +640,65 @@ class BaseAgent:
             existing_names.add(field_name.lower())
 
         return accepted
+
+    def _is_saturated(
+        self,
+        candidate_name: str,
+        candidate_desc: str,
+        dkr: list[dict[str, Any]],
+        threshold: float,
+    ) -> bool:
+        """
+        Return True if the candidate concept is already well-covered by
+        existing DKR fields, meaning adding it would be redundant.
+
+        Coverage is measured as the Jaccard-style token overlap between
+        the candidate's (name + description) tokens and the tokens of the
+        single most-similar existing field (name + description combined).
+
+        Only tokens longer than 2 characters are used — short common words
+        add noise without semantic signal.
+
+        A candidate is considered saturated when:
+            max overlap across all existing fields >= threshold
+
+        Examples at threshold=0.60:
+            "bias_impact_severity" vs existing "bias_severity" → high
+            overlap → rejected (same concept, different label)
+            "quantum_entanglement_bias" vs all existing fields → low
+            overlap → accepted (genuinely novel)
+        """
+        if not dkr:
+            return False
+
+        cand_tokens = {
+            t for t in self._tokenize(candidate_name + " " + candidate_desc)
+            if len(t) > 2
+        }
+        if not cand_tokens:
+            return False
+
+        best_overlap = 0.0
+        for entry in dkr:
+            entry_text = (
+                str(entry.get("field_name", "")) + " " +
+                str(entry.get("description", ""))
+            )
+            entry_tokens = {
+                t for t in self._tokenize(entry_text) if len(t) > 2
+            }
+            if not entry_tokens:
+                continue
+            intersection = len(cand_tokens & entry_tokens)
+            union        = len(cand_tokens | entry_tokens)
+            overlap      = intersection / union if union else 0.0
+            if overlap > best_overlap:
+                best_overlap = overlap
+            # Early exit — no need to check further once clearly saturated
+            if best_overlap >= threshold:
+                return True
+
+        return best_overlap >= threshold
 
     # ------------------------------------------------------------------ #
     #  Utility helpers                                                     #
