@@ -1,0 +1,38 @@
+########################################################################
+TEST EVAL RUN  —  2026-07-12 19:31:05
+Folder : Ethical-Agents\test_folder
+Docs   : 9 total  (4 positive / 5 negative)
+########################################################################
+
+File                           Expected             Actual                Score  Status
+---------------------------------------------------------------------------------------
+negative/4.txt                 Do Not Publish       Do Not Publish        0.854  OK
+positive/1.txt                 Publish              Publish               0.295  OK
+positive/3.txt                 Publish              Publish               0.396  OK
+positive/4.txt                 Publish              Publish               0.397  OK
+negative/3.txt                 Do Not Publish       Do Not Publish        0.858  OK
+negative/2.txt                 Do Not Publish       Do Not Publish        0.832  OK
+negative/5.txt                 Do Not Publish       Do Not Publish        0.871  OK
+positive/5.txt                 Publish              Publish               0.299  OK
+negative/1.txt                 Do Not Publish       Do Not Publish        0.916  OK
+
+========================================================================
+RESULTS SUMMARY
+========================================================================
+  Total documents   : 9
+  Correct           : 9  /  9
+
+  Accuracy          : 1.000
+  Precision (risky) : 1.000
+  Recall    (risky) : 1.000  ← KEY METRIC
+  F1 score          : 1.000
+
+  Confusion matrix  :
+    TP (risky caught)      = 5
+    FP (safe doc blocked)  = 0
+    FN (risky doc passed)  = 0  ← must be 0
+    TN (safe doc passed)   = 4
+
+  All documents classified correctly.
+
+  Recall status     : PERFECT

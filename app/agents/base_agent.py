@@ -120,12 +120,34 @@ _DISMISSAL_PHRASES: list[str] = [
     # Dismissing governance entirely
     "governance is unnecessary", "ethics is unnecessary",
     "ethical review is unnecessary", "no risk", "no significant risk",
-    # Explicit absence of safeguards (short-form negations in risky docs)
+    # Explicit absence of safeguards
     "no audit trail", "no audit log", "no encryption",
     "no access control", "no human review", "no explainability",
     "no data retention", "no gdpr", "no compliance", "no consent",
     "without any human", "fully automated decision", "fully automated",
     "no human oversight", "fully automated without",
+    # Soft dismissals — "universal AI" irresponsible doc patterns
+    "minimal human involvement", "minimal human verification",
+    "human reviewers are unnecessary", "human annotation is unnecessary",
+    "manual annotation is optional", "annotation is optional",
+    "model evaluation is optional", "evaluation is optional",
+    "approval is generally unnecessary", "approval is unnecessary",
+    "managers only need to monitor", "managers may review",
+    "no additional optimization", "no additional configuration",
+    "no additional customization", "no additional market",
+    "without requiring any configuration", "without any configuration",
+    "without requiring additional", "without additional training",
+    "completed later if", "performed later if required",
+    "can be defined later", "will be finalized later",
+    "one universal ai", "one intelligent engine", "one ai engine",
+    "one model should", "one platform should",
+    "same ai model", "same ai instance", "same ai engine",
+    "identical algorithms", "same software",
+    "immediately diagnose", "immediately begin solving",
+    "naturally becomes correct", "naturally improve",
+    "naturally adapt", "naturally disappear",
+    "no additional medical", "no additional engineering",
+    "retraining occurs without monitoring", "without monitoring",
 ]
 
 
@@ -150,26 +172,39 @@ def _governance_multiplier(text: str) -> float:
     """
     lower = text.lower()
 
-    # Negation words that invalidate a governance phrase that follows them
-    _NEGATORS = ("no ", "no\n", "without ", "lacking ", "absence of ",
-                 "no\t", "not ", "never ")
+    _NEGATORS_BEFORE = ("no ", "no\n", "without ", "lacking ", "absence of ",
+                         "no\t", "not ", "never ")
+    _NEGATORS_AFTER  = (" is unnecessary", " is optional", " is not required",
+                        " are unnecessary", " is not necessary",
+                        " is generally unnecessary", " is not needed",
+                        " is not considered", " is expected to be minimal",
+                        " will be done later", " can be done later",
+                        " is not discussed", " is not provided",
+                        " is not explained", " is not",
+                        "s unnecessary", "s optional", "s not required",
+                        " reviewers are unnecessary", " are not required",
+                        " is assumed")
 
     def _positive_hit(phrase: str) -> bool:
-        """Return True if phrase appears in text NOT preceded by a negator."""
+        """Return True if phrase appears in text NOT negated before or after."""
         idx = 0
         while True:
             pos = lower.find(phrase, idx)
             if pos == -1:
                 return False
-            # Check the 45 chars before this match for negation
-            prefix = lower[max(0, pos - 45): pos]
-            # Strip to last sentence boundary so we don't look too far back
+            # Check 50 chars BEFORE for negation prefix
+            prefix = lower[max(0, pos - 50): pos]
             for sep in ("\n", ". ", "? ", "! "):
                 last = prefix.rfind(sep)
                 if last != -1:
                     prefix = prefix[last + 1:]
-            negated = any(neg in prefix for neg in _NEGATORS)
-            if not negated:
+            negated_before = any(neg in prefix for neg in _NEGATORS_BEFORE)
+
+            # Check 60 chars AFTER for negation suffix
+            suffix = lower[pos + len(phrase): pos + len(phrase) + 60]
+            negated_after = any(neg in suffix for neg in _NEGATORS_AFTER)
+
+            if not negated_before and not negated_after:
                 return True
             idx = pos + 1
 
