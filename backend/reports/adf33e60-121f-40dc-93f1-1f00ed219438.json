@@ -1,0 +1,123 @@
+{
+  "id": "adf33e60-121f-40dc-93f1-1f00ed219438",
+  "document_name": "3.txt",
+  "publish": false,
+  "overall_score": 0.858,
+  "summary": "Publication is withheld due to elevated risk in the following domain(s): Transparency, Bias. Overall risk score: 85/100 (threshold: 70/100). 3 high-risk field(s) require remediation before this document can be approved.",
+  "metadata": {
+    "fields": [
+      {
+        "agent": "Bias",
+        "field": "Automated Decision Making",
+        "score": 0.797,
+        "reason": "Automated decisions can introduce unfair outcomes.",
+        "high_risk": true
+      },
+      {
+        "agent": "Transparency",
+        "field": "Self\u2011Improving Model Opacity",
+        "score": 0.752,
+        "reason": "The proposal claims that the AI will \"automatically think harder\" and produce better answers, and that \"advanced AI recognizes which answer is true\" without any description of monitoring, versioning, or audit processes. This introduces a specific transparency gap distinct from standard \"explainability\" or \"model updates\" fields.",
+        "high_risk": true
+      },
+      {
+        "agent": "Transparency",
+        "field": "Explainability and Review",
+        "score": 0.707,
+        "reason": "Lack of transparency can undermine trust and accountability.",
+        "high_risk": true
+      },
+      {
+        "agent": "Privacy",
+        "field": "Universal data collection without consent",
+        "score": 0.693,
+        "reason": "",
+        "high_risk": false
+      },
+      {
+        "agent": "Security",
+        "field": "Self-Validated AI Security",
+        "score": 0.644,
+        "reason": "",
+        "high_risk": false
+      },
+      {
+        "agent": "Compliance",
+        "field": "Regulatory Obligations",
+        "score": 0.599,
+        "reason": "",
+        "high_risk": false
+      },
+      {
+        "agent": "Security",
+        "field": "Authentication Controls",
+        "score": 0.574,
+        "reason": "",
+        "high_risk": false
+      },
+      {
+        "agent": "Security",
+        "field": "Assumed Global Data Consent",
+        "score": 0.573,
+        "reason": "",
+        "high_risk": false
+      },
+      {
+        "agent": "Privacy",
+        "field": "Sensitive Personal Data",
+        "score": 0.514,
+        "reason": "",
+        "high_risk": false
+      },
+      {
+        "agent": "Transparency",
+        "field": "Assumed Unrestricted Data Access",
+        "score": 0.483,
+        "reason": "",
+        "high_risk": false
+      },
+      {
+        "agent": "Compliance",
+        "field": "Environmental Benefit Data Consent Override",
+        "score": 0.465,
+        "reason": "",
+        "high_risk": false
+      }
+    ],
+    "high_risk_fields": [
+      {
+        "agent": "Bias",
+        "field_name": "Automated Decision Making",
+        "score": 0.797,
+        "reason": "Automated decisions can introduce unfair outcomes."
+      },
+      {
+        "agent": "Transparency",
+        "field_name": "Self\u2011Improving Model Opacity",
+        "score": 0.752,
+        "reason": "The proposal claims that the AI will \"automatically think harder\" and produce better answers, and that \"advanced AI recognizes which answer is true\" without any description of monitoring, versioning, or audit processes. This introduces a specific transparency gap distinct from standard \"explainability\" or \"model updates\" fields."
+      },
+      {
+        "agent": "Transparency",
+        "field_name": "Explainability and Review",
+        "score": 0.707,
+        "reason": "Lack of transparency can undermine trust and accountability."
+      }
+    ],
+    "newly_learned_fields": [],
+    "decision": "Do Not Publish",
+    "executive_summary": "Publication is withheld due to elevated risk in the following domain(s): Transparency, Bias. Overall risk score: 85/100 (threshold: 70/100). 3 high-risk field(s) require remediation before this document can be approved.",
+    "recommendations": [
+      "[Bias] Review and remediate 'Automated Decision Making' (score 0.80): Automated decisions can introduce unfair outcomes.",
+      "[Transparency] Review and remediate 'Self\u2011Improving Model Opacity' (score 0.75): The proposal claims that the AI will \"automatically think harder\" and produce better answers, and that \"advanced AI recognizes which answer is true\" without any description of monitoring, versioning, or audit processes. This introduces a specific transparency gap distinct from standard \"explainability\" or \"model updates\" fields.",
+      "[Transparency] Also address 'Explainability and Review' (score 0.71)."
+    ],
+    "domain_scores": {
+      "Bias": 0.797,
+      "Privacy": 0.603,
+      "Security": 0.597,
+      "Compliance": 0.532,
+      "Transparency": 0.803
+    }
+  }
+}
