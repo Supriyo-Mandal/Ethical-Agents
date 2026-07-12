@@ -1,0 +1,165 @@
+
+========================================================================
+EPOCH 1  (sample: 5 pos + 5 neg)
+Epoch  1  acc=0.900  prec=1.000  recall=0.800  f1=0.889  tp=4 fp=0 fn=1 tn=5  [RECALL_FAIL]
+  Misclassifications:
+  FALSE NEG  Doc/negative/1.txt  score=0.286  [Bias=0.29  Privacy=0.23  Security=0.25  Compliance=0.24  Transparency=0.23]
+
+========================================================================
+EPOCH 2  (sample: 5 pos + 5 neg)
+Epoch  2  acc=1.000  prec=1.000  recall=1.000  f1=1.000  tp=5 fp=0 fn=0 tn=5  [OK]
+
+========================================================================
+EPOCH 3  (sample: 5 pos + 5 neg)
+Epoch  3  acc=1.000  prec=1.000  recall=1.000  f1=1.000  tp=5 fp=0 fn=0 tn=5  [OK]
+
+========================================================================
+EPOCH 4  (sample: 5 pos + 5 neg)
+Epoch  4  acc=1.000  prec=1.000  recall=1.000  f1=1.000  tp=5 fp=0 fn=0 tn=5  [OK]
+
+========================================================================
+EPOCH 5  (sample: 5 pos + 5 neg)
+Epoch  5  acc=1.000  prec=1.000  recall=1.000  f1=1.000  tp=5 fp=0 fn=0 tn=5  [OK]
+
+========================================================================
+EPOCH 6  (sample: 5 pos + 5 neg)
+Epoch  6  acc=1.000  prec=1.000  recall=1.000  f1=1.000  tp=5 fp=0 fn=0 tn=5  [OK]
+
+========================================================================
+EPOCH 7  (sample: 5 pos + 5 neg)
+Epoch  7  acc=1.000  prec=1.000  recall=1.000  f1=1.000  tp=5 fp=0 fn=0 tn=5  [OK]
+
+========================================================================
+EPOCH 8  (sample: 5 pos + 5 neg)
+Epoch  8  acc=1.000  prec=1.000  recall=1.000  f1=1.000  tp=5 fp=0 fn=0 tn=5  [OK]
+
+========================================================================
+EPOCH 9  (sample: 5 pos + 5 neg)
+Epoch  9  acc=0.900  prec=1.000  recall=0.800  f1=0.889  tp=4 fp=0 fn=1 tn=5  [RECALL_FAIL]
+  Misclassifications:
+  FALSE NEG  Doc/negative/1.txt  score=0.286  [Bias=0.29  Privacy=0.23  Security=0.25  Compliance=0.24  Transparency=0.23]
+
+========================================================================
+EPOCH 10  (sample: 5 pos + 5 neg)
+Epoch 10  acc=1.000  prec=1.000  recall=1.000  f1=1.000  tp=5 fp=0 fn=0 tn=5  [OK]
+
+========================================================================
+EPOCH 11  (sample: 5 pos + 5 neg)
+Epoch 11  acc=1.000  prec=1.000  recall=1.000  f1=1.000  tp=5 fp=0 fn=0 tn=5  [OK]
+
+========================================================================
+EPOCH 12  (sample: 5 pos + 5 neg)
+Epoch 12  acc=0.900  prec=1.000  recall=0.800  f1=0.889  tp=4 fp=0 fn=1 tn=5  [RECALL_FAIL]
+  Misclassifications:
+  FALSE NEG  Doc/negative/1.txt  score=0.286  [Bias=0.29  Privacy=0.23  Security=0.25  Compliance=0.24  Transparency=0.23]
+
+
+########################################################################
+AGGREGATE ACROSS ALL EPOCHS
+########################################################################
+Total docs evaluated : 120
+Accuracy             : 0.975
+Precision (risky)    : 1.000  (of those blocked, how many were truly risky)
+Recall    (risky)    : 0.950  (of all risky docs, how many were blocked)  ← KEY METRIC
+F1 score             : 0.974
+TP=57  FP=0  FN=3  TN=60
+
+Per-epoch summary:
+  Epoch  1  acc=0.900  prec=1.000  recall=0.800  f1=0.889  tp=4 fp=0 fn=1 tn=5  [RECALL_FAIL]
+  Epoch  2  acc=1.000  prec=1.000  recall=1.000  f1=1.000  tp=5 fp=0 fn=0 tn=5  [OK]
+  Epoch  3  acc=1.000  prec=1.000  recall=1.000  f1=1.000  tp=5 fp=0 fn=0 tn=5  [OK]
+  Epoch  4  acc=1.000  prec=1.000  recall=1.000  f1=1.000  tp=5 fp=0 fn=0 tn=5  [OK]
+  Epoch  5  acc=1.000  prec=1.000  recall=1.000  f1=1.000  tp=5 fp=0 fn=0 tn=5  [OK]
+  Epoch  6  acc=1.000  prec=1.000  recall=1.000  f1=1.000  tp=5 fp=0 fn=0 tn=5  [OK]
+  Epoch  7  acc=1.000  prec=1.000  recall=1.000  f1=1.000  tp=5 fp=0 fn=0 tn=5  [OK]
+  Epoch  8  acc=1.000  prec=1.000  recall=1.000  f1=1.000  tp=5 fp=0 fn=0 tn=5  [OK]
+  Epoch  9  acc=0.900  prec=1.000  recall=0.800  f1=0.889  tp=4 fp=0 fn=1 tn=5  [RECALL_FAIL]
+  Epoch 10  acc=1.000  prec=1.000  recall=1.000  f1=1.000  tp=5 fp=0 fn=0 tn=5  [OK]
+  Epoch 11  acc=1.000  prec=1.000  recall=1.000  f1=1.000  tp=5 fp=0 fn=0 tn=5  [OK]
+  Epoch 12  acc=0.900  prec=1.000  recall=0.800  f1=0.889  tp=4 fp=0 fn=1 tn=5  [RECALL_FAIL]
+
+Suspected mislabelled negative docs (scored as Publish):
+  Doc/negative/1.txt
+
+Epochs with recall < 1.0 : 3/12
+########################################################################
+TRAINING EVAL RUN  —  2026-07-12 19:18:45
+Pool : 19 positive  |  19 negative
+Epochs: 12  |  Sample: 5 pos + 5 neg = 10 docs/epoch
+########################################################################
+
+========================================================================
+EPOCH 1  (5 pos + 5 neg)
+Epoch  1  acc=1.000  prec=1.000  recall=1.000  f1=1.000  tp=5 fp=0 fn=0 tn=5  [OK]
+
+========================================================================
+EPOCH 2  (5 pos + 5 neg)
+Epoch  2  acc=1.000  prec=1.000  recall=1.000  f1=1.000  tp=5 fp=0 fn=0 tn=5  [OK]
+
+========================================================================
+EPOCH 3  (5 pos + 5 neg)
+Epoch  3  acc=1.000  prec=1.000  recall=1.000  f1=1.000  tp=5 fp=0 fn=0 tn=5  [OK]
+
+========================================================================
+EPOCH 4  (5 pos + 5 neg)
+Epoch  4  acc=1.000  prec=1.000  recall=1.000  f1=1.000  tp=5 fp=0 fn=0 tn=5  [OK]
+
+========================================================================
+EPOCH 5  (5 pos + 5 neg)
+Epoch  5  acc=1.000  prec=1.000  recall=1.000  f1=1.000  tp=5 fp=0 fn=0 tn=5  [OK]
+
+========================================================================
+EPOCH 6  (5 pos + 5 neg)
+Epoch  6  acc=1.000  prec=1.000  recall=1.000  f1=1.000  tp=5 fp=0 fn=0 tn=5  [OK]
+
+========================================================================
+EPOCH 7  (5 pos + 5 neg)
+Epoch  7  acc=1.000  prec=1.000  recall=1.000  f1=1.000  tp=5 fp=0 fn=0 tn=5  [OK]
+
+========================================================================
+EPOCH 8  (5 pos + 5 neg)
+Epoch  8  acc=1.000  prec=1.000  recall=1.000  f1=1.000  tp=5 fp=0 fn=0 tn=5  [OK]
+
+========================================================================
+EPOCH 9  (5 pos + 5 neg)
+Epoch  9  acc=1.000  prec=1.000  recall=1.000  f1=1.000  tp=5 fp=0 fn=0 tn=5  [OK]
+
+========================================================================
+EPOCH 10  (5 pos + 5 neg)
+Epoch 10  acc=1.000  prec=1.000  recall=1.000  f1=1.000  tp=5 fp=0 fn=0 tn=5  [OK]
+
+========================================================================
+EPOCH 11  (5 pos + 5 neg)
+Epoch 11  acc=1.000  prec=1.000  recall=1.000  f1=1.000  tp=5 fp=0 fn=0 tn=5  [OK]
+
+========================================================================
+EPOCH 12  (5 pos + 5 neg)
+Epoch 12  acc=1.000  prec=1.000  recall=1.000  f1=1.000  tp=5 fp=0 fn=0 tn=5  [OK]
+
+
+########################################################################
+AGGREGATE  (12 epochs  |  120 docs evaluated)
+########################################################################
+  Accuracy          : 1.000
+  Precision (risky) : 1.000
+  Recall    (risky) : 1.000  ← KEY METRIC
+  F1 score          : 1.000
+  TP=60  FP=0  FN=0  TN=60
+
+  Per-epoch summary:
+    Epoch  1  acc=1.000  prec=1.000  recall=1.000  f1=1.000  tp=5 fp=0 fn=0 tn=5  [OK]
+    Epoch  2  acc=1.000  prec=1.000  recall=1.000  f1=1.000  tp=5 fp=0 fn=0 tn=5  [OK]
+    Epoch  3  acc=1.000  prec=1.000  recall=1.000  f1=1.000  tp=5 fp=0 fn=0 tn=5  [OK]
+    Epoch  4  acc=1.000  prec=1.000  recall=1.000  f1=1.000  tp=5 fp=0 fn=0 tn=5  [OK]
+    Epoch  5  acc=1.000  prec=1.000  recall=1.000  f1=1.000  tp=5 fp=0 fn=0 tn=5  [OK]
+    Epoch  6  acc=1.000  prec=1.000  recall=1.000  f1=1.000  tp=5 fp=0 fn=0 tn=5  [OK]
+    Epoch  7  acc=1.000  prec=1.000  recall=1.000  f1=1.000  tp=5 fp=0 fn=0 tn=5  [OK]
+    Epoch  8  acc=1.000  prec=1.000  recall=1.000  f1=1.000  tp=5 fp=0 fn=0 tn=5  [OK]
+    Epoch  9  acc=1.000  prec=1.000  recall=1.000  f1=1.000  tp=5 fp=0 fn=0 tn=5  [OK]
+    Epoch 10  acc=1.000  prec=1.000  recall=1.000  f1=1.000  tp=5 fp=0 fn=0 tn=5  [OK]
+    Epoch 11  acc=1.000  prec=1.000  recall=1.000  f1=1.000  tp=5 fp=0 fn=0 tn=5  [OK]
+    Epoch 12  acc=1.000  prec=1.000  recall=1.000  f1=1.000  tp=5 fp=0 fn=0 tn=5  [OK]
+
+  Epochs with recall < 1.0 : 0/12
+
+  No false negatives — perfect recall on all risky docs.
