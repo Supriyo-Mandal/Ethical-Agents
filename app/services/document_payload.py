@@ -10,6 +10,15 @@ def normalize_document_payload(document_payload: dict[str, Any]) -> dict[str, An
     if "messages" in document_payload:
         return document_payload
 
+    if isinstance(document_payload.get("document_content"), dict):
+        content = document_payload["document_content"]
+        return {
+            "document_name": document_payload.get("document_name", "document"),
+            "document_type": document_payload.get("document_type"),
+            "document_content": content,
+            "messages": [{"role": "user", "content": content.get("plain_text", "")}],
+        }
+
     if "document" in document_payload:
         document_value = document_payload.get("document")
         if isinstance(document_value, str) and document_value.strip():

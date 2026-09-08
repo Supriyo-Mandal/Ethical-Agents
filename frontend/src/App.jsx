@@ -44,13 +44,11 @@ export default function App() {
     return [];
   });
   const [uploadState, setUploadState]   = useState({ loading: false, result: null });
-  const [selectedFile, setSelectedFile] = useState(null);
-
+  const [selectedFiles, setSelectedFiles] = useState([]);
   useEffect(() => {
     window.localStorage.setItem('ea-docs', JSON.stringify(documents));
   }, [documents]);
 
-  // Load existing reports from the backend on mount
   useEffect(() => {
     fetch(`${API_URL}/history`)
       .then(r => r.ok ? r.json() : null)
@@ -69,6 +67,7 @@ export default function App() {
           high_risk_fields:  r.metadata?.high_risk_fields   ?? [],
           recommendations:   r.metadata?.recommendations    ?? [],
           fields:            r.metadata?.fields             ?? [],
+          duplicate_documents: r.metadata?.duplicate_documents ?? [],
         }));
         // Merge: backend is source of truth; keep any local-only entries not yet in backend
         setDocuments(prev => {
@@ -88,14 +87,14 @@ export default function App() {
 
   const handleUpload = async (e) => {
     e.preventDefault();
-    const file = selectedFile || e.target.elements.file?.files?.[0];
-    if (!file) return;
+    const files = selectedFiles.length ? selectedFiles : Array.from(e.target.elements.file?.files || []);
+    if (!files.length) return;
 
     setUploadState({ loading: true, result: null });
 
     try {
       const fd = new FormData();
-      fd.append('file', file);
+      files.forEach(file => fd.append('files', file));
 
       const res = await fetch(`${API_URL}/upload`, { method: 'POST', body: fd });
       if (!res.ok) {
@@ -104,12 +103,38 @@ export default function App() {
       }
 
       const data = await res.json();
+      if (Array.isArray(data.analyses)) {
+        const entries = data.analyses.map((item, index) => {
+          const meta = item.metadata ?? {};
+          return {
+            id: item.analysis_id ?? `${Date.now()}-${index}`,
+            name: item.document_name ?? files[index]?.name ?? 'document',
+            type: files[index]?.type || 'unknown',
+            submittedAt: new Date().toLocaleString(),
+            publish: Boolean(item.publish),
+            overall_score: item.overall_score ?? 0,
+            summary: item.summary ?? '',
+            decision: meta.decision ?? (item.publish ? 'Publish' : 'Do Not Publish'),
+            domain_scores: meta.domain_scores ?? {},
+            high_risk_fields: meta.high_risk_fields ?? [],
+            recommendations: meta.recommendations ?? [],
+            fields: meta.fields ?? [],
+            document_content: meta.document_content ?? null,
+            duplicate_documents: meta.duplicate_documents ?? [],
+          };
+        });
+        setDocuments(prev => [...entries, ...prev].slice(0, 20));
+        setUploadState({ loading: false, result: { batch: true, analyses: entries, cross: data.cross_document_analysis, duplicates: data.duplicate_documents ?? [] } });
+        setSelectedFiles([]);
+        e.target.reset();
+        return;
+      }
       const meta = data.metadata ?? {};
 
       const entry = {
         id:          String(Date.now()),
-        name:        file.name,
-        type:        file.type || 'unknown',
+        name:        files[0].name,
+        type:        files[0].type || 'unknown',
         submittedAt: new Date().toLocaleString(),
         publish:     Boolean(data.publish),
         overall_score: data.overall_score ?? 0,
@@ -119,6 +144,7 @@ export default function App() {
         high_risk_fields:   meta.high_risk_fields   ?? [],
         recommendations:    meta.recommendations    ?? [],
         fields:             meta.fields             ?? [],
+        duplicate_documents: meta.duplicate_documents ?? [],
       };
 
       setDocuments(prev => [entry, ...prev].slice(0, 20));
@@ -127,7 +153,7 @@ export default function App() {
       setUploadState({ loading: false, result: { error: err.message } });
     }
 
-    setSelectedFile(null);
+    setSelectedFiles([]);
     e.target.reset();
   };
 
@@ -199,8 +225,8 @@ export default function App() {
           <Route path="/upload"    element={
             <UploadView
               onUpload={handleUpload}
-              selectedFile={selectedFile}
-              setSelectedFile={setSelectedFile}
+              selectedFiles={selectedFiles}
+              setSelectedFiles={setSelectedFiles}
               uploadState={uploadState}
             />}
           />
@@ -286,7 +312,7 @@ function HomeView({ summary }) {
 }
 
 /* ─── Upload ─────────────────────────────────────────────────────── */
-function UploadView({ onUpload, selectedFile, setSelectedFile, uploadState }) {
+function UploadView({ onUpload, selectedFiles, setSelectedFiles, uploadState }) {
   const { loading, result } = uploadState;
 
   return (
@@ -294,7 +320,7 @@ function UploadView({ onUpload, selectedFile, setSelectedFile, uploadState }) {
       <div className="glass-panel upload-panel">
         <h2>Upload a document</h2>
         <p className="panel-sub">
-          Supported formats: PDF, DOCX, TXT, MD. The agent pipeline will score the
+          Supported formats: PDF, DOCX, TXT, MD, PNG, JPG, TIFF, or WEBP. The agent pipeline will score the
           document across five ethical risk domains and return a publish decision.
         </p>
 
@@ -303,25 +329,26 @@ function UploadView({ onUpload, selectedFile, setSelectedFile, uploadState }) {
             <input
               type="file"
               name="file"
-              accept=".pdf,.docx,.txt,.md"
-              onChange={e => setSelectedFile(e.target.files?.[0] || null)}
+              accept=".pdf,.docx,.txt,.md,.png,.jpg,.jpeg,.tif,.tiff,.webp"
+              multiple
+              onChange={e => setSelectedFiles(Array.from(e.target.files || []))}
             />
             <div className="drop-inner">
               <span className="drop-icon">⬆</span>
               <span className="drop-text">
-                {selectedFile
-                  ? <>Selected: <strong>{selectedFile.name}</strong></>
+                {selectedFiles.length
+                  ? <>Selected: <strong>{selectedFiles.length} file(s)</strong></>
                   : 'Click to choose a file — or drag and drop here'}
               </span>
-              {selectedFile && (
+              {selectedFiles.length > 0 && (
                 <span className="drop-meta">
-                  {(selectedFile.size / 1024).toFixed(1)} KB · {selectedFile.type || 'unknown type'}
+                  {selectedFiles.map(file => file.name).join(', ')}
                 </span>
               )}
             </div>
           </label>
 
-          <button className="btn-primary btn-submit" type="submit" disabled={loading || !selectedFile}>
+          <button className="btn-primary btn-submit" type="submit" disabled={loading || !selectedFiles.length}>
             {loading ? <><span className="spinner" />Processing…</> : 'Submit for review'}
           </button>
         </form>
@@ -341,10 +368,50 @@ function UploadView({ onUpload, selectedFile, setSelectedFile, uploadState }) {
       )}
 
       {/* Success result */}
-      {result && !result.error && (
+      {result?.batch && <BatchResultPanel result={result} />}
+      {result && !result.error && !result.batch && (
         <ResultPanel entry={result} />
       )}
     </section>
+  );
+}
+
+function BatchResultPanel({ result }) {
+  const cross = result.cross || {};
+  return (
+    <div className="result-panel">
+      <div className="rp-header">
+        <div>
+          <h3>Cross-document analysis</h3>
+          <p>{result.analyses.length} documents analyzed together.</p>
+        </div>
+      </div>
+      <div className="rp-section">
+        <div className="rp-section-title">Duplicate detection</div>
+        <p className="rp-summary">
+          {result.duplicates?.length
+            ? result.duplicates.map(item => `${item.documents.join(' and ')} (${Math.round(item.confidence * 100)}%)`).join('; ')
+            : 'No likely duplicate documents detected.'}
+        </p>
+      </div>
+      <div className="rp-section">
+        <div className="rp-section-title">Shared high-risk fields</div>
+        <p className="rp-summary">
+          {cross.shared_high_risk_fields?.length
+            ? cross.shared_high_risk_fields.map(item => item.field).join(', ')
+            : 'No shared high-risk fields detected.'}
+        </p>
+      </div>
+      <div className="rp-section">
+        <div className="rp-section-title">Document results</div>
+        {result.analyses.map(item => (
+          <div className="domain-row" key={item.id}>
+            <span className="domain-name">{item.name}</span>
+            <ScoreBar score={item.overall_score} />
+          </div>
+        ))}
+      </div>
+    </div>
   );
 }
 
@@ -378,6 +445,15 @@ function ResultPanel({ entry }) {
       {/* Summary */}
       {entry.summary && (
         <p className="rp-summary">{entry.summary}</p>
+      )}
+
+      {entry.duplicate_documents?.length > 0 && (
+        <div className="rp-section">
+          <div className="rp-section-title danger-title">Possible duplicate</div>
+          <p className="rp-summary">
+            {entry.duplicate_documents.map(item => `${item.documents.join(' and ')} (${Math.round(item.confidence * 100)}%)`).join('; ')}
+          </p>
+        </div>
       )}
 
       {/* Domain scores */}
