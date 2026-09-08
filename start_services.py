@@ -38,6 +38,26 @@ def npm_cmd() -> str:
     return "npm.cmd" if IS_WINDOWS else "npm"
 
 
+def ensure_frontend_dependencies(frontend_dir: Path) -> None:
+    """Ensure the frontend dependencies are installed before starting Vite."""
+    vite_bin = frontend_dir / "node_modules" / "vite" / "bin" / "vite.js"
+    if vite_bin.exists():
+        return
+
+    print("  Installing frontend dependencies...")
+    completed = subprocess.run(
+        [npm_cmd(), "install"],
+        cwd=frontend_dir,
+        text=True,
+        capture_output=True,
+        check=False,
+    )
+
+    if completed.returncode != 0:
+        err = completed.stderr.strip() or completed.stdout.strip()
+        raise RuntimeError(f"Failed to install frontend dependencies:\n{err}")
+
+
 def main():
     base_dir = Path(__file__).parent
 
@@ -66,6 +86,9 @@ def main():
             sys.exit(1)
 
         # ── Frontend Dev Server ────────────────────────────────────────────
+        frontend_dir = base_dir / "frontend"
+        ensure_frontend_dependencies(frontend_dir)
+
         # On Windows subprocess needs shell=True for npm/npm.cmd to resolve,
         # so pass the command as a plain string when on Windows.
         if IS_WINDOWS:
@@ -76,7 +99,7 @@ def main():
         frontend_process = start_service(
             "Frontend Dev Server",
             frontend_cmd,        # type: ignore[arg-type]
-            base_dir / "frontend",
+            frontend_dir,
         )
         processes.append(("Frontend", frontend_process))
         time.sleep(3)

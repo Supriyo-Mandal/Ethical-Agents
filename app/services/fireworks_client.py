@@ -6,6 +6,11 @@ from pathlib import Path
 from typing import Any
 from urllib import error, request
 
+MODEL_CONTEXT_LIMIT = 128_000
+RESERVED_OUTPUT_TOKENS = 16_384
+SAFETY_MARGIN_TOKENS = 4_096
+MAX_INPUT_BYTES = MODEL_CONTEXT_LIMIT - RESERVED_OUTPUT_TOKENS - SAFETY_MARGIN_TOKENS
+
 
 def _find_config_path() -> Path | None:
     current = Path(__file__).resolve()
@@ -46,6 +51,12 @@ def load_fireworks_api_key() -> str:
 
 
 def build_fireworks_payload(system_prompt: str, user_content: str) -> dict[str, Any]:
+    system_bytes = len(system_prompt.encode("utf-8"))
+    available_user_bytes = max(0, MAX_INPUT_BYTES - system_bytes)
+    user_bytes = user_content.encode("utf-8")
+    if len(user_bytes) > available_user_bytes:
+        user_content = user_bytes[:available_user_bytes].decode("utf-8", errors="ignore")
+
     return {
         "model": "accounts/fireworks/models/gpt-oss-120b",
         "max_tokens": 16384,

@@ -271,7 +271,7 @@ class BaseAgent:
         newly_learned: list[dict[str, Any]] = []
         if isinstance(document_payload, dict):
             newly_learned = self._learn_new_fields(
-                prompt, document_payload, text, dkr, overall_score
+                prompt, document_payload, text, dkr, relevant_fields, overall_score
             )
 
         return {
@@ -536,6 +536,7 @@ class BaseAgent:
         document_payload: dict[str, Any],
         text: str,
         dkr: list[dict[str, Any]],
+        relevant_fields: list[dict[str, Any]],
         overall_score: float,
     ) -> list[dict[str, Any]]:
         """
@@ -557,7 +558,9 @@ class BaseAgent:
         if len(dkr) >= 60:
             return []
 
-        user_content = self._render_payload(document_payload, text)
+        user_content = self._render_learning_context(
+            document_payload, text, relevant_fields
+        )
         fireworks_result = call_fireworks(prompt, user_content)
 
         if not isinstance(fireworks_result, dict):
@@ -568,6 +571,49 @@ class BaseAgent:
             append_new_fields(self.agent_key, proposed)
 
         return proposed
+
+    def _render_learning_context(
+        self,
+        document_payload: dict[str, Any],
+        text: str,
+        relevant_fields: list[dict[str, Any]],
+        max_chars: int = 24_000,
+    ) -> str:
+        if not relevant_fields:
+            return self._render_payload(document_payload, text[:max_chars])
+
+        relevance_terms = {
+            token
+            for field in relevant_fields
+            for token in self._tokenize(
+                f"{field.get('field_name', '')} {field.get('description', '')}"
+            )
+            if len(token) > 3
+        }
+        paragraphs = [part.strip() for part in re.split(r"\n\s*\n", text) if part.strip()]
+        selected: list[str] = []
+        selected_chars = 0
+        for paragraph in paragraphs:
+            paragraph_terms = self._tokenize(paragraph)
+            if not relevance_terms.intersection(paragraph_terms):
+                continue
+            if selected_chars + len(paragraph) + 2 > max_chars:
+                break
+            selected.append(paragraph)
+            selected_chars += len(paragraph) + 2
+
+        if not selected:
+            selected = [text[:max_chars]]
+        else:
+            selected_text = "\n\n".join(selected)
+            if len(selected_text) < max_chars // 2:
+                selected_text = f"{text[:1000]}\n\n{selected_text}\n\n{text[-1000:]}"
+            selected = [selected_text[:max_chars]]
+
+        return self._render_payload(
+            {"messages": [{"role": "user", "content": selected[0]}]},
+            selected[0],
+        )
 
     def _extract_proposed_fields(
         self,

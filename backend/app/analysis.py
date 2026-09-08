@@ -5,6 +5,8 @@ from pathlib import Path
 from typing import Any
 
 from app.orchestrator import analyze_document
+from .document_chunking import build_document_chunks
+from .document_storage import store_document
 
 
 def _extract_text(file: Any) -> str:
@@ -74,6 +76,18 @@ def analyze(file: Any) -> dict[str, Any]:
     the payload to carry 'document_text' so normalize_document_payload
     can route it into the messages array correctly.
     """
+    raw = b""
+    if hasattr(file, "file"):
+        file.file.seek(0)
+        raw = file.file.read()
+        file.file.seek(0)
+    elif hasattr(file, "read"):
+        raw = file.read()
+
+    filename = getattr(file, "filename", "document") or "document"
+    content_type = getattr(file, "content_type", "application/octet-stream") or "application/octet-stream"
+    storage_key = store_document(raw, filename, content_type) if raw else None
+    document_chunks = build_document_chunks(raw, filename) if raw else []
     text = _extract_text(file)
 
     payload = {
@@ -86,5 +100,9 @@ def analyze(file: Any) -> dict[str, Any]:
 
     if not isinstance(result, dict):
         raise TypeError("The agent orchestrator must return a dictionary")
+
+    if storage_key:
+        result["document_storage_key"] = storage_key
+    result["_document_chunks"] = document_chunks
 
     return result

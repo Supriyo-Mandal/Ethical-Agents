@@ -1,0 +1,109 @@
+{
+  "id": "51b76f51-0114-4d59-b5a2-66e2cc0fa8be",
+  "document_name": "Autonomous Satellite Health Monitoring.txt",
+  "publish": true,
+  "overall_score": 0.272,
+  "summary": "The document presents a manageable risk profile (overall score: 27/100). All domain scores remain below the publication threshold of 70/100. No critical risk indicators require withholding.",
+  "metadata": {
+    "fields": [
+      {
+        "agent": "Transparency",
+        "field": "Explainability and Review",
+        "score": 0.291,
+        "reason": "",
+        "high_risk": false
+      },
+      {
+        "agent": "Transparency",
+        "field": "Self\u2011Improving Model Opacity",
+        "score": 0.29,
+        "reason": "",
+        "high_risk": false
+      },
+      {
+        "agent": "Bias",
+        "field": "Consent Management",
+        "score": 0.26,
+        "reason": "",
+        "high_risk": false
+      },
+      {
+        "agent": "Security",
+        "field": "Self-Validated AI Security",
+        "score": 0.254,
+        "reason": "",
+        "high_risk": false
+      },
+      {
+        "agent": "Compliance",
+        "field": "Regulatory Obligations",
+        "score": 0.251,
+        "reason": "",
+        "high_risk": false
+      },
+      {
+        "agent": "Bias",
+        "field": "Automated Decision Making",
+        "score": 0.24,
+        "reason": "",
+        "high_risk": false
+      },
+      {
+        "agent": "Security",
+        "field": "Authentication Controls",
+        "score": 0.238,
+        "reason": "",
+        "high_risk": false
+      },
+      {
+        "agent": "Transparency",
+        "field": "Assumed Unrestricted Data Access",
+        "score": 0.236,
+        "reason": "",
+        "high_risk": false
+      },
+      {
+        "agent": "Security",
+        "field": "Assumed Global Data Consent",
+        "score": 0.228,
+        "reason": "",
+        "high_risk": false
+      },
+      {
+        "agent": "Privacy",
+        "field": "Sensitive Personal Data",
+        "score": 0.218,
+        "reason": "",
+        "high_risk": false
+      },
+      {
+        "agent": "Compliance",
+        "field": "Environmental Benefit Data Consent Override",
+        "score": 0.217,
+        "reason": "",
+        "high_risk": false
+      },
+      {
+        "agent": "Privacy",
+        "field": "Universal data collection without consent",
+        "score": 0.187,
+        "reason": "",
+        "high_risk": false
+      }
+    ],
+    "high_risk_fields": [],
+    "newly_learned_fields": [],
+    "decision": "Publish",
+    "executive_summary": "The document presents a manageable risk profile (overall score: 27/100). All domain scores remain below the publication threshold of 70/100. No critical risk indicators require withholding.",
+    "recommendations": [
+      "Document meets publication standards. No action required."
+    ],
+    "domain_scores": {
+      "Bias": 0.25,
+      "Privacy": 0.203,
+      "Security": 0.24,
+      "Compliance": 0.234,
+      "Transparency": 0.272
+    }
+  }
+}

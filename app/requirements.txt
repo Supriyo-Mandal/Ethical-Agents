@@ -3,6 +3,9 @@ fastapi==0.139.0
 uvicorn==0.51.0
 pydantic==2.13.4
 python-multipart==0.0.32
+psycopg[binary]==3.2.10
+alembic==1.16.5
+boto3==1.40.30
 
 # Document parsing (PDF and DOCX support)
 pypdf==5.4.0
