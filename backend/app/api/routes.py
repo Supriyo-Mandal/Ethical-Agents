@@ -5,6 +5,7 @@ from typing import Any
 from fastapi import APIRouter, File, HTTPException, UploadFile
 
 from ..analysis import analyze
+from ..repository import save_document_to_postgres
 from ..schemas import AnalysisResponse, HistoryResponse
 from ..storage import get_history, load_analysis, save_analysis
 
@@ -23,7 +24,12 @@ async def upload(file: UploadFile = File(...)) -> dict[str, Any]:
         raise HTTPException(status_code=400, detail="A file is required")
 
     result = analyze(file)
-    saved = save_analysis(file.filename, result)
+
+    # keep JSON file backup
+    save_analysis(file.filename, result)
+
+    # new PostgreSQL persistence
+    save_document_to_postgres(file.filename, result)
 
     return {
         "publish": bool(result.get("publish", False)),

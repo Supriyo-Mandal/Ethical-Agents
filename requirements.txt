@@ -3,3 +3,7 @@
 
 # Frontend (Node.js) — run `npm install` inside the frontend/ folder
 # Node >= 18, npm >= 9
+
+# PostgreSQL
+psycopg[binary]==3.2.1
+python-dotenv==1.0.1
