@@ -53,7 +53,7 @@ Orchestrator  (app/orchestrator)
          repository.json  ←  risk field definitions
          prompt.txt        ←  LLM learning prompt
                 │
-                │  Phase 3: LLM (Fireworks AI)
+                │  Phase 3: LLM (configured provider)
                 ▼
        New fields proposed → written back to DKR
 ```
@@ -89,7 +89,7 @@ multiplier = 0.15 + 0.85 × sigmoid(net / 4.0)
 ```
 
 ### Phase 3 — Learning
-If a Fireworks AI key is configured and the DKR has fewer than 60 fields, the agent asks the LLM whether the document introduces a genuinely novel risk concept. Candidates pass a Jaccard-style saturation check (≥ 60% overlap with an existing field → rejected). Accepted fields are written back to `repository.json`.
+If an LLM key is configured and the DKR has fewer than 60 fields, the agent asks the configured provider whether the document introduces a genuinely novel risk concept. Candidates pass a Jaccard-style saturation check (≥ 60% overlap with an existing field → rejected). Accepted fields are written back to `repository.json`.
 
 ### Parent Orchestrator Aggregation
 
@@ -131,7 +131,7 @@ Ethical-Agents/
 │   │   ├── parent_agent.py        # Aggregation + decision logic
 │   │   └── __init__.py            # Entry point + schema bridge
 │   ├── services/
-│   │   ├── fireworks_client.py    # LLM API client
+│   │   ├── llm_client.py          # OpenAI-compatible LLM API client
 │   │   ├── knowledge_repository.py
 │   │   └── document_payload.py
 │   └── config.py                  # THRESHOLD, paths, allowed extensions
@@ -198,13 +198,15 @@ cp .env.example .env
 
 Edit `.env`:
 ```env
-FIREWORKS_API_KEY=fw_your_key_here
-OPENAI_API_KEY=sk_your_key_here      # optional fallback
+OPENAI_API_KEY=your_provider_key
+LLM_BASE_URL=https://api.openai.com/v1
+LLM_MODEL=gpt-4o-mini
 ```
 
-Or set the Fireworks key in `config.json`:
+Use the API key and compatible base URL supplied by your provider.
+The key may also be stored in `config.json`:
 ```json
-{ "api_key": "fw_your_key_here" }
+{ "api_key": "your_provider_key" }
 ```
 
 ### 3. Start all services
@@ -246,7 +248,53 @@ npm run dev
 | `app/config.py` | `MAX_FILE_SIZE_MB` | `10` | Maximum upload size |
 | `app/config.py` | `ALLOWED_EXTENSIONS` | `.txt .md .pdf .docx` | Accepted file types |
 | `app/orchestrator/parent_agent.py` | `THRESHOLD` | `0.7` | Orchestrator decision boundary |
-| `config.json` | `api_key` | — | Fireworks AI API key |
+| `config.json` | `api_key` | — | API key used by the default deployment |
+| `LLM_DEPLOYMENTS_JSON` | — | Optional deployment list containing provider, model, secret references, enabled state, priority, timeout, and settings. Never put secret values in this JSON. |
+| `LLM_MAX_ATTEMPTS` | `3` | Maximum deployments attempted for one request |
+| `LLM_DEPLOYMENT_COOLDOWN_SECONDS` | `60` | Time a failed deployment remains temporarily ineligible |
+| `LLM_FAILURE_THRESHOLD` | `2` | Transient provider failures required before cooldown |
+| `LLM_AUTHENTICATION_COOLDOWN_SECONDS` | `300` | Credential failure cooldown |
+| `LLM_QUOTA_COOLDOWN_SECONDS` | `300` | Quota exhaustion cooldown |
+| `LLM_RATE_LIMIT_COOLDOWN_SECONDS` | `60` | Rate-limit cooldown, extended by provider Retry-After |
+| `LLM_PROVIDER_FAILURE_COOLDOWN_SECONDS` | `60` | Timeout/provider outage cooldown |
+
+The default deployment uses an OpenAI-compatible endpoint. To configure one or more
+models/providers, set `LLM_DEPLOYMENTS_JSON` to a JSON array. Each deployment can use
+a different API key and `settings.base_url`:
+
+```json
+[
+  {
+    "id": "free-provider-primary",
+    "provider": "openai-compatible",
+    "model": "provider-model-id",
+    "api_key_ref": "FREE_PROVIDER_API_KEY",
+    "enabled": true,
+    "priority": 1,
+    "timeout_seconds": 30,
+    "settings": {
+      "base_url": "https://provider.example.com/v1"
+    }
+  },
+  {
+    "id": "free-provider-fallback",
+    "provider": "openai-compatible",
+    "model": "fallback-model-id",
+    "api_key_ref": "FALLBACK_PROVIDER_API_KEY",
+    "enabled": false,
+    "priority": 2,
+    "timeout_seconds": 30,
+    "settings": {
+      "base_url": "https://fallback.example.com/v1"
+    }
+  }
+]
+```
+
+The gateway uses enabled deployments in priority order and limits each request
+to `LLM_MAX_ATTEMPTS`. Failed deployments are temporarily skipped during their
+cooldown. Automatic retries of the same deployment, distributed health state,
+and advanced circuit-breaker behavior are not implemented.
 
 ---
 
@@ -387,7 +435,7 @@ agents = [BiasAgent, PrivacyAgent, SecurityAgent, ComplianceAgent, TransparencyA
 | Frontend | React 18, React Router 6, Vite 5 |
 | Backend API | FastAPI, Uvicorn, Pydantic v2 |
 | Document parsing | pypdf, pdfminer.six, python-docx |
-| LLM (Phase 3) | Fireworks AI (`accounts/fireworks/models/gpt-oss-120b`) |
+| LLM (Phase 3) | Configured OpenAI-compatible provider and model |
 | Storage | JSON files (no database required) |
 | Styling | Custom CSS — dark theme with radial gradients |
 

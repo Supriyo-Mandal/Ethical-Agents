@@ -1,0 +1,92 @@
+providers:
+  - id: openrouter
+    base_url: https://openrouter.ai/api/v1
+
+    credentials:
+      - id: credential-1
+        api_key: ${OPENROUTER_API_KEY_1}
+        enabled: true
+
+      - id: credential-2
+        api_key: ${OPENROUTER_API_KEY_2}
+        enabled: true
+
+      - id: credential-3
+        api_key: ${OPENROUTER_API_KEY_3}
+        enabled: true
+
+    models:
+      text_generation:
+        model: openrouter/free
+        enabled: true
+
+      embeddings:
+        - id: embedding-1
+          model: nvidia/nemotron-3-embed-1b:free
+          enabled: true
+
+        - id: embedding-2
+          model: nvidia/llama-nemotron-embed-vl-1b-v2:free
+          enabled: true
+
+        - id: embedding-3
+          model: liquid/lfm-2.5-embedding-350m:free
+          enabled: true
+
+  - id: google
+    base_url: https://generativelanguage.googleapis.com
+
+    credentials:
+      - id: credential-1
+        api_key: ${GEMINI_API_KEY_1}
+        enabled: true
+
+      - id: credential-2
+        api_key: ${GEMINI_API_KEY_2}
+        enabled: true
+
+      - id: credential-3
+        api_key: ${GEMINI_API_KEY_3}
+        enabled: true
+
+    discovery:
+      enabled: true
+      endpoint: /v1beta/models
+      refresh_interval: 3600
+
+    models:
+      text_generation:
+        auto_discover: true
+
+      embeddings:
+        auto_discover: true
+
+  - id: groq
+    base_url: https://api.groq.com/openai/v1
+
+    credentials:
+      - id: credential-1
+        api_key: ${GROQ_API_KEY_1}
+        enabled: true
+
+    credentials:
+      - id: credential-2
+        api_key: ${GROQ_API_KEY_2}
+        enabled: true
+
+    credentials:
+      - id: credential-3
+        api_key: ${GROQ_API_KEY_3}
+        enabled: true
+
+    discovery:
+      enabled: true
+      endpoint: /models
+      refresh_interval: 3600
+
+    models:
+      text_generation:
+        auto_discover: true
+
+      embeddings:
+        auto_discover: false

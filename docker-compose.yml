@@ -1,0 +1,108 @@
+services:
+  minio:
+    image: minio/minio:RELEASE.2025-02-28T09-55-16Z
+    container_name: ethical-agents-minio
+    command: server /data
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER:?MINIO_ROOT_USER must be set}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD:?MINIO_ROOT_PASSWORD must be set}
+    volumes:
+      - ethical_agents_object_storage_data:/data
+    networks:
+      - ethical-agents-private
+    restart: unless-stopped
+
+  minio-init:
+    image: minio/mc:RELEASE.2025-02-21T22-34-44Z
+    container_name: ethical-agents-minio-init
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER:?MINIO_ROOT_USER must be set}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD:?MINIO_ROOT_PASSWORD must be set}
+    entrypoint: ["/bin/sh", "-c"]
+    command:
+      - >-
+        until mc alias set local http://minio:9000 "$${MINIO_ROOT_USER}" "$${MINIO_ROOT_PASSWORD}"; do sleep 2; done;
+        mc mb --ignore-existing local/ethical-agents-documents
+    networks:
+      - ethical-agents-private
+    depends_on:
+      - minio
+
+  postgres:
+    image: pgvector/pgvector:0.8.0-pg16
+    container_name: ethical-agents-postgres
+    ports:
+      - "127.0.0.1:5432:5432"
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-ethical_agents}
+      POSTGRES_USER: ${POSTGRES_USER:-ethical_agents}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?POSTGRES_PASSWORD must be set}
+    volumes:
+      - ethical_agents_postgres_data:/var/lib/postgresql/data
+    networks:
+      - ethical-agents-private
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+  backend:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    container_name: ethical-agents-backend
+    ports:
+      - "8000:8000"
+    environment:
+      PYTHONUNBUFFERED: "1"
+      FIREWORKS_API_KEY: ${FIREWORKS_API_KEY:-}
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+      LLM_DEPLOYMENTS_JSON: ${LLM_DEPLOYMENTS_JSON:-}
+      LLM_MAX_ATTEMPTS: ${LLM_MAX_ATTEMPTS:-3}
+      LLM_DEPLOYMENT_COOLDOWN_SECONDS: ${LLM_DEPLOYMENT_COOLDOWN_SECONDS:-60}
+      LLM_FAILURE_THRESHOLD: ${LLM_FAILURE_THRESHOLD:-2}
+      LLM_AUTHENTICATION_COOLDOWN_SECONDS: ${LLM_AUTHENTICATION_COOLDOWN_SECONDS:-300}
+      LLM_QUOTA_COOLDOWN_SECONDS: ${LLM_QUOTA_COOLDOWN_SECONDS:-300}
+      LLM_RATE_LIMIT_COOLDOWN_SECONDS: ${LLM_RATE_LIMIT_COOLDOWN_SECONDS:-60}
+      LLM_PROVIDER_FAILURE_COOLDOWN_SECONDS: ${LLM_PROVIDER_FAILURE_COOLDOWN_SECONDS:-60}
+      DATABASE_URL: postgresql+psycopg://${POSTGRES_USER:-ethical_agents}:${POSTGRES_PASSWORD:?POSTGRES_PASSWORD must be set}@postgres:5432/${POSTGRES_DB:-ethical_agents}
+      OBJECT_STORAGE_ENDPOINT: http://minio:9000
+      OBJECT_STORAGE_BUCKET: ethical-agents-documents
+      OBJECT_STORAGE_ACCESS_KEY: ${MINIO_ROOT_USER:?MINIO_ROOT_USER must be set}
+      OBJECT_STORAGE_SECRET_KEY: ${MINIO_ROOT_PASSWORD:?MINIO_ROOT_PASSWORD must be set}
+      OBJECT_STORAGE_REGION: us-east-1
+      EMBEDDING_MODEL: ${EMBEDDING_MODEL:-nomic-ai/nomic-embed-text-v1.5}
+    networks:
+      - ethical-agents-private
+    depends_on:
+      postgres:
+        condition: service_healthy
+      minio-init:
+        condition: service_completed_successfully
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: .
+      dockerfile: frontend/Dockerfile
+    container_name: ethical-agents-frontend
+    ports:
+      - "3000:3000"
+      - "127.0.0.1:5432:5432"
+    environment:
+      VITE_API_URL: http://localhost:8000
+    depends_on:
+      - backend
+    networks:
+      - ethical-agents-private
+    restart: unless-stopped
+
+networks:
+  ethical-agents-private:
+    driver: bridge
+
+volumes:
+  ethical_agents_postgres_data:
+  ethical_agents_object_storage_data:

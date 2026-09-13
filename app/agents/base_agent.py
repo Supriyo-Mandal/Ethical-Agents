@@ -6,7 +6,7 @@ import re
 from typing import Any
 
 from app.config import THRESHOLD
-from app.services.fireworks_client import call_fireworks
+from app.services.llm_gateway import LLMError, LLMRequest, get_llm_service
 from app.services.knowledge_repository import append_new_fields, load_prompt, load_repository
 
 # ── Document-level governance signals ─────────────────────────────────
@@ -558,12 +558,25 @@ class BaseAgent:
             return []
 
         user_content = self._render_payload(document_payload, text)
-        fireworks_result = call_fireworks(prompt, user_content)
-
-        if not isinstance(fireworks_result, dict):
+        try:
+            response = get_llm_service().generate(
+                LLMRequest(
+                    messages=[
+                        {"role": "system", "content": prompt},
+                        {"role": "user", "content": user_content},
+                    ],
+                    max_output_tokens=16384,
+                )
+            )
+        except LLMError:
             return []
 
-        proposed = self._extract_proposed_fields(fireworks_result, text, dkr)
+        llm_result = response.content
+
+        if not isinstance(llm_result, dict):
+            return []
+
+        proposed = self._extract_proposed_fields(llm_result, text, dkr)
         if proposed:
             append_new_fields(self.agent_key, proposed)
 
@@ -571,7 +584,7 @@ class BaseAgent:
 
     def _extract_proposed_fields(
         self,
-        fireworks_result: dict[str, Any],
+        llm_result: dict[str, Any],
         document_text: str,
         dkr: list[dict[str, Any]],
     ) -> list[dict[str, Any]]:
@@ -596,7 +609,7 @@ class BaseAgent:
         """
         SATURATION_THRESHOLD = 0.60   # 60 % token overlap → already covered
 
-        candidate_fields = fireworks_result.get("candidate_fields") or []
+        candidate_fields = llm_result.get("candidate_fields") or []
         if not isinstance(candidate_fields, list):
             return []
 
@@ -712,7 +725,7 @@ class BaseAgent:
         self, document_payload: str | dict[str, Any], filename: str
     ) -> str:
         if isinstance(document_payload, dict):
-            # Fireworks-style messages payload
+            # OpenAI-compatible messages payload
             messages = document_payload.get("messages") or []
             if isinstance(messages, list):
                 for item in messages:
