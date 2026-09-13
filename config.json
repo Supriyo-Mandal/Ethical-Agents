@@ -1,6 +1,14 @@
 {
-  "api_key": "your-openrouter-key",
   "provider": "openrouter",
   "base_url": "https://openrouter.ai/api/v1",
-  "model": "nvidia/nemotron-3.5-lightning:free"
+  "api_key": "${OPENROUTER_API_KEY}",
+
+  "models": {
+    "generation": {
+      "model": "openrouter/free"
+    },
+    "embedding": {
+      "model": "nvidia/nemotron-3-embed-1b:free"
+    }
+  }
 }
