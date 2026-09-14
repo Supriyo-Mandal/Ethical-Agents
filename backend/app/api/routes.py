@@ -4,6 +4,9 @@ from typing import Any
 
 from fastapi import APIRouter, File, HTTPException, UploadFile
 
+from app.services.llm_config import load_config
+from app.services.llm_gateway import _get_provider_candidates
+
 from ..analysis import analyze, cross_document_analysis, detect_duplicate_documents
 from ..config import MAX_BATCH_FILES
 from ..schemas import AnalysisResponse, BatchAnalysisResponse, HistoryResponse
@@ -15,6 +18,27 @@ router = APIRouter()
 @router.get("/health")
 def health() -> dict[str, str]:
     return {"status": "ok"}
+
+
+@router.get("/health/llm")
+def llm_health() -> dict[str, Any]:
+    try:
+        providers = load_config()
+        if not providers:
+            return {"status": "degraded", "ready": False, "error": "No providers configured"}
+
+        candidates = _get_provider_candidates()
+        if not candidates:
+            return {"status": "degraded", "ready": False, "error": "No enabled provider/model available"}
+
+        return {
+            "status": "ok",
+            "ready": True,
+            "providers": [p.id for p in providers],
+            "candidate_count": len(candidates),
+        }
+    except Exception as exc:
+        return {"status": "degraded", "ready": False, "error": str(exc)}
 
 
 @router.post("/upload", response_model=AnalysisResponse | BatchAnalysisResponse)
@@ -44,19 +68,23 @@ async def upload(
     for match in duplicates:
         for name in match["documents"]:
             duplicates_by_document.setdefault(name, []).append(match)
+
     for result in results:
-        result.setdefault("metadata", {})["duplicate_documents"] = duplicates_by_document.get(result["document_name"], [])
+        result.setdefault("metadata", {})["duplicate_documents"] = duplicates_by_document.get(
+            result["document_name"], []
+        )
         saved = save_analysis(result["document_name"], result)
         result["analysis_id"] = saved["id"]
 
     previous_documents = [
-            {
-                "id": report.get("id", ""),
-                "name": report.get("document_name", ""),
-                "publish": bool(report.get("publish", False)),
-            }
-            for report in get_history()
-        ]
+        {
+            "id": report.get("id", ""),
+            "name": report.get("document_name", ""),
+            "publish": bool(report.get("publish", False)),
+        }
+        for report in get_history()
+    ]
+
     if len(results) == 1:
         result = results[0]
         return {
@@ -66,9 +94,14 @@ async def upload(
             "metadata": result.get("metadata", {"fields": []}),
             "previous_documents": previous_documents,
         }
+
     return {
         "analyses": [
-            {"analysis_id": item.get("analysis_id"), "document_name": item.get("document_name"), **item}
+            {
+                "analysis_id": item.get("analysis_id"),
+                "document_name": item.get("document_name"),
+                **item,
+            }
             for item in results
         ],
         "cross_document_analysis": cross_document_analysis(results),

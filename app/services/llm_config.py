@@ -1,173 +1,158 @@
 from __future__ import annotations
-
-import json
 import os
-from dataclasses import dataclass, field
 from pathlib import Path
+from dataclasses import dataclass, field
 from typing import Any
+import yaml
+from dotenv import load_dotenv
+
+CONFIG_PATH = Path(__file__).resolve().parents[2] / "config" / "llm-gateway.yaml"
 
 
-class DeploymentConfigurationError(ValueError):
-    """Raised when LLM deployment configuration is malformed."""
-
-
-@dataclass(frozen=True)
-class RoutingConfig:
-    max_attempts: int = 3
-    cooldown_seconds: float = 60.0
-    failure_threshold: int = 2
-    authentication_cooldown: float = 300.0
-    quota_cooldown: float = 300.0
-    rate_limit_cooldown: float = 60.0
-    provider_failure_cooldown: float = 60.0
-    max_retries: int = 1
-    base_retry_delay: float = 0.1
-    max_retry_delay: float = 2.0
-    overall_timeout: float = 30.0
-
-
-@dataclass(frozen=True)
-class DeploymentConfig:
+@dataclass
+class Credential:
     id: str
-    provider: str
-    model: str
-    api_key_ref: str
-    api_key: str = field(default="", repr=False, compare=False)
+    api_key: str
     enabled: bool = True
-    priority: int = 100
-    timeout_seconds: float = 30.0
-    connect_timeout: float = 30.0
-    request_timeout: float = 30.0
-    overall_request_timeout: float = 30.0
-    settings: dict[str, Any] = field(default_factory=dict)
 
-    def __repr__(self) -> str:
-        return (
-            "DeploymentConfig("
-            f"id={self.id!r}, provider={self.provider!r}, model={self.model!r}, "
-            f"api_key_ref={self.api_key_ref!r}, enabled={self.enabled!r}, "
-            f"priority={self.priority!r}, timeout_seconds={self.timeout_seconds!r})"
+
+@dataclass
+class ModelSpec:
+    kind: str
+    model: str | None = None
+    enabled: bool = True
+    auto_discover: bool = False
+
+
+@dataclass
+class Provider:
+    id: str
+    base_url: str
+    credentials: list[Credential] = field(default_factory=list)
+    models: dict[str, list[ModelSpec] | ModelSpec] = field(default_factory=dict)
+    discovery: dict[str, Any] = field(default_factory=dict)
+
+def _resolve_env(value: Any) -> Any:
+    if isinstance(value, str):
+        if value.startswith("${") and value.endswith("}"):
+            key = value[2:-1].strip()
+            return os.getenv(key, "")
+        return value
+    if isinstance(value, list):
+        return [_resolve_env(item) for item in value]
+    if isinstance(value, dict):
+        return {k: _resolve_env(v) for k, v in value.items()}
+    return value
+
+def load_providers(path: str | Path = CONFIG_PATH) -> list[Provider]:
+    with open(path, "r", encoding="utf-8") as f:
+        raw = yaml.safe_load(f) or {}
+
+    providers_raw = raw.get("providers", [])
+    providers: list[Provider] = []
+
+    for entry in providers_raw:
+        entry = _resolve_env(entry)
+
+        provider_id = entry.get("id")
+        base_url = entry.get("base_url", "")
+        credentials_raw = entry.get("credentials", [])
+        discovery = entry.get("discovery", {})
+
+        credentials = []
+        for cred in credentials_raw:
+            if not cred.get("enabled", True):
+                continue
+            credentials.append(
+                Credential(
+                    id=str(cred.get("id", "")),
+                    api_key=str(cred.get("api_key", "")),
+                    enabled=bool(cred.get("enabled", True)),
+                )
+            )
+
+        models: dict[str, list[ModelSpec] | ModelSpec] = {}
+
+        raw_models = entry.get("models", {})
+        for kind, spec in raw_models.items():
+            if isinstance(spec, dict):
+                if spec.get("enabled") is False:
+                    continue
+
+                if spec.get("auto_discover") is True:
+                    models[kind] = ModelSpec(
+                        kind=kind,
+                        model=None,
+                        enabled=bool(spec.get("enabled", True)),
+                        auto_discover=True,
+                    )
+                else:
+                    models[kind] = ModelSpec(
+                        kind=kind,
+                        model=str(spec.get("model", "")) if spec.get("model") else None,
+                        enabled=bool(spec.get("enabled", True)),
+                        auto_discover=False,
+                    )
+            elif isinstance(spec, list):
+                models[kind] = [
+                    ModelSpec(
+                        kind=kind,
+                        model=str(item.get("model", "")) if item.get("model") else None,
+                        enabled=bool(item.get("enabled", True)),
+                        auto_discover=False,
+                    )
+                    for item in spec
+                    if item.get("enabled", True)
+                ]
+
+        providers.append(
+            Provider(
+                id=str(provider_id),
+                base_url=str(base_url),
+                credentials=credentials,
+                models=models,
+                discovery=discovery,
+            )
         )
 
+    return providers
 
-def load_deployments(environ: dict[str, str] | None = None) -> tuple[DeploymentConfig, ...]:
-    env = environ if environ is not None else os.environ
-    raw = env.get("LLM_DEPLOYMENTS_JSON", "").strip()
-    if not raw:
-        return (_default_deployment(env),)
+def validate_provider(provider: Provider) -> None:
+    if not provider.id:
+        raise ValueError("Provider id is required")
 
-    try:
-        entries = json.loads(raw)
-    except json.JSONDecodeError as exc:
-        raise DeploymentConfigurationError("LLM_DEPLOYMENTS_JSON must be valid JSON") from exc
-    if not isinstance(entries, list) or not entries:
-        raise DeploymentConfigurationError("LLM_DEPLOYMENTS_JSON must be a non-empty list")
+    if not provider.base_url:
+        raise ValueError(f"Provider {provider.id} is missing base_url")
 
-    deployments = tuple(_deployment_from_mapping(entry, index, env) for index, entry in enumerate(entries, 1))
-    ids = [deployment.id for deployment in deployments]
-    if len(ids) != len(set(ids)):
-        raise DeploymentConfigurationError("Deployment ids must be unique")
-    return tuple(sorted(deployments, key=lambda item: (item.priority, item.id)))
+    if not provider.credentials:
+        raise ValueError(f"Provider {provider.id} has no enabled credentials")
 
+    if not provider.models:
+        raise ValueError(f"Provider {provider.id} has no model configuration")
 
-def load_routing_config(environ: dict[str, str] | None = None) -> RoutingConfig:
-    env = environ if environ is not None else os.environ
-    try:
-        max_attempts = int(env.get("LLM_MAX_ATTEMPTS", "3"))
-        cooldown_seconds = float(env.get("LLM_DEPLOYMENT_COOLDOWN_SECONDS", "60"))
-        failure_threshold = int(env.get("LLM_FAILURE_THRESHOLD", "2"))
-        authentication_cooldown = float(env.get("LLM_AUTHENTICATION_COOLDOWN_SECONDS", "300"))
-        quota_cooldown = float(env.get("LLM_QUOTA_COOLDOWN_SECONDS", "300"))
-        rate_limit_cooldown = float(env.get("LLM_RATE_LIMIT_COOLDOWN_SECONDS", "60"))
-        provider_failure_cooldown = float(env.get("LLM_PROVIDER_FAILURE_COOLDOWN_SECONDS", str(cooldown_seconds)))
-        max_retries = int(env.get("LLM_MAX_RETRIES", "1"))
-        base_retry_delay = float(env.get("LLM_BASE_RETRY_DELAY_SECONDS", "0.1"))
-        max_retry_delay = float(env.get("LLM_MAX_RETRY_DELAY_SECONDS", "2"))
-        overall_timeout = float(env.get("LLM_OVERALL_TIMEOUT_SECONDS", "30"))
-    except ValueError as exc:
-        raise DeploymentConfigurationError("LLM routing limits must be numeric") from exc
-    values = (cooldown_seconds, authentication_cooldown, quota_cooldown, rate_limit_cooldown, provider_failure_cooldown, base_retry_delay, max_retry_delay, overall_timeout)
-    if max_attempts < 1 or failure_threshold < 1 or max_retries < 0 or max_retry_delay < base_retry_delay or overall_timeout <= 0 or any(value < 0 for value in values):
-        raise DeploymentConfigurationError("LLM routing limits are out of range")
-    return RoutingConfig(
-        max_attempts=max_attempts,
-        cooldown_seconds=cooldown_seconds,
-        failure_threshold=failure_threshold,
-        authentication_cooldown=authentication_cooldown,
-        quota_cooldown=quota_cooldown,
-        rate_limit_cooldown=rate_limit_cooldown,
-        provider_failure_cooldown=provider_failure_cooldown,
-        max_retries=max_retries,
-        base_retry_delay=base_retry_delay,
-        max_retry_delay=max_retry_delay,
-        overall_timeout=overall_timeout,
-    )
+    for kind, model_spec in provider.models.items():
+        if isinstance(model_spec, list):
+            if not model_spec:
+                raise ValueError(f"Provider {provider.id} has no enabled models for {kind}")
+            for item in model_spec:
+                if item.enabled is False:
+                    continue
+                if not item.model and not item.auto_discover:
+                    raise ValueError(f"Provider {provider.id} model for {kind} is missing")
+            continue
 
+        if model_spec.enabled is False:
+            continue
 
-def _default_deployment(env: dict[str, str]) -> DeploymentConfig:
-    api_key_ref = "OPENAI_API_KEY"
-    return DeploymentConfig(
-        id="openai-compatible-default",
-        provider="openai-compatible",
-        model=env.get("LLM_MODEL", "gpt-4o-mini"),
-        api_key_ref=api_key_ref,
-        api_key=_resolve_api_key(api_key_ref, env),
-        enabled=True,
-        priority=1,
-        timeout_seconds=30.0,
-        settings={"base_url": env.get("LLM_BASE_URL", "https://api.openai.com/v1")},
-    )
+        if model_spec.auto_discover:
+            continue
 
+        if not model_spec.model:
+            raise ValueError(f"Provider {provider.id} model for {kind} is missing")
 
-def _deployment_from_mapping(value: Any, index: int, environ: dict[str, str]) -> DeploymentConfig:
-    if not isinstance(value, dict):
-        raise DeploymentConfigurationError(f"Deployment {index} must be an object")
-    required = ("id", "provider", "model", "api_key_ref")
-    missing = [key for key in required if not isinstance(value.get(key), str) or not value[key].strip()]
-    if missing:
-        raise DeploymentConfigurationError(f"Deployment {index} is missing: {', '.join(missing)}")
-
-    enabled = value.get("enabled", True)
-    priority = value.get("priority", 100)
-    timeout = value.get("timeout_seconds", 30.0)
-    request_timeout = value.get("request_timeout", timeout)
-    connect_timeout = value.get("connect_timeout", request_timeout)
-    overall_timeout = value.get("overall_request_timeout", 30.0)
-    settings = value.get("settings", {})
-    if not isinstance(enabled, bool):
-        raise DeploymentConfigurationError(f"Deployment {index} enabled must be boolean")
-    if isinstance(priority, bool) or not isinstance(priority, int):
-        raise DeploymentConfigurationError(f"Deployment {index} priority must be an integer")
-    if any(isinstance(item, bool) or not isinstance(item, (int, float)) or item <= 0 for item in (timeout, request_timeout, connect_timeout, overall_timeout)):
-        raise DeploymentConfigurationError(f"Deployment {index} timeout values must be positive")
-    if not isinstance(settings, dict):
-        raise DeploymentConfigurationError(f"Deployment {index} settings must be an object")
-
-    return DeploymentConfig(
-        id=value["id"].strip(),
-        provider=value["provider"].strip(),
-        model=value["model"].strip(),
-        api_key_ref=value["api_key_ref"].strip(),
-        api_key=_resolve_api_key(value["api_key_ref"].strip(), environ),
-        enabled=enabled,
-        priority=priority,
-        timeout_seconds=float(request_timeout),
-        connect_timeout=float(connect_timeout),
-        request_timeout=float(request_timeout),
-        overall_request_timeout=float(overall_timeout),
-        settings=settings,
-    )
-
-
-def _resolve_api_key(reference: str, environ: dict[str, str]) -> str:
-    value = environ.get(reference, "")
-    if value:
-        return value
-    config_path = Path(__file__).resolve().parents[2] / "config.json"
-    try:
-        config = json.loads(config_path.read_text(encoding="utf-8"))
-    except (OSError, json.JSONDecodeError):
-        config = {}
-    if reference == "OPENAI_API_KEY" and isinstance(config.get("api_key"), str):
-        return config["api_key"].strip()
-    return ""
+def load_config() -> list[Provider]:
+    load_dotenv()
+    providers = load_providers()
+    for provider in providers:
+        validate_provider(provider)
+    return providers

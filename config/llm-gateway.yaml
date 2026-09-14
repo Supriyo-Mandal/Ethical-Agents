@@ -69,12 +69,10 @@ providers:
         api_key: ${GROQ_API_KEY_1}
         enabled: true
 
-    credentials:
       - id: credential-2
         api_key: ${GROQ_API_KEY_2}
         enabled: true
 
-    credentials:
       - id: credential-3
         api_key: ${GROQ_API_KEY_3}
         enabled: true
@@ -89,4 +87,4 @@ providers:
         auto_discover: true
 
       embeddings:
-        auto_discover: false
+        enabled: false

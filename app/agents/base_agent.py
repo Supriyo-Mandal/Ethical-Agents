@@ -6,7 +6,7 @@ import re
 from typing import Any
 
 from app.config import THRESHOLD
-from app.services.llm_gateway import LLMError, LLMRequest, get_llm_service
+from app.services.llm_gateway import generate_text
 from app.services.knowledge_repository import append_new_fields, load_prompt, load_repository
 
 # ── Document-level governance signals ─────────────────────────────────
@@ -558,20 +558,15 @@ class BaseAgent:
             return []
 
         user_content = self._render_payload(document_payload, text)
-        try:
-            response = get_llm_service().generate(
-                LLMRequest(
-                    messages=[
-                        {"role": "system", "content": prompt},
-                        {"role": "user", "content": user_content},
-                    ],
-                    max_output_tokens=16384,
-                )
-            )
-        except LLMError:
-            return []
+        response = generate_text(
+            [
+                {"role": "system", "content": prompt},
+                {"role": "user", "content": user_content},
+            ],
+            max_output_tokens=16384,
+        )
 
-        llm_result = response.content
+        llm_result = response if isinstance(response, dict) else {"raw_text": str(response)}
 
         if not isinstance(llm_result, dict):
             return []
