@@ -1,5 +1,7 @@
-import { useEffect, useMemo, useState } from 'react';
-import { Link, NavLink, Route, Routes, useLocation } from 'react-router-dom';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import { Link, NavLink, Route, Routes, useLocation, Navigate, useNavigate } from 'react-router-dom';
+import ProtectedRoute from './auth/ProtectedRoute';
+import { GoogleSignIn, useAuth } from './auth/AuthProvider';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
 
@@ -32,6 +34,8 @@ function ScoreBar({ score }) {
 /* ─── Root App ───────────────────────────────────────────────────── */
 export default function App() {
   const location = useLocation();
+  const { credential } = useAuth();
+
   const [sidebarOpen, setSidebarOpen]   = useState(false);
   const [documents,   setDocuments]     = useState(() => {
     try {
@@ -52,7 +56,11 @@ export default function App() {
 
   // Load existing reports from the backend on mount
   useEffect(() => {
-    fetch(`${API_URL}/history`)
+    fetch(`${API_URL}/history`, {
+      headers: {
+        Authorization: `Bearer ${credential}`,
+      },
+    })
       .then(r => r.ok ? r.json() : null)
       .then(data => {
         if (!data?.analyses?.length) return;
@@ -97,7 +105,14 @@ export default function App() {
       const fd = new FormData();
       fd.append('file', file);
 
-      const res = await fetch(`${API_URL}/upload`, { method: 'POST', body: fd });
+      const res = await fetch(`${API_URL}/upload`, { 
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${credential}`,
+        },
+        body: fd,
+      });
+
       if (!res.ok) {
         const err = await res.json().catch(() => ({ detail: res.statusText }));
         throw new Error(err.detail || 'Upload failed');
@@ -137,6 +152,8 @@ export default function App() {
 
   return (
     <div className="shell">
+      <BubbleField />
+
       {/* Mobile toggle */}
       <button className="drawer-btn" onClick={() => setSidebarOpen(o => !o)} aria-label="Menu">
         <span />
@@ -191,20 +208,32 @@ export default function App() {
             <p className="kicker">workspace</p>
             <h1 className="topbar-title">{pageName}</h1>
           </div>
-          <Link to="/upload" className="btn-primary">+ New Review</Link>
+          <div className="topbar-actions">
+            <Link to="/upload" className="btn-primary">
+              + New Review
+            </Link>
+
+            <div className="profile-section">
+              <UserProfile />
+            </div>
+          </div>
         </header>
 
         <Routes>
-          <Route path="/"          element={<HomeView summary={summary} />} />
-          <Route path="/upload"    element={
-            <UploadView
-              onUpload={handleUpload}
-              selectedFile={selectedFile}
-              setSelectedFile={setSelectedFile}
-              uploadState={uploadState}
-            />}
-          />
-          <Route path="/dashboard" element={<DashboardView documents={documents} summary={summary} />} />
+          <Route path="/login" element={ <GoogleSignInPage /> } />
+
+          <Route element={ <ProtectedRoute /> }>
+            <Route path="/"          element={<HomeView summary={summary} />} />
+            <Route path="/upload"    element={
+              <UploadView
+                onUpload={handleUpload}
+                selectedFile={selectedFile}
+                setSelectedFile={setSelectedFile}
+                uploadState={uploadState}
+              />}
+            />
+            <Route path="/dashboard" element={<DashboardView documents={documents} summary={summary} />} />
+          </Route>
         </Routes>
       </main>
     </div>
@@ -509,5 +538,264 @@ function DashboardView({ documents, summary }) {
         </div>
       )}
     </section>
+  );
+}
+
+/* ─── SignIn ──────────────────────────────────────────────────── */
+function GoogleSignInPage() {
+  const navigate = useNavigate();
+  const { credential } = useAuth();
+
+  if (credential) {
+    return <Navigate to="/" replace />;
+  }
+
+  return (
+    <div className="login-shell">
+      <div className="login-aura login-aura-one" />
+      <div className="login-aura login-aura-two" />
+
+      <div className="login-layout">
+        <section className="login-intro">
+          <div className="login-mark">EA</div>
+
+          <p className="kicker">Ethical Agent Review Hub</p>
+
+          <h2>
+            Make every document decision with more clarity.
+          </h2>
+
+          <p>
+            Sign in to review documents across bias, privacy, security,
+            compliance, and transparency.
+          </p>
+
+          <div className="login-domain-list">
+            <span>Bias</span>
+            <span>Privacy</span>
+            <span>Security</span>
+            <span>Compliance</span>
+            <span>Transparency</span>
+          </div>
+        </section>
+
+        <section className="login-card">
+          <div className="login-card-glow" />
+
+          <p className="kicker">Welcome back</p>
+          <h3>Sign in to your workspace</h3>
+          <p className="login-card-subtitle">
+            Continue securely with your Google account.
+          </p>
+
+          <GoogleSignIn />
+
+          <p className="login-footnote">
+            Your account is used only to secure your reviews and reports.
+          </p>
+        </section>
+      </div>
+    </div>
+  );
+}
+
+/* ─── Profile ──────────────────────────────────────────────────── */
+function UserProfile() {
+  const { user, logout } = useAuth();
+  const navigate = useNavigate();
+
+  if (!user) {
+    return null;
+  }
+
+  return (
+    <div className="user-profile">
+      <img
+        src={user.picture}
+        alt={user.name}
+        className="user-avatar"
+      />
+      <div className="user-menu">
+        <span>Signed in as</span>
+        <strong>{user.name}</strong>
+      </div>
+      <button
+        className="logout-btn"
+        onClick={() => {
+          logout();
+          navigate("/login", {replace:true});
+        }}
+      >
+        Logout
+      </button>
+    </div>
+  );
+}
+
+
+function BubbleField() {
+  const nextSideIndex = useRef(0);
+
+  const sides = ['right', 'top', 'left', 'bottom'];
+
+  const createBubble = (id, side) => {
+    const size = 48 + Math.random() * 28;
+    const position = Math.round(10 + Math.random() * 80);
+
+    const placement = {
+      right: {
+        right: '3%',
+        top: `${position}%`,
+      },
+      top: {
+        left: `${position}%`,
+        top: '3%',
+      },
+      left: {
+        left: '3%',
+        top: `${position}%`,
+      },
+      bottom: {
+        left: `${position}%`,
+        bottom: '3%',
+      },
+    };
+
+    const travel = {
+      right: {
+        x: '-72vw',
+        y: `${-18 + Math.random() * 36}vh`,
+        x2: '-58vw',
+        y2: `${18 + Math.random() * 28}vh`,
+      },
+      top: {
+        x: `${-18 + Math.random() * 36}vw`,
+        y: '72vh',
+        x2: `${18 + Math.random() * 28}vw`,
+        y2: '58vh',
+      },
+      left: {
+        x: '72vw',
+        y: `${-18 + Math.random() * 36}vh`,
+        x2: '58vw',
+        y2: `${18 + Math.random() * 28}vh`,
+      },
+      bottom: {
+        x: `${-18 + Math.random() * 36}vw`,
+        y: '-72vh',
+        x2: `${18 + Math.random() * 28}vw`,
+        y2: '-58vh',
+      },
+    };    
+    
+    return {
+      id,
+      side,
+      size: `${size}px`,
+      delay: `${Math.random() * 2}s`,
+      duration: `${18 + Math.random() * 8}s`,
+      driftX: travel[side].x,
+      driftY: travel[side].y,
+      driftX2: travel[side].x2,
+      driftY2: travel[side].y2,
+      placement: placement[side],
+      popped: false,
+    };
+  };
+
+  const [bubbles, setBubbles] = useState(() =>
+    Array.from({length: 6}, (_, index) => {
+      const side = sides[index % sides.length];
+      return createBubble(index, side);
+    })
+  );
+
+  const popBubble = (id) => {
+    playPopSound();
+
+    setBubbles((current) =>
+      current.map((bubble) =>
+        bubble.id === id ? { ...bubble, popped:true } : bubble
+      )
+    );
+
+    window.setTimeout(() => {
+      setBubbles((current) => 
+        current.filter((bubble) => 
+          bubble.id !== id
+        )
+      );
+    }, 480);
+
+    const spawnDelay = 3000 + Math.random() * 1000;
+
+    window.setTimeout(() => {
+      const side = sides[nextSideIndex.current % sides.length];
+      nextSideIndex.current += 1;
+
+      setBubbles((current) => [
+        ...current,
+        createBubble(`${Date.now()}-${Math.random()}`, side),
+      ]);
+    }, spawnDelay);
+  };
+
+  const playPopSound = () => {
+    const AudioContext = window.AudioContext || window.webkitAudioContext;
+    if (!AudioContext) return;
+
+    const audioContext = new AudioContext();
+    const oscillator = audioContext.createOscillator();
+    const gain = audioContext.createGain();
+
+    oscillator.type = 'sine';
+    oscillator.frequency.setValueAtTime(520, audioContext.currentTime);
+    oscillator.frequency.exponentialRampToValueAtTime(
+      110,
+      audioContext.currentTime + 0.12
+    );
+
+    gain.gain.setValueAtTime(0.12, audioContext.currentTime);
+    gain.gain.exponentialRampToValueAtTime(
+      0.001,
+      audioContext.currentTime + 0.12
+    );
+
+    oscillator.connect(gain);
+    gain.connect(audioContext.destination);
+
+    oscillator.start();
+    oscillator.stop(audioContext.currentTime + 0.12);
+
+    oscillator.addEventListener('ended', () => {
+      audioContext.close();
+    });
+  };
+
+  return (
+    <div className="bubble-field" aria-hidden="true">
+      {bubbles.map((bubble) => (
+        <button
+          key={bubble.id}
+          type="button"
+          className={`bubble bubble-${bubble.side}${
+            bubble.popped ? ' bubble-popped' : ''
+          }`}
+          style={{
+            ...bubble.placement,
+            width: bubble.size,
+            height: bubble.size,
+            animationDelay: bubble.delay,
+            animationDuration: bubble.duration,
+            '--drift-x': bubble.driftX,
+            '--drift-y': bubble.driftY,
+            '--drift-x-2': bubble.driftX2,
+            '--drift-y-2': bubble.driftY2,
+          }}
+          onClick={() => popBubble(bubble.id)}
+          tabIndex="-1"
+        />
+      ))}
+    </div>
   );
 }
