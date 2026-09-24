@@ -12,6 +12,7 @@ class PreviousDocument(BaseModel):
 
 
 class AnalysisResponse(BaseModel):
+    analysis_id: str
     publish: bool
     overall_score: float
     summary: str

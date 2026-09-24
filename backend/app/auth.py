@@ -10,6 +10,9 @@ security = HTTPBearer()
 def get_current_user(
         credentials: HTTPAuthorizationCredentials = Depends(security),
 ) -> dict:
+    if not GOOGLE_CLIENT_ID:
+        raise RuntimeError("GOOGLE_CLIENT_ID not configured")
+    
     try:
         payload = id_token.verify_oauth2_token(
             credentials.credentials,
@@ -17,12 +20,12 @@ def get_current_user(
             GOOGLE_CLIENT_ID
         )
     except ValueError as exc:
-        raise HTTPException(status_code=401, details="Invalid Google token") from exc
+        raise HTTPException(status_code=401, detail="Invalid Google token") from exc
 
     if payload.get("iss") not in {
         "accounts.google.com",
         "https://accounts.google.com"
     }:
-        raise HTTPException(status_code=401, details="Invalid token issuer")
+        raise HTTPException(status_code=401, detail="Invalid token issuer")
 
     return payload

@@ -1,5 +1,5 @@
 from __future__ import annotations
-
+import hashlib
 import io
 from pathlib import Path
 from typing import Any
@@ -88,3 +88,13 @@ def analyze(file: Any) -> dict[str, Any]:
         raise TypeError("The agent orchestrator must return a dictionary")
 
     return result
+
+def get_file_sha256(file: Any) -> str:
+    if not hasattr(file, "file"):
+        raise TypeError("Expected a FastAPI UploadFile")
+
+    file.file.seek(0)
+    content = file.file.read()
+    file.file.seek(0)
+
+    return hashlib.sha256(content).hexdigest()
