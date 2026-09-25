@@ -17,6 +17,8 @@ def analyze_document(payload: Any) -> dict[str, Any]:
         document_name = str(payload.get("document_name", "document"))
 
     result = ParentAgent().evaluate_document(payload, document_name)
+    if isinstance(payload, dict) and isinstance(payload.get("document_content"), dict):
+        result["document_content"] = payload["document_content"]
     return _to_backend_schema(result)
 
 
@@ -66,6 +68,9 @@ def _to_backend_schema(result: dict[str, Any]) -> dict[str, Any]:
             for d in result.get("agent_outputs", [])
         },
     }
+
+    if isinstance(result.get("document_content"), dict):
+        metadata["document_content"] = result["document_content"]
 
     return {
         "publish": result.get("publish", False),

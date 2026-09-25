@@ -19,5 +19,11 @@ class AnalysisResponse(BaseModel):
     previous_documents: list[PreviousDocument]
 
 
+class BatchAnalysisResponse(BaseModel):
+    analyses: list[dict[str, Any]]
+    cross_document_analysis: dict[str, Any]
+    previous_documents: list[PreviousDocument]
+
+
 class HistoryResponse(BaseModel):
     analyses: list[dict[str, Any]]
