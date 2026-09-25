@@ -98,6 +98,9 @@ def _candidate_models_for_provider(provider: Any) -> list[str]:
 def _get_provider_candidates(provider_id: str | None = None):
     load_dotenv()
     providers = load_config()
+    logger.info("loading config")
+    logger.info("providers loaded: %s", [p.id for p in providers])
+
     if not providers:
         raise LLMGatewayError(
             "No LLM providers found in config",
@@ -201,6 +204,9 @@ def generate_text(
                 method="POST",
             )
 
+            started = time.monotonic()
+            logger.info("LLM: sending request to %s", endpoint)
+
             try:
                 with request.urlopen(req, timeout=timeout_seconds) as response:
                     body = response.read().decode("utf-8")
@@ -237,6 +243,7 @@ def generate_text(
                         "result_type": type(result).__name__,
                     },
                 )
+                logger.info("LLM: provider=%s model=%s succeeded in %.2fs", provider.id, model, time.monotonic() - started)
                 return result
 
             except error.HTTPError as exc:

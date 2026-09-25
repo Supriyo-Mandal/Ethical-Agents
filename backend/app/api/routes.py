@@ -1,4 +1,5 @@
 from __future__ import annotations
+import logging
 
 from typing import Any
 
@@ -14,6 +15,7 @@ from ..storage import get_history, load_analysis, save_analysis
 
 router = APIRouter()
 
+logger = logging.getLogger(__name__)
 
 @router.get("/health")
 def health() -> dict[str, str]:
@@ -53,13 +55,17 @@ async def upload(
     if any(not file.filename for file in files):
         raise HTTPException(status_code=400, detail="Every uploaded file needs a filename")
 
+    logger.info("upload route reached")
+    logger.info("UPLOAD: request received with %s file(s)", len(files))
     previous_reports = get_history()
     results: list[dict[str, Any]] = []
     for file in files:
+        logger.info("UPLOAD: analyzing file=%s", file.filename)
         try:
             result = analyze(file)
         except ValueError as exc:
             raise HTTPException(status_code=400, detail=f"{file.filename}: {exc}") from exc
+        logger.info("UPLOAD: analysis complete for file=%s", file.filename)
         result["document_name"] = file.filename or "document"
         results.append(result)
 
