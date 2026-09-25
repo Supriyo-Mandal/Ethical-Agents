@@ -5,15 +5,14 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
 
 WORKDIR /app
 
-# Copy Python dependency files first for better caching
 COPY requirements.txt ./requirements.txt
 COPY app/requirements.txt ./app/requirements.txt
 
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy the project files
 COPY app ./app
 COPY backend ./backend
+COPY config ./config
 COPY alembic.ini ./alembic.ini
 COPY migrations ./migrations
 
